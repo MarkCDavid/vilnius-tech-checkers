@@ -6,6 +6,14 @@ public class Coordinate {
         return y * size + x;
     }
 
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
     public Coordinate move(Direction direction){
         return move(direction, 1);
     }
@@ -22,6 +30,10 @@ public class Coordinate {
     public Coordinate(int x, int y) {
         this.x = x;
         this.y = y;
+    }
+
+    public static Coordinate ofIndex(int index, int size) {
+        return new Coordinate(index / size, index % size);
     }
 
     private final int x;

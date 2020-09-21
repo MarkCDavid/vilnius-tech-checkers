@@ -16,7 +16,12 @@ public class Piece {
 
     public Piece(char side, int moveSize){
         this.side = side;
-        this.availableDirections = new Direction[] { new Direction(1, -1), new Direction(-1, -1),};
+        if(side == 'B')
+            this.availableDirections = new Direction[] { new Direction(1, 1), new Direction(-1, 1),};
+        else if(side == 'W')
+            this.availableDirections = new Direction[] { new Direction(1, -1), new Direction(-1, -1),};
+        else
+            this.availableDirections = new Direction[0];
         this.moveSize = moveSize;
     }
 

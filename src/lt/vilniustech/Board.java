@@ -27,6 +27,18 @@ public class Board {
         }
     }
 
+    public List<Move> getAvailableMoves(char side) {
+        ArrayList<Move> availableMoves = new ArrayList<>();
+
+        for(int i = 0; i < cells.length; i++) {
+            Coordinate from = Coordinate.ofIndex(i, this.size);
+            Piece piece = getCell(from).getPiece();
+            if(piece != null && piece.getSide() == side)
+                availableMoves.addAll(getAvailableMoves(from));
+        }
+        return availableMoves;
+    }
+
 
     public List<Move> getAvailableMoves(Coordinate from) {
         ArrayList<Move> availableMoves = new ArrayList<>();
@@ -56,6 +68,10 @@ public class Board {
         return availableMoves;
     }
 
+    public void doMove(Move move) {
+        move.perform(this);
+    }
+
     public void display() {
         for(int row = 0; row < this.size; row++){
             for(int col = 0; col < this.size; col++){
@@ -69,11 +85,17 @@ public class Board {
     }
 
     public Cell getCell(Coordinate coordinate) {
-        int index = coordinate.getIndex(this.size);
-        return validIndex(index) ? cells[index] : null;
+        return validCoordinate(coordinate) ? cells[coordinate.getIndex(this.size)] : null;
     }
 
-    private boolean validIndex(int index) {
+    private boolean validCoordinate(Coordinate coordinate) {
+        boolean invalidX = coordinate.getX() < 0 || coordinate.getX() >= size;
+        if(invalidX) return false;
+
+        boolean invalidY = coordinate.getX() < 0 || coordinate.getX() >= size;
+        if(invalidY) return false;
+
+        int index = coordinate.getIndex(size);
         return index >= 0 && index < cells.length;
     }
 

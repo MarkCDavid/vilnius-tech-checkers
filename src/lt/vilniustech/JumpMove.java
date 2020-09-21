@@ -38,7 +38,7 @@ public class JumpMove implements Move {
         Piece fromPiece = fromCell.getPiece();
         Piece overPiece = overCell.getPiece();
         Piece toPiece = toCell.getPiece();
-        return fromPiece != null && overPiece != null && toPiece == null;
+        return fromPiece != null && overPiece != null && fromPiece.getSide() != overPiece.getSide() && toPiece == null;
     }
 
     @Override
