@@ -5,7 +5,7 @@
 A game of checkers for two players.
 
 
-# Checkers Version
+## Checkers Version
 
 Given the [available versions of the game](https://en.wikipedia.org/wiki/Draughts), one of the versions has to be chosen for implementation. 
 
