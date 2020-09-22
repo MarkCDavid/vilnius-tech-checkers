@@ -2,6 +2,7 @@ package lt.vilniustech.rulesets.english;
 
 import lt.vilniustech.*;
 import lt.vilniustech.moves.Move;
+import lt.vilniustech.rulesets.CaptureConstraints;
 import lt.vilniustech.rulesets.CellFill;
 import lt.vilniustech.rulesets.CheckersRuleset;
 
@@ -21,6 +22,17 @@ public class EnglishCheckers implements CheckersRuleset {
         else if(blackPieces.size() == 0) return Side.WHITE;
         return Side.NONE;
     }
+
+    @Override
+    public Side getFirstMove() {
+        return Side.BLACK;
+    }
+
+    @Override
+    public CaptureConstraints getCaptureConstraints(Move move) {
+        return new EnglishCheckersCaptureConstraints(move);
+    }
+
 
     @Override
     public boolean isKingRow(Side side, Coordinate coordinate) {

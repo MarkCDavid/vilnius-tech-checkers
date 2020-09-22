@@ -40,8 +40,7 @@ public class Board implements Iterable<Cell> {
             availableMoves.addAll(getAvailableMoves(side, from));
         }
 
-        List<Move> jumpMoves = filterJumpMoves(availableMoves);
-        return jumpMoves.size() > 0 ? jumpMoves : availableMoves;
+        return availableMoves;
     }
 
 
@@ -62,23 +61,31 @@ public class Board implements Iterable<Cell> {
             }
         }
 
-        List<Move> jumpMoves = filterJumpMoves(availableMoves);
-        return jumpMoves.size() > 0 ? jumpMoves : availableMoves;
+        return availableMoves;
     }
+
+//    private List<Move> filterMoves(ArrayList<Move> availableMoves) {
+//        if (ruleset.isCaptureMandatory()) {
+//            List<Move> captureMoves = filterCaptureMoves(availableMoves);
+//            return captureMoves.size() > 0 ? captureMoves : availableMoves;
+//        } else {
+//            return availableMoves;
+//        }
+//    }
 
     private Move getMove(Coordinate from, Direction direction, int moveSize) {
         Move simple = new SimpleMove(from, direction, moveSize);
         if(simple.isValid(this)) return simple;
         else {
-            Move jump = new JumpMove(from, direction, moveSize + 1);
+            Move jump = new CaptureMove(from, direction, moveSize + 1);
             if(jump.isValid(this)) return jump;
             return null;
         }
     }
 
-    private List<Move> filterJumpMoves(List<Move> moves) {
+    private List<Move> filterCaptureMoves(List<Move> moves) {
         return moves.stream()
-                .filter(move -> move instanceof JumpMove)
+                .filter(move -> move instanceof CaptureMove)
                 .collect(Collectors.toList());
     }
 

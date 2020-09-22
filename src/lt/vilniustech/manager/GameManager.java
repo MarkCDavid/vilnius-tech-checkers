@@ -4,6 +4,7 @@ import lt.vilniustech.Board;
 import lt.vilniustech.Coordinate;
 import lt.vilniustech.Side;
 import lt.vilniustech.moves.Move;
+import lt.vilniustech.rulesets.CaptureConstraints;
 import lt.vilniustech.rulesets.CheckersRuleset;
 
 import java.util.List;
@@ -34,7 +35,9 @@ public class GameManager {
     public GameManager(CheckersRuleset ruleset) {
         this.ruleset = ruleset;
         this.board = new Board(ruleset);
+        this.currentSide = ruleset.getFirstMove();
         this.availableMoves = board.getAvailableMoves(currentSide);
+
     }
 
     public void processInput(String fromString, String toString, OnManagerException onException) {
@@ -53,14 +56,11 @@ public class GameManager {
         Move move = getMove(from, to, onException);
         if(move == null) return;
 
-        boolean anotherJumpAvailable = board.applyMove(move);
-
-        if(anotherJumpAvailable) {
-            availableMoves = board.getAvailableMoves(currentSide, to);
-        } else {
-            currentSide = Side.opposite(currentSide);
-            availableMoves = board.getAvailableMoves(currentSide);
-        }
+        CaptureConstraints captureConstraints = ruleset.getCaptureConstraints(move);
+        boolean capturesAvailable = board.applyMove(move);
+        captureConstraints.setCapturesAvailable(capturesAvailable);
+        currentSide = captureConstraints.getNextSide(currentSide);
+        availableMoves = captureConstraints.filterMoves(board.getAvailableMoves(currentSide));
 
         winner = ruleset.processWinningConditions(
                 availableMoves,
@@ -101,7 +101,7 @@ public class GameManager {
     private List<Move> availableMoves;
 
     private Side winner = Side.NONE;
-    private Side currentSide = Side.BLACK;
+    private Side currentSide;
 
     private final CheckersRuleset ruleset;
     private final Board board;

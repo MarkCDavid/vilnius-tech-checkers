@@ -2,15 +2,15 @@ package lt.vilniustech.moves;
 
 import lt.vilniustech.*;
 
-public class JumpMove implements Move {
+public class CaptureMove implements Move {
 
-    public JumpMove(Coordinate from, Coordinate over, Coordinate to) {
+    public CaptureMove(Coordinate from, Coordinate over, Coordinate to) {
         this.from = from;
         this.over = over;
         this.to = to;
     }
 
-    public JumpMove(Coordinate from, Direction direction, int moveSize) {
+    public CaptureMove(Coordinate from, Direction direction, int moveSize) {
         this.from = from;
         this.to = from.move(direction, moveSize);
         this.over = from.move(direction, moveSize - 1);
@@ -58,7 +58,7 @@ public class JumpMove implements Move {
         over.popPiece();
         to.setPiece(from.popPiece());
 
-        return board.getAvailableMoves(side, this.to).stream().anyMatch(move -> move instanceof JumpMove);
+        return board.getAvailableMoves(side, this.to).stream().anyMatch(move -> move instanceof CaptureMove);
     }
 
     @Override
