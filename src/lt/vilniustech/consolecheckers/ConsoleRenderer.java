@@ -1,4 +1,4 @@
-package lt.vilniustech.consolerenderer;
+package lt.vilniustech.consolecheckers;
 
 import lt.vilniustech.*;
 import lt.vilniustech.rulesets.CheckersRuleset;

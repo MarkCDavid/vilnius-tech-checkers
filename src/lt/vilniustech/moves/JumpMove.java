@@ -49,13 +49,16 @@ public class JumpMove implements Move {
         Cell over = board.getCell(this.over);
         Cell to = board.getCell(this.to);
 
+
         if(from == null || over == null || to == null) return false;
         if(over.getPiece() == null) return false;
+
+        Side side = from.getPiece().getSide();
 
         over.popPiece();
         to.setPiece(from.popPiece());
 
-        return board.getAvailableMoves(this.to).stream().anyMatch(move -> move instanceof JumpMove);
+        return board.getAvailableMoves(side, this.to).stream().anyMatch(move -> move instanceof JumpMove);
     }
 
     @Override

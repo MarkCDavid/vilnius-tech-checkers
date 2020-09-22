@@ -18,4 +18,5 @@ public class Cell {
 
     private Piece piece;
 
+
 }

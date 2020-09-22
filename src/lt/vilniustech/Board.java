@@ -1,101 +1,94 @@
 package lt.vilniustech;
 
-import lt.vilniustech.moves.JumpMove;
-import lt.vilniustech.moves.Move;
-import lt.vilniustech.moves.SimpleMove;
-import lt.vilniustech.rulesets.CellFill;
-import lt.vilniustech.rulesets.CheckersRuleset;
+import lt.vilniustech.moves.*;
+import lt.vilniustech.rulesets.*;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Board {
+public class Board implements Iterable<Cell> {
 
-    public CheckersRuleset getRuleset() {
-        return ruleset;
-    }
+    public CheckersRuleset getRuleset() { return ruleset; }
 
     public Board(CheckersRuleset ruleset) {
         this.ruleset = ruleset;
-        CellFill blackCellFill = ruleset.getBlackCellFill();
-        CellFill whiteCellFill = ruleset.getWhiteCellFill();
         this.cells = new Cell[ruleset.getBoardSize() * ruleset.getBoardSize()];
+
         for(int row = 0; row < ruleset.getBoardSize(); row++){
-            for(int col = 0; col < ruleset.getBoardSize(); col++){
-                Coordinate coordinate = new Coordinate(col, row);
-                int index = coordinate.getIndex(ruleset.getBoardSize());
-                this.cells[index] = new Cell();
+            for(int column = 0; column < ruleset.getBoardSize(); column++){
 
-                if(blackCellFill.fillCell(coordinate))
-                    this.cells[index].setPiece(ruleset.createBlackPiece());
+                Coordinate coordinate = new Coordinate(column, row);
+                Cell cell = setCell(coordinate, new Cell());
 
-                if(whiteCellFill.fillCell(coordinate))
-                    this.cells[index].setPiece(ruleset.createWhitePiece());
+                if(ruleset.getCellFill(Side.BLACK).fillCell(coordinate))
+                    cell.setPiece(ruleset.createPiece(Side.BLACK));
+
+                if(ruleset.getCellFill(Side.WHITE).fillCell(coordinate))
+                    cell.setPiece(ruleset.createPiece(Side.WHITE));
             }
         }
     }
 
     public List<Move> getAvailableMoves(Side side) {
+
         ArrayList<Move> availableMoves = new ArrayList<>();
 
         for(int i = 0; i < cells.length; i++) {
-            Coordinate from = Coordinate.ofIndex(i, this.ruleset.getBoardSize());
-            Piece piece = getCell(from).getPiece();
-            if(piece != null && piece.getSide() == side)
-                availableMoves.addAll(getAvailableMoves(from));
+            Coordinate from = Coordinate.ofIndex(i, ruleset.getBoardSize());
+            availableMoves.addAll(getAvailableMoves(side, from));
         }
 
-        List<Move> jumpMoves = availableMoves.stream().filter(move -> move instanceof JumpMove).collect(Collectors.toList());
-
-        if(jumpMoves.size() > 0)
-            return jumpMoves;
-
-        return availableMoves;
+        List<Move> jumpMoves = filterJumpMoves(availableMoves);
+        return jumpMoves.size() > 0 ? jumpMoves : availableMoves;
     }
 
 
-    public List<Move> getAvailableMoves(Coordinate from) {
+    public List<Move> getAvailableMoves(Side side, Coordinate from) {
         ArrayList<Move> availableMoves = new ArrayList<>();
 
         Cell fromCell = getCell(from);
         if(fromCell == null) return availableMoves;
 
         Piece fromPiece = fromCell.getPiece();
-        if(fromPiece == null) return availableMoves;
+        if(fromPiece == null || fromPiece.getSide() != side) return availableMoves;
 
-        Direction[] availableDirections = fromPiece.getDirections();
-        for(Direction direction : availableDirections) {
+        for(Direction direction : fromPiece.getDirections()) {
             for(int moveSize = 1; moveSize <= fromPiece.getMoveSize(); moveSize++) {
-                Move simple = new SimpleMove(from, direction, moveSize);
-                if(simple.isValid(this)) {
-                    availableMoves.add(simple);
-                }
-                else {
-                    Move jump = new JumpMove(from, direction, moveSize + 1);
-                    if(jump.isValid(this)){
-                        availableMoves.add(jump);
-                    }
-                }
+                Move move = getMove(from, direction, moveSize);
+                if(move == null) continue;
+                availableMoves.add(move);
             }
         }
 
-        List<Move> jumpMoves = availableMoves.stream().filter(move -> move instanceof JumpMove).collect(Collectors.toList());
-
-        if(jumpMoves.size() > 0)
-            return jumpMoves;
-
-        return availableMoves;
+        List<Move> jumpMoves = filterJumpMoves(availableMoves);
+        return jumpMoves.size() > 0 ? jumpMoves : availableMoves;
     }
 
-    public boolean doMove(Move move) {
+    private Move getMove(Coordinate from, Direction direction, int moveSize) {
+        Move simple = new SimpleMove(from, direction, moveSize);
+        if(simple.isValid(this)) return simple;
+        else {
+            Move jump = new JumpMove(from, direction, moveSize + 1);
+            if(jump.isValid(this)) return jump;
+            return null;
+        }
+    }
 
+    private List<Move> filterJumpMoves(List<Move> moves) {
+        return moves.stream()
+                .filter(move -> move instanceof JumpMove)
+                .collect(Collectors.toList());
+    }
+
+    public boolean applyMove(Move move) {
         Side side = getCell(move.getFrom()).getPiece().getSide();
-        boolean destinationIsKingRow = side == Side.BLACK ? ruleset.isBlackKingRow(move.getTo()) : ruleset.isWhiteKingRow(move.getTo());
+        boolean destinationIsKingRow = ruleset.isKingRow(side, move.getTo());
 
         if(destinationIsKingRow) {
             move.perform(this);
-            Piece kingPiece = side == Side.BLACK ? ruleset.createBlackKing() : ruleset.createWhiteKing();
+            Piece kingPiece = ruleset.createKing(side);
             getCell(move.getTo()).setPiece(kingPiece);
             return false;
         }
@@ -104,8 +97,24 @@ public class Board {
         }
     }
 
+    public Cell setCell(Coordinate coordinate, Cell cell) {
+        if(!validCoordinate(coordinate)) return null;
+        cells[coordinate.getIndex(ruleset.getBoardSize())] = cell;
+        return cell;
+    }
+
     public Cell getCell(Coordinate coordinate) {
-        return validCoordinate(coordinate) ? cells[coordinate.getIndex(this.ruleset.getBoardSize())] : null;
+        return validCoordinate(coordinate) ? cells[coordinate.getIndex(ruleset.getBoardSize())] : null;
+    }
+
+    public List<Piece> getSidePieces(Side side) {
+        ArrayList<Piece> pieces = new ArrayList<>();
+        for(Cell cell: this) {
+            Piece piece = cell.getPiece();
+            if(piece != null && piece.getSide() == side)
+                pieces.add(piece);
+        }
+        return pieces;
     }
 
     private boolean validCoordinate(Coordinate coordinate) {
@@ -121,4 +130,10 @@ public class Board {
 
     private final Cell[] cells;
     private final CheckersRuleset ruleset;
+
+
+    @Override
+    public Iterator<Cell> iterator() {
+        return new BoardIterator(this);
+    }
 }

@@ -1,5 +1,6 @@
 package lt.vilniustech;
 
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,9 +31,9 @@ public class Coordinate {
         return String.format("%s%d", toStringIndex(column), row);
     }
 
-    public static final Pattern letterNumberCoordinate = Pattern.compile("([A-Z]+)([0-9]+)");
-    public static final Pattern numberLetterCoordinate = Pattern.compile("([0-9]+)([A-Z]+)");
-    public static Coordinate ofString(String coordinate) {
+    public static final Pattern letterNumberCoordinate = Pattern.compile("([A-Za-z]+)([0-9]+)");
+    public static final Pattern numberLetterCoordinate = Pattern.compile("([0-9]+)([A-Za-z]+)");
+    public static Coordinate ofString(String coordinate) throws IllegalCoordinateException {
         Matcher numberLetterMatcher = numberLetterCoordinate.matcher(coordinate);
         if(numberLetterMatcher.find())
             return new Coordinate(numberLetterMatcher.group(2), Integer.parseInt(numberLetterMatcher.group(1)));
@@ -68,11 +69,25 @@ public class Coordinate {
     }
 
     public static int ofStringIndex(String string) {
+        string = string.toUpperCase();
         int index = 0;
         for(char symbol: string.toCharArray()) {
             index += alphabet.indexOf(symbol);
         }
         return index;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) return true;
+        if (other == null || getClass() != other.getClass()) return false;
+        Coordinate that = (Coordinate) other;
+        return column == that.column && row == that.row;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(column, row);
     }
 
     private final int column;

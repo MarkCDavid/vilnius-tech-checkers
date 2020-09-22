@@ -12,6 +12,42 @@ public class EnglishCheckers implements CheckersRuleset {
     }
 
     @Override
+    public boolean isKingRow(Side side, Coordinate coordinate) {
+        switch (side) {
+            case BLACK -> { return isBlackKingRow(coordinate); }
+            case WHITE -> { return isWhiteKingRow(coordinate); }
+            default -> throw new IllegalStateException("Unexpected value: " + side);
+        }
+    }
+
+    @Override
+    public CellFill getCellFill(Side side) {
+        switch (side) {
+            case BLACK -> { return getBlackCellFill(); }
+            case WHITE -> { return getWhiteCellFill(); }
+            default -> throw new IllegalStateException("Unexpected value: " + side);
+        }
+    }
+
+    @Override
+    public Piece createPiece(Side side) {
+        switch (side) {
+            case BLACK -> { return createBlackPiece(); }
+            case WHITE -> { return createWhitePiece(); }
+            default -> throw new IllegalStateException("Unexpected value: " + side);
+        }
+    }
+
+    @Override
+    public Piece createKing(Side side) {
+        switch (side) {
+            case BLACK -> { return createBlackKing(); }
+            case WHITE -> { return createWhiteKing(); }
+            default -> throw new IllegalStateException("Unexpected value: " + side);
+        }
+    }
+
+    @Override
     public Piece createWhitePiece() {
         return new Piece(Side.WHITE, new Direction[]{
                 new Direction(1, -1),
@@ -57,13 +93,12 @@ public class EnglishCheckers implements CheckersRuleset {
     }
 
     @Override
-    public CellFill getWhiteCellFill() {
-        return new EnglishCheckersCellFill(getBoardSize() - 3, getBoardSize() - 1);
-    }
+    public CellFill getWhiteCellFill() { return whiteCellFill; }
 
     @Override
-    public CellFill getBlackCellFill() {
-        return new EnglishCheckersCellFill(0, 2);
-    }
+    public CellFill getBlackCellFill() { return blackCellFill; }
 
+
+    private final CellFill whiteCellFill = new EnglishCheckersCellFill(getBoardSize() - 3, getBoardSize() - 1);
+    private final CellFill blackCellFill = new EnglishCheckersCellFill(0, 2);
 }
