@@ -5,8 +5,9 @@ import java.util.List;
 
 public class Board {
 
-    public Board(int size, int filledRows) {
-        this.size = size;
+    public Board(CheckersRuleset ruleset) {
+        this.size = ruleset.getBoardSize();
+
         this.cells = new Cell[size * size];
         for(int row = 0; row < size; row++){
             for(int col = 0; col < size; col++){
@@ -14,20 +15,20 @@ public class Board {
                 int offset = (row + 1) % 2;
                 this.cells[index] = new Cell();
 
-                if(row < filledRows) {
+                if(row < ruleset.getFilledRowCount()) {
                     if((col + offset) % 2 == 0)
-                        this.cells[index].setPiece(new Piece('B', 1));
+                        this.cells[index].setPiece(ruleset.createBlackPiece());
                 }
 
-                if(row >= size - filledRows){
+                if(row >= size - ruleset.getFilledRowCount()){
                     if((col + offset) % 2 == 0)
-                        this.cells[index].setPiece(new Piece('W', 1));
+                        this.cells[index].setPiece(ruleset.createWhitePiece());
                 }
             }
         }
     }
 
-    public List<Move> getAvailableMoves(char side) {
+    public List<Move> getAvailableMoves(Side side) {
         ArrayList<Move> availableMoves = new ArrayList<>();
 
         for(int i = 0; i < cells.length; i++) {
@@ -49,7 +50,7 @@ public class Board {
         Piece fromPiece = fromCell.getPiece();
         if(fromPiece == null) return availableMoves;
 
-        Direction[] availableDirections = fromPiece.getAvailableDirections();
+        Direction[] availableDirections = fromPiece.getDirections();
         for(Direction direction : availableDirections) {
             for(int moveSize = 1; moveSize <= fromPiece.getMoveSize(); moveSize++) {
                 Move simple = new SimpleMove(from, direction, moveSize);
@@ -77,10 +78,18 @@ public class Board {
             for(int col = 0; col < this.size; col++){
                 int index = row * this.size + col;
                 Piece piece = cells[index].getPiece();
-                char representation = piece != null ? piece.getSide() : ' ';
+                char representation = piece == null ? ' ' : getRepresentation(piece.getSide());
                 System.out.printf("|%c|", representation);
             }
             System.out.println();
+        }
+    }
+
+    private char getRepresentation(Side side){
+        switch (side) {
+            case BLACK -> { return 'B'; }
+            case WHITE -> { return 'W'; }
+            default -> { return ' '; }
         }
     }
 

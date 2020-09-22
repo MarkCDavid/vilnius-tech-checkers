@@ -2,11 +2,11 @@ package lt.vilniustech;
 
 public class Piece {
 
-    public Direction[] getAvailableDirections() {
-        return availableDirections;
+    public Direction[] getDirections() {
+        return directions;
     }
 
-    public char getSide() {
+    public Side getSide() {
         return side;
     }
 
@@ -14,18 +14,19 @@ public class Piece {
         return moveSize;
     }
 
-    public Piece(char side, int moveSize){
+    public Piece(Side side, Direction[] directions, int moveSize){
         this.side = side;
-        if(side == 'B')
-            this.availableDirections = new Direction[] { new Direction(1, 1), new Direction(-1, 1),};
-        else if(side == 'W')
-            this.availableDirections = new Direction[] { new Direction(1, -1), new Direction(-1, -1),};
-        else
-            this.availableDirections = new Direction[0];
+        this.directions = directions;
         this.moveSize = moveSize;
     }
 
-    private final Direction[] availableDirections;
+    public Piece(Side side, Direction[] directions){
+        this.side = side;
+        this.directions = directions;
+        this.moveSize = 1;
+    }
+
+    private final Side side;
+    private final Direction[] directions;
     private final int moveSize;
-    private final char side;
 }

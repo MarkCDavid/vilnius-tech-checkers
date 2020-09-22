@@ -5,10 +5,10 @@ import java.util.Scanner;
 
 public class Checkers {
     public static void main(String[] args) {
-        Board board = new Board(8, 3);
+        Board board = new Board(new EnglishCheckers());
         Scanner scanner = new Scanner(System.in);
 
-        char side = 'B';
+        Side side = Side.BLACK;
 
         while(true) {
             board.display();
@@ -25,11 +25,8 @@ public class Checkers {
 
             board.doMove(moves.get(choice));
 
-            side = getSide(side);
+            side = Side.opposite(side);
         }
     }
 
-    public static char getSide(char current) {
-        return current == 'W' ? 'B' : 'W';
-    }
 }
