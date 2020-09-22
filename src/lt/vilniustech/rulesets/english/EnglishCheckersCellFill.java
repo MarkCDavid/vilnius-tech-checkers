@@ -1,4 +1,7 @@
-package lt.vilniustech;
+package lt.vilniustech.rulesets.english;
+
+import lt.vilniustech.rulesets.CellFill;
+import lt.vilniustech.Coordinate;
 
 public class EnglishCheckersCellFill extends CellFill {
 

@@ -1,4 +1,5 @@
-package lt.vilniustech;
+package lt.vilniustech.rulesets;
+import lt.vilniustech.Coordinate;
 
 public abstract class CellFill {
 

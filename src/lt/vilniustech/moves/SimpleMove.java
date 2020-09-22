@@ -1,4 +1,6 @@
-package lt.vilniustech;
+package lt.vilniustech.moves;
+
+import lt.vilniustech.*;
 
 public class SimpleMove implements Move {
 
@@ -34,11 +36,12 @@ public class SimpleMove implements Move {
     }
 
     @Override
-    public void perform(Board board) {
+    public boolean perform(Board board) {
         Cell from = board.getCell(this.from);
         Cell to = board.getCell(this.to);
-        if(from == null || to == null) return;
+        if(from == null || to == null) return false;
         to.setPiece(from.popPiece());
+        return false;
     }
 
     @Override

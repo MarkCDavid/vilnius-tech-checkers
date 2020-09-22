@@ -1,4 +1,8 @@
-package lt.vilniustech;
+package lt.vilniustech.rulesets.english;
+
+import lt.vilniustech.*;
+import lt.vilniustech.rulesets.CellFill;
+import lt.vilniustech.rulesets.CheckersRuleset;
 
 public class EnglishCheckers implements CheckersRuleset {
 
@@ -43,8 +47,18 @@ public class EnglishCheckers implements CheckersRuleset {
     }
 
     @Override
+    public boolean isWhiteKingRow(Coordinate coordinate) {
+        return coordinate.getRow() == 0;
+    }
+
+    @Override
+    public boolean isBlackKingRow(Coordinate coordinate) {
+        return coordinate.getRow() == getBoardSize() - 1;
+    }
+
+    @Override
     public CellFill getWhiteCellFill() {
-        return new EnglishCheckersCellFill(5, 7);
+        return new EnglishCheckersCellFill(getBoardSize() - 3, getBoardSize() - 1);
     }
 
     @Override

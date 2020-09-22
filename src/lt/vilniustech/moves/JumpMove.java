@@ -1,4 +1,6 @@
-package lt.vilniustech;
+package lt.vilniustech.moves;
+
+import lt.vilniustech.*;
 
 public class JumpMove implements Move {
 
@@ -42,16 +44,18 @@ public class JumpMove implements Move {
     }
 
     @Override
-    public void perform(Board board) {
+    public boolean perform(Board board) {
         Cell from = board.getCell(this.from);
         Cell over = board.getCell(this.over);
         Cell to = board.getCell(this.to);
 
-        if(from == null || over == null || to == null) return;
-        if(over.getPiece() == null) return;
+        if(from == null || over == null || to == null) return false;
+        if(over.getPiece() == null) return false;
 
         over.popPiece();
         to.setPiece(from.popPiece());
+
+        return board.getAvailableMoves(this.to).stream().anyMatch(move -> move instanceof JumpMove);
     }
 
     @Override

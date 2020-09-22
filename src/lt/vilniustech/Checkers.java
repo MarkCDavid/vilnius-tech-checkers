@@ -1,5 +1,8 @@
 package lt.vilniustech;
 
+import lt.vilniustech.moves.Move;
+import lt.vilniustech.rulesets.english.EnglishCheckers;
+
 import java.util.List;
 import java.util.Scanner;
 
@@ -9,11 +12,14 @@ public class Checkers {
         Scanner scanner = new Scanner(System.in);
 
         Side side = Side.BLACK;
+        Coordinate afterJump = null;
 
         while(true) {
             board.display();
             System.out.println();
-            List<Move> moves = board.getAvailableMoves(side);
+            List<Move> moves;
+            if(afterJump == null) moves = board.getAvailableMoves(side);
+            else moves = board.getAvailableMoves(afterJump);
             for(int i = 0; i < moves.size(); i++) {
                 System.out.printf("%d) %s%n", i, moves.get(i));
             }
@@ -23,9 +29,17 @@ public class Checkers {
 
             if(choice == -1) break;
 
-            board.doMove(moves.get(choice));
+            Move move = moves.get(choice);
+            boolean anotherJump = board.doMove(move);
+            if(!anotherJump) {
+                side = Side.opposite(side);
+                afterJump = null;
+            }
+            else
+            {
+                afterJump = move.getTo();
+            }
 
-            side = Side.opposite(side);
         }
     }
 
