@@ -1,5 +1,7 @@
 package lt.vilniustech.consolerenderer;
 
+import lt.vilniustech.Coordinate;
+
 import java.util.Arrays;
 
 public class Buffer {
@@ -41,7 +43,7 @@ public class Buffer {
         int y = boardOriginY + Shapes.HORIZONTAL_OFFSET / 2;
 
         for (int i = 0; i < boardSize; i++) {
-            String index = String.valueOf(i);
+            String index = Coordinate.toStringIndex(i);
 
             for (int xOffset = 0; xOffset < index.length(); xOffset++)
                 buffer[x + xOffset][y] = index.charAt(xOffset);
