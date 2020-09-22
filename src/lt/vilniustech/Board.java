@@ -12,6 +12,10 @@ import java.util.stream.Collectors;
 
 public class Board {
 
+    public CheckersRuleset getRuleset() {
+        return ruleset;
+    }
+
     public Board(CheckersRuleset ruleset) {
         this.ruleset = ruleset;
         CellFill blackCellFill = ruleset.getBlackCellFill();
@@ -97,33 +101,6 @@ public class Board {
         }
         else {
             return move.perform(this);
-        }
-    }
-
-    public void display() {
-        for(int row = -1; row < this.ruleset.getBoardSize(); row++){
-            if(row > -1) System.out.printf(" %d ", row);
-            for(int col = 0; col < this.ruleset.getBoardSize(); col++){
-                if(row == -1) {
-                    if(col == 0) System.out.print(" XY");
-                    System.out.printf(" %d ", col);
-                }
-                else {
-                    int index = row * this.ruleset.getBoardSize() + col;
-                    Piece piece = cells[index].getPiece();
-                    char representation = piece == null ? ' ' : getRepresentation(piece.getSide());
-                    System.out.printf("|%c|", representation);
-                }
-            }
-            System.out.println();
-        }
-    }
-
-    private char getRepresentation(Side side){
-        switch (side) {
-            case BLACK -> { return 'B'; }
-            case WHITE -> { return 'W'; }
-            default -> { return ' '; }
         }
     }
 

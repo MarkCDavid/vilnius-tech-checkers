@@ -34,7 +34,7 @@ public class EnglishCheckers implements CheckersRuleset {
                 new Direction(-1, -1),
                 new Direction(1, 1),
                 new Direction(-1, 1),
-        });
+        }, true);
     }
     @Override
     public Piece createBlackKing() {
@@ -43,7 +43,7 @@ public class EnglishCheckers implements CheckersRuleset {
                 new Direction(-1, -1),
                 new Direction(1, 1),
                 new Direction(-1, 1),
-        });
+        }, true);
     }
 
     @Override

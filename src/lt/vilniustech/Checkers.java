@@ -10,12 +10,13 @@ public class Checkers {
     public static void main(String[] args) {
         Board board = new Board(new EnglishCheckers());
         Scanner scanner = new Scanner(System.in);
+        Renderer renderer = new ConsoleRenderer();
 
         Side side = Side.BLACK;
         Coordinate afterJump = null;
 
         while(true) {
-            board.display();
+            renderer.render(board);
             System.out.println();
             List<Move> moves;
             if(afterJump == null) moves = board.getAvailableMoves(side);
