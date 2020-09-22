@@ -1,5 +1,6 @@
 package lt.vilniustech;
 
+import lt.vilniustech.consolerenderer.ConsoleRenderer;
 import lt.vilniustech.moves.Move;
 import lt.vilniustech.rulesets.english.EnglishCheckers;
 
@@ -17,7 +18,7 @@ public class Checkers {
 
         while(true) {
             renderer.render(board);
-            System.out.println();
+            System.out.println(side);
             List<Move> moves;
             if(afterJump == null) moves = board.getAvailableMoves(side);
             else moves = board.getAvailableMoves(afterJump);
