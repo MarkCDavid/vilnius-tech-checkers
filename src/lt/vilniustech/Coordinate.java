@@ -3,15 +3,15 @@ package lt.vilniustech;
 public class Coordinate {
 
     public int getIndex(int size) {
-        return y * size + x;
+         return row * size + column;
     }
 
-    public int getX() {
-        return x;
+    public int getColumn() {
+        return column;
     }
 
-    public int getY() {
-        return y;
+    public int getRow() {
+        return row;
     }
 
     public Coordinate move(Direction direction){
@@ -19,23 +19,23 @@ public class Coordinate {
     }
 
     public Coordinate move(Direction direction, int size){
-        return new Coordinate(this.x + direction.getX() * size, this.y + direction.getY() * size);
+        return new Coordinate(this.column + direction.getX() * size, this.row + direction.getY() * size);
     }
 
     @Override
     public String toString() {
-        return String.format("(%d, %d)", x, y);
+        return String.format("(%d, %d)", column, row);
     }
 
-    public Coordinate(int x, int y) {
-        this.x = x;
-        this.y = y;
+    public Coordinate(int column, int row) {
+        this.column = column;
+        this.row = row;
     }
 
     public static Coordinate ofIndex(int index, int size) {
         return new Coordinate(index / size, index % size);
     }
 
-    private final int x;
-    private final int y;
+    private final int column;
+    private final int row;
 }

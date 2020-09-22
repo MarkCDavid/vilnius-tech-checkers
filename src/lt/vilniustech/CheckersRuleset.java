@@ -3,11 +3,12 @@ package lt.vilniustech;
 public interface CheckersRuleset {
 
     int getBoardSize();
-    int getFilledRowCount();
 
-
-    Piece createWhitePiece();
+    CellFill getBlackCellFill();
     Piece createBlackPiece();
-    Piece createWhiteKing();
     Piece createBlackKing();
+
+    CellFill getWhiteCellFill();
+    Piece createWhitePiece();
+    Piece createWhiteKing();
 }

@@ -7,23 +7,20 @@ public class Board {
 
     public Board(CheckersRuleset ruleset) {
         this.size = ruleset.getBoardSize();
-
+        CellFill blackCellFill = ruleset.getBlackCellFill();
+        CellFill whiteCellFill = ruleset.getWhiteCellFill();
         this.cells = new Cell[size * size];
         for(int row = 0; row < size; row++){
             for(int col = 0; col < size; col++){
-                int index = row * size + col;
-                int offset = (row + 1) % 2;
+                Coordinate coordinate = new Coordinate(col, row);
+                int index = coordinate.getIndex(size);
                 this.cells[index] = new Cell();
 
-                if(row < ruleset.getFilledRowCount()) {
-                    if((col + offset) % 2 == 0)
-                        this.cells[index].setPiece(ruleset.createBlackPiece());
-                }
+                if(blackCellFill.fillCell(coordinate))
+                    this.cells[index].setPiece(ruleset.createBlackPiece());
 
-                if(row >= size - ruleset.getFilledRowCount()){
-                    if((col + offset) % 2 == 0)
-                        this.cells[index].setPiece(ruleset.createWhitePiece());
-                }
+                if(whiteCellFill.fillCell(coordinate))
+                    this.cells[index].setPiece(ruleset.createWhitePiece());
             }
         }
     }
@@ -98,10 +95,10 @@ public class Board {
     }
 
     private boolean validCoordinate(Coordinate coordinate) {
-        boolean invalidX = coordinate.getX() < 0 || coordinate.getX() >= size;
+        boolean invalidX = coordinate.getColumn() < 0 || coordinate.getColumn() >= size;
         if(invalidX) return false;
 
-        boolean invalidY = coordinate.getX() < 0 || coordinate.getX() >= size;
+        boolean invalidY = coordinate.getColumn() < 0 || coordinate.getColumn() >= size;
         if(invalidY) return false;
 
         int index = coordinate.getIndex(size);

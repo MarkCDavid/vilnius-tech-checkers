@@ -8,11 +8,6 @@ public class EnglishCheckers implements CheckersRuleset {
     }
 
     @Override
-    public int getFilledRowCount() {
-        return 3;
-    }
-
-    @Override
     public Piece createWhitePiece() {
         return new Piece(Side.WHITE, new Direction[]{
                 new Direction(1, -1),
@@ -37,7 +32,6 @@ public class EnglishCheckers implements CheckersRuleset {
                 new Direction(-1, 1),
         });
     }
-
     @Override
     public Piece createBlackKing() {
         return new Piece(Side.BLACK, new Direction[]{
@@ -47,4 +41,15 @@ public class EnglishCheckers implements CheckersRuleset {
                 new Direction(-1, 1),
         });
     }
+
+    @Override
+    public CellFill getWhiteCellFill() {
+        return new EnglishCheckersCellFill(5, 7);
+    }
+
+    @Override
+    public CellFill getBlackCellFill() {
+        return new EnglishCheckersCellFill(0, 2);
+    }
+
 }
