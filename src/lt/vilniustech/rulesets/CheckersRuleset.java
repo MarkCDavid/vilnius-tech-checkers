@@ -3,10 +3,14 @@ package lt.vilniustech.rulesets;
 import lt.vilniustech.Coordinate;
 import lt.vilniustech.Piece;
 import lt.vilniustech.Side;
+import lt.vilniustech.moves.Move;
+
+import java.util.List;
 
 public interface CheckersRuleset {
 
     int getBoardSize();
+    Side processWinningConditions(List<Move> moves, List<Piece> whitePieces, List<Piece> blackPieces);
 
     boolean isKingRow(Side side, Coordinate coordinate);
     CellFill getCellFill(Side side);

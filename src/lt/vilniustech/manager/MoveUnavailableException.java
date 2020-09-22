@@ -1,4 +1,6 @@
-package lt.vilniustech;
+package lt.vilniustech.manager;
+
+import lt.vilniustech.Coordinate;
 
 public class MoveUnavailableException extends RuntimeException {
 

@@ -1,14 +1,25 @@
 package lt.vilniustech.rulesets.english;
 
 import lt.vilniustech.*;
+import lt.vilniustech.moves.Move;
 import lt.vilniustech.rulesets.CellFill;
 import lt.vilniustech.rulesets.CheckersRuleset;
+
+import java.util.List;
 
 public class EnglishCheckers implements CheckersRuleset {
 
     @Override
     public int getBoardSize() {
         return 8;
+    }
+
+    @Override
+    public Side processWinningConditions(List<Move> moves, List<Piece> whitePieces, List<Piece> blackPieces) {
+        if(moves.size() == 0) return Side.DRAW;
+        else if(whitePieces.size() == 0) return Side.BLACK;
+        else if(blackPieces.size() == 0) return Side.WHITE;
+        return Side.NONE;
     }
 
     @Override

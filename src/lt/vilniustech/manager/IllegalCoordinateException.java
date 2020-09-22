@@ -1,4 +1,4 @@
-package lt.vilniustech;
+package lt.vilniustech.manager;
 
 public class IllegalCoordinateException extends RuntimeException {
 

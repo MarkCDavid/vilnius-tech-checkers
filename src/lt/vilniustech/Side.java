@@ -2,7 +2,9 @@ package lt.vilniustech;
 
 public enum Side {
     BLACK,
-    WHITE;
+    WHITE,
+    DRAW,
+    NONE;
 
     public static Side opposite(Side side) {
         switch (side){

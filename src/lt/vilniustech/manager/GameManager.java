@@ -1,6 +1,10 @@
-package lt.vilniustech;
+package lt.vilniustech.manager;
 
+import lt.vilniustech.Board;
+import lt.vilniustech.Coordinate;
+import lt.vilniustech.Side;
 import lt.vilniustech.moves.Move;
+import lt.vilniustech.rulesets.CheckersRuleset;
 
 import java.util.List;
 import java.util.Optional;
@@ -9,7 +13,7 @@ import java.util.function.Predicate;
 public class GameManager {
 
     public boolean isFinished() {
-        return winner != null;
+        return winner != Side.NONE;
     }
 
     public Side getWinner() {
@@ -27,10 +31,10 @@ public class GameManager {
         return board;
     }
 
-    public GameManager(Board board) {
-        this.board = board;
+    public GameManager(CheckersRuleset ruleset) {
+        this.ruleset = ruleset;
+        this.board = new Board(ruleset);
         this.availableMoves = board.getAvailableMoves(currentSide);
-        this.winner = null;
     }
 
     public void processInput(String fromString, String toString, OnManagerException onException) {
@@ -58,9 +62,13 @@ public class GameManager {
             availableMoves = board.getAvailableMoves(currentSide);
         }
 
-        if(board.getSidePieces(Side.BLACK).size() == 0) winner = Side.WHITE;
-        else if(board.getSidePieces(Side.WHITE).size() == 0) winner = Side.BLACK;
+        winner = ruleset.processWinningConditions(
+                availableMoves,
+                board.getSidePieces(Side.WHITE),
+                board.getSidePieces(Side.BLACK)
+        );
     }
+
 
     private Move getMove(Coordinate from, Coordinate to, OnManagerException onException) {
         Optional<Move> move = availableMoves.stream()
@@ -92,8 +100,9 @@ public class GameManager {
 
     private List<Move> availableMoves;
 
-    private Side winner;
+    private Side winner = Side.NONE;
     private Side currentSide = Side.BLACK;
 
+    private final CheckersRuleset ruleset;
     private final Board board;
 }

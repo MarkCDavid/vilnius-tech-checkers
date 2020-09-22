@@ -1,5 +1,7 @@
 package lt.vilniustech;
 
+import lt.vilniustech.manager.IllegalCoordinateException;
+
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
