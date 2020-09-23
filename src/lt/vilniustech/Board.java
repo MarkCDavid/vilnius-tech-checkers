@@ -94,13 +94,13 @@ public class Board implements Iterable<Cell> {
         boolean destinationIsKingRow = ruleset.isKingRow(side, move.getTo());
 
         if(destinationIsKingRow) {
-            move.perform(this);
+            move.apply(this);
             Piece kingPiece = ruleset.createKing(side);
             getCell(move.getTo()).setPiece(kingPiece);
             return false;
         }
         else {
-            return move.perform(this);
+            return move.apply(this);
         }
     }
 

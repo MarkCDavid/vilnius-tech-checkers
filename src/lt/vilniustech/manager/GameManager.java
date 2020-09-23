@@ -35,9 +35,8 @@ public class GameManager {
     public GameManager(CheckersRuleset ruleset) {
         this.ruleset = ruleset;
         this.board = new Board(ruleset);
-        this.currentSide = ruleset.getFirstMove();
-        this.availableMoves = board.getAvailableMoves(currentSide);
-
+        this.currentSide = ruleset.getFirstToMove();
+        this.availableMoves =  board.getAvailableMoves(currentSide);
     }
 
     public void processInput(String fromString, String toString, OnManagerException onException) {
@@ -56,9 +55,9 @@ public class GameManager {
         Move move = getMove(from, to, onException);
         if(move == null) return;
 
-        CaptureConstraints captureConstraints = ruleset.getCaptureConstraints(move);
+        CaptureConstraints captureConstraints = ruleset.getCaptureConstraints(board, move);
         boolean capturesAvailable = board.applyMove(move);
-        captureConstraints.setCapturesAvailable(capturesAvailable);
+        captureConstraints.setMultipleCaptures(capturesAvailable);
         currentSide = captureConstraints.getNextSide(currentSide);
         availableMoves = captureConstraints.filterMoves(board.getAvailableMoves(currentSide));
 

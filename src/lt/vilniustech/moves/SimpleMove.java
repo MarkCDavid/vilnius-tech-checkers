@@ -25,6 +25,11 @@ public class SimpleMove implements Move {
     }
 
     @Override
+    public boolean isApplied() {
+        return applied;
+    }
+
+    @Override
     public boolean isValid(Board board) {
         Cell fromCell = board.getCell(this.from);
         Cell toCell = board.getCell(this.to);
@@ -36,11 +41,28 @@ public class SimpleMove implements Move {
     }
 
     @Override
-    public boolean perform(Board board) {
+    public boolean apply(Board board) {
+        if(isApplied()) return false;
+
         Cell from = board.getCell(this.from);
         Cell to = board.getCell(this.to);
         if(from == null || to == null) return false;
+
+        applied = true;
         to.setPiece(from.popPiece());
+        return false;
+    }
+
+    @Override
+    public boolean revert(Board board) {
+        if(!isApplied()) return false;
+
+        Cell from = board.getCell(this.from);
+        Cell to = board.getCell(this.to);
+        if(from == null || to == null) return false;
+
+        applied = false;
+        from.setPiece(to.popPiece());
         return false;
     }
 
@@ -48,6 +70,8 @@ public class SimpleMove implements Move {
     public String toString() {
         return String.format("%s -> %s", from, to);
     }
+
+    private boolean applied;
 
     private final Coordinate from;
     private final Coordinate to;

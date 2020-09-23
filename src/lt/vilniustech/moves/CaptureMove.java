@@ -26,6 +26,11 @@ public class CaptureMove implements Move {
         return to;
     }
 
+    @Override
+    public boolean isApplied() {
+        return applied;
+    }
+
     public Coordinate getOver() {
         return over;
     }
@@ -44,27 +49,51 @@ public class CaptureMove implements Move {
     }
 
     @Override
-    public boolean perform(Board board) {
+    public boolean apply(Board board) {
+        if(isApplied()) return false;
+
         Cell from = board.getCell(this.from);
         Cell over = board.getCell(this.over);
         Cell to = board.getCell(this.to);
 
-
         if(from == null || over == null || to == null) return false;
         if(over.getPiece() == null) return false;
 
-        Side side = from.getPiece().getSide();
+        applied = true;
 
-        over.popPiece();
+        Side side = from.getPiece().getSide();
+        capturedPiece = over.popPiece();
         to.setPiece(from.popPiece());
 
         return board.getAvailableMoves(side, this.to).stream().anyMatch(move -> move instanceof CaptureMove);
     }
 
     @Override
+    public boolean revert(Board board) {
+        if(!isApplied()) return false;
+
+        Cell from = board.getCell(this.from);
+        Cell over = board.getCell(this.over);
+        Cell to = board.getCell(this.to);
+
+        if(from == null || over == null || to == null) return false;
+        if(over.getPiece() != null) return false;
+
+        applied = false;
+
+        over.setPiece(capturedPiece);
+        from.setPiece(to.popPiece());
+
+        return false;
+    }
+
+    @Override
     public String toString() {
         return String.format("%s --%s-> %s", from, over, to);
     }
+
+    private boolean applied;
+    private Piece capturedPiece;
 
     private final Coordinate from;
     private final Coordinate over;

@@ -1,5 +1,6 @@
 package lt.vilniustech.rulesets;
 
+import lt.vilniustech.Board;
 import lt.vilniustech.Coordinate;
 import lt.vilniustech.Piece;
 import lt.vilniustech.Side;
@@ -12,9 +13,9 @@ public interface CheckersRuleset {
 
     int getBoardSize();
     Side processWinningConditions(List<Move> moves, List<Piece> whitePieces, List<Piece> blackPieces);
-    Side getFirstMove();
+    Side getFirstToMove();
 
-    CaptureConstraints getCaptureConstraints(Move move);
+    CaptureConstraints getCaptureConstraints(Board board, Move move);
 
     boolean isKingRow(Side side, Coordinate coordinate);
     CellFill getCellFill(Side side);

@@ -1,14 +1,15 @@
-package lt.vilniustech.rulesets.english;
+package lt.vilniustech.rulesets.italian;
 
 import lt.vilniustech.*;
 import lt.vilniustech.moves.Move;
 import lt.vilniustech.rulesets.CaptureConstraints;
 import lt.vilniustech.rulesets.CellFill;
 import lt.vilniustech.rulesets.CheckersRuleset;
+import lt.vilniustech.rulesets.english.EnglishCheckersCellFill;
 
 import java.util.List;
 
-public class EnglishCheckers implements CheckersRuleset {
+public class ItalianCheckers implements CheckersRuleset {
 
     @Override
     public int getBoardSize() {
@@ -25,12 +26,12 @@ public class EnglishCheckers implements CheckersRuleset {
 
     @Override
     public Side getFirstToMove() {
-        return Side.BLACK;
+        return Side.WHITE;
     }
 
     @Override
     public CaptureConstraints getCaptureConstraints(Board board, Move move) {
-        return new EnglishCheckersCaptureConstraints(board, move);
+        return new ItalianCheckersCaptureConstraints(board, move);
     }
 
     @Override
