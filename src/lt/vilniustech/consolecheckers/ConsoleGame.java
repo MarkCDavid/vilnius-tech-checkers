@@ -1,21 +1,20 @@
-package lt.vilniustech;
+package lt.vilniustech.consolecheckers;
 
-import lt.vilniustech.consolecheckers.ConsoleRenderer;
+import lt.vilniustech.Renderer;
+import lt.vilniustech.Side;
 import lt.vilniustech.manager.GameManager;
-import lt.vilniustech.rulesets.english.EnglishCheckers;
-import lt.vilniustech.rulesets.italian.ItalianCheckers;
 import lt.vilniustech.rulesets.turkish.TurkishCheckers;
 
 import java.util.Scanner;
 
-public class Checkers {
+public class ConsoleGame {
+
 
     public static final String EXIT_GAME_OPTION = "exit";
     public static final String SURRENDER_OPTION = "surrender";
     public static final String DRAW_OPTION = "draw";
 
     public static void main(String[] args) {
-
         GameManager manager = new GameManager(new TurkishCheckers());
         Renderer renderer = new ConsoleRenderer();
         Scanner scanner = new Scanner(System.in);
@@ -42,7 +41,6 @@ public class Checkers {
                         System.out.printf("Incorrect amount of arguments. Type '<FROM CELL> <TO CELL>' to make a move.%n");
                         continue;
                     }
-
                     manager.processInput(move[0], move[1], exception -> {
                         System.out.println(exception.getMessage());
                     });
@@ -55,6 +53,8 @@ public class Checkers {
                 break;
             }
         }
+
     }
+
 
 }

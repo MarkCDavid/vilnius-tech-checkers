@@ -33,20 +33,6 @@ public class Coordinate {
         return String.format("%s%d", toStringIndex(column), row);
     }
 
-    public static final Pattern letterNumberCoordinate = Pattern.compile("([A-Za-z]+)([0-9]+)");
-    public static final Pattern numberLetterCoordinate = Pattern.compile("([0-9]+)([A-Za-z]+)");
-    public static Coordinate ofString(String coordinate) throws IllegalCoordinateException {
-        Matcher numberLetterMatcher = numberLetterCoordinate.matcher(coordinate);
-        if(numberLetterMatcher.find())
-            return new Coordinate(numberLetterMatcher.group(2), Integer.parseInt(numberLetterMatcher.group(1)));
-
-        Matcher letterNumberMatcher = letterNumberCoordinate.matcher(coordinate);
-        if(letterNumberMatcher.find())
-            return new Coordinate(letterNumberMatcher.group(1), Integer.parseInt(letterNumberMatcher.group(2)));
-
-        throw new IllegalCoordinateException(coordinate);
-    }
-
     public Coordinate(int column, int row) {
         this.column = column;
         this.row = row;
@@ -59,15 +45,6 @@ public class Coordinate {
 
     public static Coordinate ofIndex(int index, int size) {
         return new Coordinate(index / size, index % size);
-    }
-
-    private static final String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    public static String toStringIndex(int index) {
-        StringBuilder stringBuilder = new StringBuilder();
-        for(index += 1; index > 0; index /= alphabet.length()) {
-            stringBuilder.append(alphabet.charAt((index - 1) % alphabet.length()));
-        }
-        return stringBuilder.toString();
     }
 
     public static int ofStringIndex(String string) {
@@ -94,4 +71,30 @@ public class Coordinate {
 
     private final int column;
     private final int row;
+
+    public static final Pattern letterNumberCoordinate = Pattern.compile("([A-Z]+)([0-9]+)");
+    public static final Pattern numberLetterCoordinate = Pattern.compile("([0-9]+)([A-Z]+)");
+    public static Coordinate ofString(String coordinate) throws IllegalCoordinateException {
+        coordinate = coordinate.toUpperCase();
+        Matcher numberLetterMatcher = numberLetterCoordinate.matcher(coordinate);
+        if(numberLetterMatcher.find())
+            return new Coordinate(numberLetterMatcher.group(2), Integer.parseInt(numberLetterMatcher.group(1)));
+
+        Matcher letterNumberMatcher = letterNumberCoordinate.matcher(coordinate);
+        if(letterNumberMatcher.find())
+            return new Coordinate(letterNumberMatcher.group(1), Integer.parseInt(letterNumberMatcher.group(2)));
+
+        throw new IllegalCoordinateException(coordinate);
+    }
+
+
+    private static final String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    public static String toStringIndex(int index) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for(index += 1; index > 0; index /= alphabet.length()) {
+            stringBuilder.append(alphabet.charAt((index - 1) % alphabet.length()));
+        }
+        return stringBuilder.toString();
+    }
+
 }
