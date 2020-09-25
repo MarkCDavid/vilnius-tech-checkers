@@ -4,6 +4,7 @@ import lt.vilniustech.consolecheckers.ConsoleRenderer;
 import lt.vilniustech.manager.GameManager;
 import lt.vilniustech.rulesets.english.EnglishCheckers;
 import lt.vilniustech.rulesets.italian.ItalianCheckers;
+import lt.vilniustech.rulesets.turkish.TurkishCheckers;
 
 import java.util.Scanner;
 
@@ -15,7 +16,7 @@ public class Checkers {
 
     public static void main(String[] args) {
 
-        GameManager manager = new GameManager(new ItalianCheckers());
+        GameManager manager = new GameManager(new TurkishCheckers());
         Renderer renderer = new ConsoleRenderer();
         Scanner scanner = new Scanner(System.in);
 

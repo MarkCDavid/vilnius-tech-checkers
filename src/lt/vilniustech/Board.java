@@ -58,20 +58,13 @@ public class Board implements Iterable<Cell> {
                 Move move = getMove(from, direction, moveSize);
                 if(move == null) continue;
                 availableMoves.add(move);
+                if(move instanceof CaptureMove)
+                    break;
             }
         }
 
         return availableMoves;
     }
-
-//    private List<Move> filterMoves(ArrayList<Move> availableMoves) {
-//        if (ruleset.isCaptureMandatory()) {
-//            List<Move> captureMoves = filterCaptureMoves(availableMoves);
-//            return captureMoves.size() > 0 ? captureMoves : availableMoves;
-//        } else {
-//            return availableMoves;
-//        }
-//    }
 
     private Move getMove(Coordinate from, Direction direction, int moveSize) {
         Move simple = new SimpleMove(from, direction, moveSize);
@@ -81,12 +74,6 @@ public class Board implements Iterable<Cell> {
             if(jump.isValid(this)) return jump;
             return null;
         }
-    }
-
-    private List<Move> filterCaptureMoves(List<Move> moves) {
-        return moves.stream()
-                .filter(move -> move instanceof CaptureMove)
-                .collect(Collectors.toList());
     }
 
     public boolean applyMove(Move move) {
