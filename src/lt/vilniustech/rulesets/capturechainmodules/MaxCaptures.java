@@ -1,15 +1,22 @@
-package lt.vilniustech.rulesets.italian.capturechainmodules;
+package lt.vilniustech.rulesets.capturechainmodules;
 
 import lt.vilniustech.Board;
 import lt.vilniustech.moves.CaptureMove;
-import lt.vilniustech.moves.Move;
-import lt.vilniustech.rulesets.CaptureChain;
-import lt.vilniustech.rulesets.CaptureChainModule;
+import lt.vilniustech.rulesets.capturechain.CaptureChain;
+import lt.vilniustech.rulesets.capturechain.CaptureChainModule;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class MaxCaptures implements CaptureChainModule {
+
+    public static UUID id = UUID.fromString("ff2a4c9d-55d1-4ea6-8df4-4a5b0caef892");
+
+    @Override
+    public UUID getId() {
+        return MaxCaptures.id;
+    }
 
     public MaxCaptures() {
         this.captures = 0;
@@ -25,10 +32,10 @@ public class MaxCaptures implements CaptureChainModule {
     }
 
     @Override
-    public List<CaptureChain> filter(List<CaptureChain> captureChains, int moduleIndex) {
+    public List<CaptureChain> filter(List<CaptureChain> captureChains) {
         int maxCaptures = 0;
         for(CaptureChain captureChain: captureChains) {
-            MaxCaptures module = module(captureChain, moduleIndex);
+            MaxCaptures module = module(captureChain);
             if (maxCaptures < module.captures) {
                 maxCaptures = module.captures;
             }
@@ -36,12 +43,12 @@ public class MaxCaptures implements CaptureChainModule {
         final int finalMaxCaptures = maxCaptures;
 
         return captureChains.stream()
-                .filter(captureChain -> module(captureChain, moduleIndex).captures == finalMaxCaptures)
+                .filter(captureChain -> module(captureChain).captures == finalMaxCaptures)
                 .collect(Collectors.toList());
     }
 
-    private MaxCaptures module(CaptureChain captureChain, int moduleIndex) {
-        return (MaxCaptures) captureChain.getModule(moduleIndex);
+    private MaxCaptures module(CaptureChain captureChain) {
+        return (MaxCaptures) captureChain.getModule(getId());
     }
 
     @Override

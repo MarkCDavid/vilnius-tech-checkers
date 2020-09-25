@@ -1,27 +1,23 @@
-package lt.vilniustech.rulesets;
+package lt.vilniustech.rulesets.capturechain;
 
 import lt.vilniustech.Board;
 import lt.vilniustech.Coordinate;
 import lt.vilniustech.Side;
 import lt.vilniustech.moves.CaptureMove;
 import lt.vilniustech.moves.Move;
+import lt.vilniustech.rulesets.capturechainmodules.ModuleFactory;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class CaptureChainBuilder
 {
     public CaptureChainBuilder() {
-        this.modules = new ArrayList<>();
+        this.modules = new HashMap<>();
     }
 
-    public int registeredModuleCount() {
-        return modules.size();
-    }
-
-    public CaptureChainModule getModule(int index) {
-        return modules.get(index);
+    public CaptureChainModule getModule(UUID module) {
+        return modules.get(module);
     }
 
     public List<CaptureChain> build(Board board, List<Move> moves) {
@@ -62,9 +58,10 @@ public class CaptureChainBuilder
                 .collect(Collectors.toList());
     }
 
-    public void registerModule(CaptureChainModule module) {
-        modules.add(module);
+    public void registerModule(UUID module) {
+        if(modules.containsKey(module)) return;
+        modules.put(module, ModuleFactory.make(module));
     }
 
-    private final List<CaptureChainModule> modules;
+    private final Map<UUID, CaptureChainModule> modules;
 }

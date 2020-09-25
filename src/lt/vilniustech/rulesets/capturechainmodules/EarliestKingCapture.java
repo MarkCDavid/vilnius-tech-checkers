@@ -1,14 +1,22 @@
-package lt.vilniustech.rulesets.italian.capturechainmodules;
+package lt.vilniustech.rulesets.capturechainmodules;
 
 import lt.vilniustech.Board;
 import lt.vilniustech.moves.CaptureMove;
-import lt.vilniustech.rulesets.CaptureChain;
-import lt.vilniustech.rulesets.CaptureChainModule;
+import lt.vilniustech.rulesets.capturechain.CaptureChain;
+import lt.vilniustech.rulesets.capturechain.CaptureChainModule;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class EarliestKingCapture implements CaptureChainModule {
+
+    public static UUID id = UUID.fromString("7eef86b3-19e8-4ea6-9d8d-daa75124afbd");
+
+    @Override
+    public UUID getId() {
+        return EarliestKingCapture.id;
+    }
 
     public EarliestKingCapture() {
         this.kingCapture = false;
@@ -31,10 +39,10 @@ public class EarliestKingCapture implements CaptureChainModule {
     }
 
     @Override
-    public List<CaptureChain> filter(List<CaptureChain> captureChains, int moduleIndex) {
+    public List<CaptureChain> filter(List<CaptureChain> captureChains) {
         int earliestKingCapture = Integer.MAX_VALUE;
         for(CaptureChain captureChain: captureChains) {
-            EarliestKingCapture module = module(captureChain, moduleIndex);
+            EarliestKingCapture module = module(captureChain);
             if (earliestKingCapture > module.earliestKingCapture) {
                 earliestKingCapture = module.earliestKingCapture;
             }
@@ -42,12 +50,12 @@ public class EarliestKingCapture implements CaptureChainModule {
         final int finalEarliestKingCapture = earliestKingCapture;
 
         return captureChains.stream()
-                .filter(captureChain -> module(captureChain, moduleIndex).earliestKingCapture == finalEarliestKingCapture)
+                .filter(captureChain -> module(captureChain).earliestKingCapture == finalEarliestKingCapture)
                 .collect(Collectors.toList());
     }
 
-    private EarliestKingCapture module(CaptureChain captureChain, int moduleIndex) {
-        return (EarliestKingCapture) captureChain.getModule(moduleIndex);
+    private EarliestKingCapture module(CaptureChain captureChain) {
+        return (EarliestKingCapture) captureChain.getModule(getId());
     }
 
     @Override

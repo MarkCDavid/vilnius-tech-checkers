@@ -5,6 +5,7 @@ import lt.vilniustech.Side;
 import lt.vilniustech.moves.CaptureMove;
 import lt.vilniustech.moves.Move;
 import lt.vilniustech.rulesets.CaptureConstraints;
+import lt.vilniustech.rulesets.Filters;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,7 +13,6 @@ import java.util.stream.Collectors;
 public class EnglishCheckersCaptureConstraints implements CaptureConstraints {
 
     public EnglishCheckersCaptureConstraints(Board board, Move move) {
-        this.board = board;
         this.move = move;
     }
 
@@ -20,7 +20,8 @@ public class EnglishCheckersCaptureConstraints implements CaptureConstraints {
     public List<Move> filterMoves(List<Move> availableMoves) {
         if(multipleCaptures) {
             return availableMoves.stream()
-                    .filter(move -> move instanceof CaptureMove && move.getFrom().equals(this.move.getTo()))
+                    .filter(Filters.captureMoves())
+                    .filter(Filters.movesFromDestination(move))
                     .collect(Collectors.toList());
         }
         return availableMoves;
@@ -36,9 +37,6 @@ public class EnglishCheckersCaptureConstraints implements CaptureConstraints {
         this.multipleCaptures = multipleCaptures;
     }
 
-
     private boolean multipleCaptures;
-
-    private final Board board;
     private final Move move;
 }

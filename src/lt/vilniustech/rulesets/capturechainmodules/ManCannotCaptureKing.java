@@ -1,14 +1,22 @@
-package lt.vilniustech.rulesets.italian.capturechainmodules;
+package lt.vilniustech.rulesets.capturechainmodules;
 
 import lt.vilniustech.Board;
 import lt.vilniustech.Piece;
 import lt.vilniustech.moves.CaptureMove;
-import lt.vilniustech.rulesets.CaptureChain;
-import lt.vilniustech.rulesets.CaptureChainModule;
+import lt.vilniustech.rulesets.capturechain.CaptureChain;
+import lt.vilniustech.rulesets.capturechain.CaptureChainModule;
 
 import java.util.List;
+import java.util.UUID;
 
 public class ManCannotCaptureKing implements CaptureChainModule {
+
+    public static UUID id = UUID.fromString("180a7783-433d-494e-8572-e75e63b2b347");
+
+    @Override
+    public UUID getId() {
+        return ManCannotCaptureKing.id;
+    }
 
     public ManCannotCaptureKing() {
         this.manCapturesKing = false;
@@ -24,7 +32,7 @@ public class ManCannotCaptureKing implements CaptureChainModule {
     }
 
     @Override
-    public List<CaptureChain> filter(List<CaptureChain> captureChains, int moduleIndex) {
+    public List<CaptureChain> filter(List<CaptureChain> captureChains) {
         return captureChains;
     }
 

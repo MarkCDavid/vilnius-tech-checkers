@@ -122,6 +122,6 @@ public class ItalianCheckers implements CheckersRuleset {
     public CellFill getBlackCellFill() { return blackCellFill; }
 
 
-    private final CellFill whiteCellFill = new EnglishCheckersCellFill(getBoardSize() - 3, getBoardSize() - 1);
-    private final CellFill blackCellFill = new EnglishCheckersCellFill(0, 2);
+    private final CellFill whiteCellFill = new ItalianCheckersCellFill(getBoardSize() - 3, getBoardSize() - 1);
+    private final CellFill blackCellFill = new ItalianCheckersCellFill(0, 2);
 }
