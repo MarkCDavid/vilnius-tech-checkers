@@ -55,10 +55,10 @@ public class Board implements Iterable<Cell> {
         for(Direction direction : fromPiece.getDirections()) {
             for(int moveSize = 1; moveSize <= fromPiece.getMoveSize(); moveSize++) {
                 Move move = getMove(from, direction, moveSize);
-                if(move == null) continue;
+                if(move == null) break;
                 availableMoves.add(move);
-                if(move instanceof CaptureMove)
-                    break;
+                if(move instanceof CaptureMove) break;
+
             }
         }
 

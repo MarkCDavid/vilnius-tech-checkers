@@ -2,14 +2,19 @@ package lt.vilniustech.guicheckers;
 
 import lt.vilniustech.*;
 import lt.vilniustech.manager.GameManager;
+import lt.vilniustech.moves.Move;
 import lt.vilniustech.rulesets.english.EnglishCheckers;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GUIGame extends JPanel {
 
@@ -19,18 +24,39 @@ public class GUIGame extends JPanel {
         drawBoard(graphics);
     }
 
+
     public void drawBoard(Graphics2D graphics) {
         Board board = gameManager.getBoard();
         int boardSize = board.getRuleset().getBoardSize();
-        int cellSize = graphics.getClipBounds().width / boardSize;
+        cellSize = graphics.getClipBounds().width / boardSize;
         for(int row = 0; row < boardSize; row++) {
             for(int column = 0; column < boardSize; column++) {
                 int offset = (row + 1) % 2;
                 boolean blackCell = (column + offset) % 2 == 0;
-                graphics.setColor(blackCell ? Color.BLACK : Color.LIGHT_GRAY);
-                graphics.fillRect(row * cellSize, column * cellSize, cellSize, cellSize);
 
                 Coordinate coordinate = new Coordinate(row, column);
+
+                boolean cellDrawn = false;
+                for(Move selectedMove: selectedMoves) {
+                    if(selectedMove.getFrom().equals(coordinate)) {
+                        cellDrawn = true;
+                        graphics.setColor(Color.MAGENTA);
+                        graphics.fillRect(row * cellSize, column * cellSize, cellSize, cellSize);
+                        break;
+                    }
+                    if(selectedMove.getTo().equals(coordinate)) {
+                        cellDrawn = true;
+                        graphics.setColor(Color.cyan);
+                        graphics.fillRect(row * cellSize, column * cellSize, cellSize, cellSize);
+                        break;
+                    }
+                }
+
+                if(!cellDrawn) {
+                    graphics.setColor(blackCell ? Color.BLACK : Color.LIGHT_GRAY);
+                    graphics.fillRect(row * cellSize, column * cellSize, cellSize, cellSize);
+                }
+
                 Cell cell = board.getCell(coordinate);
                 Piece piece = cell.getPiece();
                 if(piece == null) continue;
@@ -58,8 +84,24 @@ public class GUIGame extends JPanel {
         );
     }
 
+    private int cellSize;
+    public int getCellSize() {
+        return cellSize;
+    }
 
+    public GameManager getGameManager() {
+        return gameManager;
+    }
 
+    public void setSelectedMoves(List<Move> selectedMoves) {
+        this.selectedMoves = selectedMoves;
+    }
+
+    public List<Move> getSelectedMoves() {
+        return this.selectedMoves;
+    }
+
+    private List<Move> selectedMoves = new ArrayList<>();
 
     public GUIGame(GameManager gameManager) throws IOException {
         this.gameManager = gameManager;
@@ -76,19 +118,9 @@ public class GUIGame extends JPanel {
     private final BufferedImage whitePiece;
     private final BufferedImage whiteKing;
 
-    private static final int SCREEN_SIZE = 800;
     private static final int MARGIN = 20;
 
-    public static void main(String[] args) throws IOException {
 
-        JFrame frame = new JFrame("Checkers");
-        frame.add(new GUIGame(new GameManager(new EnglishCheckers())));
-        frame.pack();
-        Insets insets = frame.getInsets();
-        frame.setSize(SCREEN_SIZE, SCREEN_SIZE + insets.top + insets.bottom);
-        frame.setVisible(true);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    }
 
 
 

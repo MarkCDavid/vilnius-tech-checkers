@@ -7,6 +7,7 @@ import lt.vilniustech.moves.Move;
 import lt.vilniustech.rulesets.CaptureConstraints;
 import lt.vilniustech.rulesets.CheckersRuleset;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -55,6 +56,10 @@ public class GameManager {
         Move move = getMove(from, to, onException);
         if(move == null) return;
 
+        performMove(move);
+    }
+
+    public void performMove(Move move) {
         CaptureConstraints captureConstraints = ruleset.getCaptureConstraints(board, move);
         boolean capturesAvailable = board.applyMove(move);
         captureConstraints.setMultipleCaptures(capturesAvailable);
@@ -66,6 +71,15 @@ public class GameManager {
                 board.getSidePieces(Side.WHITE),
                 board.getSidePieces(Side.BLACK)
         );
+    }
+
+    public List<Move> getAvailableMoves(Coordinate from) {
+        List<Move> moves = new ArrayList<>();
+        for(Move move: availableMoves) {
+            if(move.getFrom().equals(from))
+                moves.add(move);
+        }
+        return moves;
     }
 
 
