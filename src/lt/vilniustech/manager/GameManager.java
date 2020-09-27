@@ -59,7 +59,9 @@ public class GameManager {
         performMove(move);
     }
 
-    public void performMove(Move move) {
+    public boolean performMove(Move move) {
+        if(isFinished()) throw new GameFinishedException(getWinner());
+
         CaptureConstraints captureConstraints = ruleset.getCaptureConstraints(board, move);
         boolean capturesAvailable = board.applyMove(move);
         captureConstraints.setMultipleCaptures(capturesAvailable);
@@ -71,14 +73,17 @@ public class GameManager {
                 board.getSidePieces(Side.WHITE),
                 board.getSidePieces(Side.BLACK)
         );
+        return isFinished();
     }
 
     public List<Move> getAvailableMoves() {
-      return availableMoves;
+        return isFinished() ? new ArrayList<>() : availableMoves;
     }
 
     public List<Move> getAvailableMoves(Coordinate from) {
         List<Move> moves = new ArrayList<>();
+        if(isFinished()) return moves;
+
         for(Move move: availableMoves) {
             if(move.getFrom().equals(from))
                 moves.add(move);

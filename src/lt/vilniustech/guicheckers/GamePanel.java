@@ -39,6 +39,7 @@ public class GamePanel extends JPanel {
     }
 
     private boolean drawHighlights = true;
+
     public void setDrawHighlights(boolean drawHighlights) {
         this.drawHighlights = drawHighlights;
     }
@@ -67,6 +68,7 @@ public class GamePanel extends JPanel {
         addMouseListener(new MouseListener() {
             @Override
             public void mouseReleased(MouseEvent e) {
+                if(getGameManager().isFinished()) return;
                 int row = e.getY() / renderer.getCellSize();
                 int column = e.getX() / renderer.getCellSize();
                 Coordinate coordinate = new Coordinate(column, row);

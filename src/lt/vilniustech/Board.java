@@ -78,10 +78,12 @@ public class Board implements Iterable<Cell> {
     }
 
     public boolean applyMove(Move move) {
-        Side side = getCell(move.getFrom()).getPiece().getSide();
+        Piece piece = getCell(move.getFrom()).getPiece();
+        Side side = piece.getSide();
         boolean destinationIsKingRow = ruleset.isKingRow(side, move.getTo());
 
-        if(destinationIsKingRow) {
+
+        if(destinationIsKingRow && !piece.isKing()) {
             move.apply(this);
             Piece kingPiece = ruleset.createKing(side);
             getCell(move.getTo()).setPiece(kingPiece);

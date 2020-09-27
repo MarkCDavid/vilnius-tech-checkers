@@ -11,19 +11,24 @@ import java.util.List;
 public class TurkishCheckers implements CheckersRuleset {
 
     @Override
+    public String toString() {
+        return "Turkish Checkers";
+    }
+
+    @Override
     public int getBoardSize() {
         return 8;
     }
 
     @Override
     public Side processWinningConditions(List<Move> moves, List<Piece> whitePieces, List<Piece> blackPieces) {
-        if(moves.size() == 0) return Side.DRAW;
-        else if(whitePieces.size() == 0) return Side.BLACK;
+        if(whitePieces.size() == 0) return Side.BLACK;
         else if(blackPieces.size() == 0) return Side.WHITE;
         else if(whitePieces.size() == 1 && blackPieces.size() == 1) {
             if(whitePieces.get(0).isKing() && !blackPieces.get(0).isKing()) return Side.WHITE;
             else if(!whitePieces.get(0).isKing() && blackPieces.get(0).isKing()) return Side.BLACK;
         }
+        else if(moves.size() == 0) return Side.DRAW;
         return Side.NONE;
     }
 
