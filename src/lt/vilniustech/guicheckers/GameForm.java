@@ -75,6 +75,8 @@ public class GameForm {
             moveHistory.addMove(availableMove);
 
             boolean gameFinished = gamePanel.getGameManager().performMove(availableMove);
+
+            getMoveHistory().setEnabled(!gamePanel.getGameManager().getStateMachine().isMultiCapture());
             if (gameFinished)
                 processGameEnd();
         }
@@ -93,6 +95,7 @@ public class GameForm {
         getStatusBar().setWinner(getGamePanel().getGameManager().getWinner());
         getGamePanel().repaint();
         getGamePanel().setEnabled(false);
+        getMoveHistory().setEnabled(true);
         drawButton.setEnabled(false);
         surrenderButton.setEnabled(false);
     }

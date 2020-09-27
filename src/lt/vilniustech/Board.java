@@ -31,6 +31,21 @@ public class Board implements Iterable<Cell> {
     }
 
 
+    public boolean applyMove(Move move) {
+        Piece piece = getCell(move.getFrom()).getPiece();
+        Side side = piece.getSide();
+        boolean destinationIsKingRow = ruleset.isKingRow(side, move.getTo());
+
+        move.apply(this);
+        if(destinationIsKingRow && !piece.isKing()) {
+            Piece kingPiece = ruleset.createKing(side);
+            getCell(move.getTo()).setPiece(kingPiece);
+            return false;
+        }
+        return true;
+    }
+
+
     public Cell setCell(Coordinate coordinate, Cell cell) {
         if(!validCoordinate(coordinate)) return null;
         cells[coordinate.getIndex(ruleset.getBoardSize())] = cell;

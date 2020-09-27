@@ -2,6 +2,7 @@ package lt.vilniustech.rulesets.english;
 
 import lt.vilniustech.*;
 import lt.vilniustech.manager.GameManager;
+import lt.vilniustech.manager.MoveCollectionsBuilder;
 import lt.vilniustech.moves.Move;
 import lt.vilniustech.rulesets.CaptureConstraints;
 import lt.vilniustech.rulesets.CellFill;
@@ -40,8 +41,8 @@ public class EnglishCheckers implements CheckersRuleset {
     }
 
     @Override
-    public CaptureConstraints getCaptureConstraints(GameManager manager, Move move) {
-        return new EnglishCheckersCaptureConstraints(manager, move);
+    public CaptureConstraints getCaptureConstraints(Board board, Move move) {
+        return new EnglishCheckersCaptureConstraints(board, move);
     }
 
     @Override

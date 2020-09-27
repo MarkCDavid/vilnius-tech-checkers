@@ -61,8 +61,7 @@ public class CaptureMove implements Move {
 
         applied = true;
 
-        Side side = from.getPiece().getSide();
-        capturedPiece = over.popPiece();
+        takeCapturedPiece(board);
         to.setPiece(from.popPiece());
     }
 
@@ -79,10 +78,16 @@ public class CaptureMove implements Move {
 
         applied = false;
 
-        over.setPiece(capturedPiece);
+        setCapturedPiece(board);
         from.setPiece(to.popPiece());
+    }
 
-        return;
+    public void takeCapturedPiece(Board board) {
+        capturedPiece = board.getCell(this.over).popPiece();
+    }
+
+    public void setCapturedPiece(Board board) {
+        board.getCell(this.over).setPiece(capturedPiece);
     }
 
     @Override

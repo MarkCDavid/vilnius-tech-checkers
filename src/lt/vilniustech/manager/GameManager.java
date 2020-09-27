@@ -1,6 +1,8 @@
 package lt.vilniustech.manager;
 
 import lt.vilniustech.*;
+import lt.vilniustech.manager.state.SimpleState;
+import lt.vilniustech.manager.state.StateMachine;
 import lt.vilniustech.moves.CaptureMove;
 import lt.vilniustech.moves.Move;
 import lt.vilniustech.moves.SimpleMove;
@@ -34,11 +36,14 @@ public class GameManager {
         return board;
     }
 
+    public StateMachine getStateMachine() { return stateMachine; }
+
     public GameManager(CheckersRuleset ruleset) {
         this.ruleset = ruleset;
         this.board = new Board(ruleset);
+        this.stateMachine = new StateMachine(new SimpleState());
         this.currentSide = ruleset.getFirstToMove();
-        this.availableMoves =  getAvailableMoves(currentSide);
+        this.availableMoves = MoveCollectionsBuilder.getAllAvailableMoves(board, currentSide);
     }
 
     public void processInput(String fromString, String toString, OnManagerException onException) {
@@ -60,65 +65,17 @@ public class GameManager {
         performMove(move);
     }
 
-    private boolean applyMove(Move move) {
-        Piece piece = getBoard().getCell(move.getFrom()).getPiece();
-        Side side = piece.getSide();
-        boolean destinationIsKingRow = ruleset.isKingRow(side, move.getTo());
-
-
-        move.apply(getBoard());
-        if(destinationIsKingRow && !piece.isKing()) {
-            Piece kingPiece = ruleset.createKing(side);
-            getBoard().getCell(move.getTo()).setPiece(kingPiece);
-            return false;
-        }
-        else {
-            return getAvailableMoves(side, move.getTo()).stream().anyMatch(m -> m instanceof CaptureMove);
-        }
-    }
-
-    public List<Move> getAvailableMoves(Side side) {
-
-        ArrayList<Move> availableMoves = new ArrayList<>();
-
-        for(Coordinate from: new CoordinateIterator(ruleset.getBoardSize())) {
-            availableMoves.addAll(getAvailableMoves(side, from));
-        }
-
-        return availableMoves;
-    }
-
-
-    public List<Move> getAvailableMoves(Side side, Coordinate from) {
-        ArrayList<Move> availableMoves = new ArrayList<>();
-
-        Cell fromCell = getBoard().getCell(from);
-        if(fromCell == null) return availableMoves;
-
-        Piece fromPiece = fromCell.getPiece();
-        if(fromPiece == null || fromPiece.getSide() != side) return availableMoves;
-
-        for(Direction direction : fromPiece.getDirections()) {
-            for(int moveSize = 1; moveSize <= fromPiece.getMoveSize(); moveSize++) {
-                Move move = getMove(from, direction, moveSize);
-                if(move == null) break;
-                availableMoves.add(move);
-                if(move instanceof CaptureMove) break;
-
-            }
-        }
-
-        return availableMoves;
-    }
 
     public boolean performMove(Move move) {
         if(isFinished()) throw new GameFinishedException(getWinner());
 
-        CaptureConstraints captureConstraints = ruleset.getCaptureConstraints(this, move);
-        boolean capturesAvailable = applyMove(move);
-        captureConstraints.setMultipleCaptures(capturesAvailable);
-        currentSide = captureConstraints.getNextSide(currentSide);
-        availableMoves = captureConstraints.filterMoves(getAvailableMoves(currentSide));
+        stateMachine.performMove(board, move);
+
+        CaptureConstraints captureConstraints = ruleset.getCaptureConstraints(board, move);
+        captureConstraints.setMultipleCaptures(stateMachine.isMultiCapture());
+
+        currentSide = stateMachine.getNextSide(currentSide);
+        availableMoves = captureConstraints.filterMoves(MoveCollectionsBuilder.getAllAvailableMoves(board, currentSide, stateMachine.isMultiCapture() ? move.getFrom() : null));
 
         winner = ruleset.processWinningConditions(
                 availableMoves,
@@ -126,18 +83,6 @@ public class GameManager {
                 board.getSidePieces(Side.BLACK)
         );
         return isFinished();
-    }
-
-    private Move getMove(Coordinate from, Direction direction, int moveSize) {
-        Move simple = new SimpleMove(from, direction, moveSize);
-        if(simple.isValid(getBoard()))
-            return simple;
-
-        Move capture = new CaptureMove(from, direction, moveSize + 1);
-        if(capture.isValid(getBoard()))
-            return capture;
-
-        return null;
     }
 
     public List<Move> getAvailableMoves() {
@@ -182,7 +127,10 @@ public class GameManager {
         }
     }
 
+    private final StateMachine stateMachine;
+
     private List<Move> availableMoves;
+//    private List<Move> captureChain;
 
     private Side winner = Side.NONE;
     private Side currentSide;

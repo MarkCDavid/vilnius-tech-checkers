@@ -2,8 +2,6 @@ package lt.vilniustech.rulesets.english;
 
 import lt.vilniustech.Board;
 import lt.vilniustech.Side;
-import lt.vilniustech.manager.GameManager;
-import lt.vilniustech.moves.DelayedCaptureMove;
 import lt.vilniustech.moves.Move;
 import lt.vilniustech.rulesets.CaptureConstraints;
 import lt.vilniustech.rulesets.Filters;
@@ -13,7 +11,7 @@ import java.util.stream.Collectors;
 
 public class EnglishCheckersCaptureConstraints implements CaptureConstraints {
 
-    public EnglishCheckersCaptureConstraints(GameManager manager, Move move) {
+    public EnglishCheckersCaptureConstraints(Board board, Move move) {
         this.move = move;
     }
 
