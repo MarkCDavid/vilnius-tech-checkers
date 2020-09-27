@@ -4,6 +4,7 @@ import lt.vilniustech.Board;
 import lt.vilniustech.Coordinate;
 import lt.vilniustech.Piece;
 import lt.vilniustech.Side;
+import lt.vilniustech.manager.GameManager;
 import lt.vilniustech.moves.Move;
 
 import java.util.ArrayList;
@@ -12,10 +13,11 @@ import java.util.List;
 public interface CheckersRuleset {
 
     int getBoardSize();
+    boolean isCaptureImmediate();
     Side processWinningConditions(List<Move> moves, List<Piece> whitePieces, List<Piece> blackPieces);
     Side getFirstToMove();
 
-    CaptureConstraints getCaptureConstraints(Board board, Move move);
+    CaptureConstraints getCaptureConstraints(GameManager manager, Move move);
 
     boolean isKingRow(Side side, Coordinate coordinate);
     CellFill getCellFill(Side side);

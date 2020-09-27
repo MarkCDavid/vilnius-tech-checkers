@@ -1,6 +1,9 @@
 package lt.vilniustech.guicheckers;
 
+import lt.vilniustech.Coordinate;
 import lt.vilniustech.Side;
+import lt.vilniustech.guicheckers.events.CellClickListener;
+import lt.vilniustech.guicheckers.events.MoveHistoryChangeListener;
 import lt.vilniustech.manager.GameManager;
 import lt.vilniustech.moves.Move;
 import lt.vilniustech.rulesets.CheckersRuleset;
@@ -23,21 +26,13 @@ public class GameForm {
         drawButton.addActionListener(e -> {
             Side winner = Side.DRAW;
             getGamePanel().getGameManager().setWinner(winner);
-            processGameEnd(winner);
+            processGameEnd();
         });
         surrenderButton.addActionListener(e -> {
             Side winner = Side.opposite(getGamePanel().getGameManager().getCurrentSide());
             getGamePanel().getGameManager().setWinner(winner);
-            processGameEnd(winner);
+            processGameEnd();
         });
-    }
-
-    public void processGameEnd(Side winner) {
-        getStatusBar().setWinner(winner);
-        getGamePanel().repaint();
-        getGamePanel().setEnabled(false);
-        drawButton.setEnabled(false);
-        surrenderButton.setEnabled(false);
     }
 
     private void createUIComponents() {
@@ -45,41 +40,66 @@ public class GameForm {
         MoveHistory moveHistory = setMoveHistory(new MoveHistory(gamePanel.getGameManager().getBoard()));
         StatusBar statusBar = setStatusBar(new StatusBar());
 
-        moveHistory.addHistoryChangeListener(move -> {
-            gamePanel.setSelectedMoves(new ArrayList<>());
-            gamePanel.setDrawHighlights(moveHistory.isPresent());
-            gamePanel.repaint();
-        });
+        moveHistory.addHistoryChangeListener(getMoveHistoryChangeListener(gamePanel, moveHistory));
+        gamePanel.addCellClickListener(getCellClickListener(gamePanel, moveHistory, statusBar));
+    }
 
-        gamePanel.addCellClickListener(coordinate -> {
-            if(!moveHistory.isPresent())
-                return;
+    private CellClickListener getCellClickListener(GamePanel gamePanel, MoveHistory moveHistory, StatusBar statusBar) {
+        return coordinate -> {
+            if (!moveHistory.isPresent()) return;
 
             List<Move> selectedMoves = gamePanel.getSelectedMoves();
+            boolean selectMove = selectedMoves.size() == 0;
 
-            if(selectedMoves.size() == 0) {
-                gamePanel.setSelectedMoves(gamePanel.getGameManager().getAvailableMoves(coordinate));
-            }
-            else{
-                for(Move availableMove: selectedMoves) {
-                    if(availableMove.getTo().equals(coordinate)) {
-                        moveHistory.addMove(availableMove);
-                        boolean isFinished = gamePanel.getGameManager().performMove(availableMove);
-                        if(isFinished)
-                            processGameEnd(gamePanel.getGameManager().getWinner());
-
-                        break;
-                    }
-                }
-                selectedMoves.clear();
+            if (selectMove) {
+                selectMove(gamePanel, coordinate);
+            } else {
+                executeMove(gamePanel, moveHistory, coordinate, selectedMoves);
             }
             gamePanel.repaint();
             statusBar.setCurrentSide(gamePanel.getGameManager().getCurrentSide());
             moveHistory.setSelectedIndex(moveHistory.getMaxSelectionIndex());
-        });
-
-
+        };
     }
+
+    private void selectMove(GamePanel gamePanel, Coordinate from) {
+        gamePanel.setSelectedMoves(gamePanel.getGameManager().getAvailableMoves(from));
+    }
+
+    private void executeMove(GamePanel gamePanel, MoveHistory moveHistory, Coordinate to, List<Move> selectedMoves) {
+        for (Move availableMove : selectedMoves) {
+
+            if (!availableMove.getTo().equals(to))
+                continue;
+
+            moveHistory.addMove(availableMove);
+
+            boolean gameFinished = gamePanel.getGameManager().performMove(availableMove);
+            if (gameFinished)
+                processGameEnd();
+        }
+        selectedMoves.clear();
+    }
+
+    private MoveHistoryChangeListener getMoveHistoryChangeListener(GamePanel gamePanel, MoveHistory moveHistory) {
+        return move -> {
+            gamePanel.setSelectedMoves(new ArrayList<>());
+            gamePanel.setDrawHighlights(moveHistory.isPresent());
+            gamePanel.repaint();
+        };
+    }
+
+    private void processGameEnd() {
+        getStatusBar().setWinner(getGamePanel().getGameManager().getWinner());
+        getGamePanel().repaint();
+        getGamePanel().setEnabled(false);
+        drawButton.setEnabled(false);
+        surrenderButton.setEnabled(false);
+    }
+
+    private JButton surrenderButton;
+    private JButton drawButton;
+    private JButton exitButton;
 
     private JPanel gamePanel;
     private GamePanel getGamePanel() {
@@ -100,11 +120,7 @@ public class GameForm {
         return getMoveHistory();
     }
 
-
     private JLabel statusBar;
-    private JButton surrenderButton;
-    private JButton drawButton;
-    private JButton exitButton;
 
     private StatusBar getStatusBar() {
         return (StatusBar) this.statusBar;

@@ -10,6 +10,6 @@ public interface Move {
 
     boolean isApplied();
     boolean isValid(Board board);
-    boolean apply(Board board);
-    boolean revert(Board board);
+    void apply(Board board);
+    void revert(Board board);
 }

@@ -30,69 +30,6 @@ public class Board implements Iterable<Cell> {
         }
     }
 
-    public List<Move> getAvailableMoves(Side side) {
-
-        ArrayList<Move> availableMoves = new ArrayList<>();
-
-        for(int i = 0; i < cells.length; i++) {
-            Coordinate from = Coordinate.ofIndex(i, ruleset.getBoardSize());
-            availableMoves.addAll(getAvailableMoves(side, from));
-        }
-
-        return availableMoves;
-    }
-
-
-    public List<Move> getAvailableMoves(Side side, Coordinate from) {
-        ArrayList<Move> availableMoves = new ArrayList<>();
-
-        Cell fromCell = getCell(from);
-        if(fromCell == null) return availableMoves;
-
-        Piece fromPiece = fromCell.getPiece();
-        if(fromPiece == null || fromPiece.getSide() != side) return availableMoves;
-
-        for(Direction direction : fromPiece.getDirections()) {
-            for(int moveSize = 1; moveSize <= fromPiece.getMoveSize(); moveSize++) {
-                Move move = getMove(from, direction, moveSize);
-                if(move == null) break;
-                availableMoves.add(move);
-                if(move instanceof CaptureMove) break;
-
-            }
-        }
-
-        return availableMoves;
-    }
-
-    private Move getMove(Coordinate from, Direction direction, int moveSize) {
-        Move simple = new SimpleMove(from, direction, moveSize);
-        if(simple.isValid(this))
-            return simple;
-
-        Move jump = new CaptureMove(from, direction, moveSize + 1);
-        if(jump.isValid(this))
-            return jump;
-
-        return null;
-    }
-
-    public boolean applyMove(Move move) {
-        Piece piece = getCell(move.getFrom()).getPiece();
-        Side side = piece.getSide();
-        boolean destinationIsKingRow = ruleset.isKingRow(side, move.getTo());
-
-
-        if(destinationIsKingRow && !piece.isKing()) {
-            move.apply(this);
-            Piece kingPiece = ruleset.createKing(side);
-            getCell(move.getTo()).setPiece(kingPiece);
-            return false;
-        }
-        else {
-            return move.apply(this);
-        }
-    }
 
     public Cell setCell(Coordinate coordinate, Cell cell) {
         if(!validCoordinate(coordinate)) return null;

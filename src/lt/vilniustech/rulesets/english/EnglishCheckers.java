@@ -1,6 +1,7 @@
 package lt.vilniustech.rulesets.english;
 
 import lt.vilniustech.*;
+import lt.vilniustech.manager.GameManager;
 import lt.vilniustech.moves.Move;
 import lt.vilniustech.rulesets.CaptureConstraints;
 import lt.vilniustech.rulesets.CellFill;
@@ -21,6 +22,11 @@ public class EnglishCheckers implements CheckersRuleset {
     }
 
     @Override
+    public boolean isCaptureImmediate() {
+        return false;
+    }
+
+    @Override
     public Side processWinningConditions(List<Move> moves, List<Piece> whitePieces, List<Piece> blackPieces) {
         if(whitePieces.size() == 0) return Side.BLACK;
         else if(blackPieces.size() == 0) return Side.WHITE;
@@ -34,8 +40,8 @@ public class EnglishCheckers implements CheckersRuleset {
     }
 
     @Override
-    public CaptureConstraints getCaptureConstraints(Board board, Move move) {
-        return new EnglishCheckersCaptureConstraints(board, move);
+    public CaptureConstraints getCaptureConstraints(GameManager manager, Move move) {
+        return new EnglishCheckersCaptureConstraints(manager, move);
     }
 
     @Override

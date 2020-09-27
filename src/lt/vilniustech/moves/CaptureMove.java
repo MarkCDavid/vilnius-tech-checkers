@@ -49,42 +49,40 @@ public class CaptureMove implements Move {
     }
 
     @Override
-    public boolean apply(Board board) {
-        if(isApplied()) return false;
+    public void apply(Board board) {
+        if(isApplied()) return;
 
         Cell from = board.getCell(this.from);
         Cell over = board.getCell(this.over);
         Cell to = board.getCell(this.to);
 
-        if(from == null || over == null || to == null) return false;
-        if(over.getPiece() == null) return false;
+        if(from == null || over == null || to == null) return;
+        if(over.getPiece() == null) return;
 
         applied = true;
 
         Side side = from.getPiece().getSide();
         capturedPiece = over.popPiece();
         to.setPiece(from.popPiece());
-
-        return board.getAvailableMoves(side, this.to).stream().anyMatch(move -> move instanceof CaptureMove);
     }
 
     @Override
-    public boolean revert(Board board) {
-        if(!isApplied()) return false;
+    public void revert(Board board) {
+        if(!isApplied()) return;
 
         Cell from = board.getCell(this.from);
         Cell over = board.getCell(this.over);
         Cell to = board.getCell(this.to);
 
-        if(from == null || over == null || to == null) return false;
-        if(over.getPiece() != null) return false;
+        if(from == null || over == null || to == null) return;
+        if(over.getPiece() != null) return;
 
         applied = false;
 
         over.setPiece(capturedPiece);
         from.setPiece(to.popPiece());
 
-        return false;
+        return;
     }
 
     @Override

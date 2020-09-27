@@ -24,10 +24,10 @@ public class GUIRenderer {
         this.blackCell = new ColorRectSprite(Color.decode("#664400"));
         this.whiteCell = new ColorRectSprite(Color.decode("#ffffee"));
 
-        this.blackPiece = new ImageSprite("src/lt/vilniustech/guicheckers/img/BlackPiece.png");
-        this.blackKing =  new ImageSprite("src/lt/vilniustech/guicheckers/img/BlackKing.png");
-        this.whitePiece = new ImageSprite("src/lt/vilniustech/guicheckers/img/WhitePiece.png");
-        this.whiteKing = new ImageSprite("src/lt/vilniustech/guicheckers/img/WhiteKing.png");
+        this.blackPiece = new ImageSprite("resources/img/BlackPiece.png");
+        this.blackKing =  new ImageSprite("resources/img/BlackKing.png");
+        this.whitePiece = new ImageSprite("resources/img/WhitePiece.png");
+        this.whiteKing = new ImageSprite("resources/img/WhiteKing.png");
     }
 
     private static final float MARGIN = 0.2f;

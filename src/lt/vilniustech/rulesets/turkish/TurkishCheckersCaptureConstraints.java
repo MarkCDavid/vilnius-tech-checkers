@@ -2,6 +2,7 @@ package lt.vilniustech.rulesets.turkish;
 
 import lt.vilniustech.Board;
 import lt.vilniustech.Side;
+import lt.vilniustech.manager.GameManager;
 import lt.vilniustech.moves.Move;
 import lt.vilniustech.rulesets.CaptureConstraints;
 import lt.vilniustech.rulesets.Filters;
@@ -14,8 +15,8 @@ import java.util.stream.Collectors;
 
 public class TurkishCheckersCaptureConstraints implements CaptureConstraints {
 
-    public TurkishCheckersCaptureConstraints(Board board, Move move) {
-        this.board = board;
+    public TurkishCheckersCaptureConstraints(GameManager manager, Move move) {
+        this.manager = manager;
 
         this.captureChainBuilder = new CaptureChainBuilder();
         this.captureChainBuilder.registerModule(MaxCaptures.id);
@@ -28,7 +29,7 @@ public class TurkishCheckersCaptureConstraints implements CaptureConstraints {
                 .collect(Collectors.toList());
 
         if(captureMoves.size() > 0) {
-            List<CaptureChain> captureChains = captureChainBuilder.build(board, captureMoves);
+            List<CaptureChain> captureChains = captureChainBuilder.build(manager, captureMoves);
             if(captureChains.size() > 1) captureChains = captureChainBuilder.getModule(MaxCaptures.id).filter(captureChains);
             return captureChains.stream().map(CaptureChain::getMove).collect(Collectors.toList());
         }
@@ -50,5 +51,5 @@ public class TurkishCheckersCaptureConstraints implements CaptureConstraints {
     private boolean multipleCaptures;
 
     private final CaptureChainBuilder captureChainBuilder;
-    private final Board board;
+    private final GameManager manager;
 }
