@@ -15,7 +15,7 @@
           </grid>
         </constraints>
         <properties>
-          <text value="Label"/>
+          <text value=""/>
         </properties>
       </component>
       <hspacer id="4bb0d">
@@ -47,16 +47,13 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="6f8ff" class="javax.swing.JList" binding="madeMoves" custom-create="true">
+          <component id="6f8ff" class="lt.vilniustech.guicheckers.MoveHistory" binding="moveHistory" custom-create="true">
             <constraints/>
             <properties>
               <enabled value="true"/>
               <layoutOrientation value="0"/>
               <selectionMode value="0"/>
             </properties>
-            <clientProperties>
-              <html.disable class="java.lang.Boolean" value="false"/>
-            </clientProperties>
           </component>
         </children>
       </scrollpane>

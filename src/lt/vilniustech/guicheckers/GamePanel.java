@@ -25,14 +25,23 @@ public class GamePanel extends JPanel {
 
         renderer.drawCheckeredPattern(graphics, gameManager.getBoard());
 
-        if(selectedMoves.size() == 0)
-            renderer.drawAvailableMoves(graphics, gameManager.getBoard(), gameManager.getAvailableMoves());
-        else
-            renderer.drawSelectedMoves(graphics, gameManager.getBoard(), selectedMoves);
+        if(drawHighlights)
+            drawHighlights(graphics);
 
         renderer.drawPieces(graphics, gameManager.getBoard());
     }
 
+    private void drawHighlights(Graphics2D graphics) {
+        if (selectedMoves.size() == 0)
+            renderer.drawAvailableMoves(graphics, gameManager.getBoard(), gameManager.getAvailableMoves());
+        else
+            renderer.drawSelectedMoves(graphics, gameManager.getBoard(), selectedMoves);
+    }
+
+    private boolean drawHighlights = true;
+    public void setDrawHighlights(boolean drawHighlights) {
+        this.drawHighlights = drawHighlights;
+    }
 
 
     public GameManager getGameManager() {
@@ -48,8 +57,6 @@ public class GamePanel extends JPanel {
     }
 
     private List<Move> selectedMoves = new ArrayList<>();
-
-
 
     public GamePanel(GameManager gameManager) {
         this.renderer = new GUIRenderer();
@@ -93,5 +100,4 @@ public class GamePanel extends JPanel {
     public void removeCellClickListener(CellClickListener listener) {
         cellClickSupport.removeCellClickListener(listener);
     }
-
 }

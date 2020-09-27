@@ -67,12 +67,14 @@ public class Board implements Iterable<Cell> {
 
     private Move getMove(Coordinate from, Direction direction, int moveSize) {
         Move simple = new SimpleMove(from, direction, moveSize);
-        if(simple.isValid(this)) return simple;
-        else {
-            Move jump = new CaptureMove(from, direction, moveSize + 1);
-            if(jump.isValid(this)) return jump;
-            return null;
-        }
+        if(simple.isValid(this))
+            return simple;
+
+        Move jump = new CaptureMove(from, direction, moveSize + 1);
+        if(jump.isValid(this))
+            return jump;
+
+        return null;
     }
 
     public boolean applyMove(Move move) {
