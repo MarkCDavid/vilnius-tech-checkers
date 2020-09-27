@@ -1,6 +1,5 @@
 package lt.vilniustech.consolecheckers;
 
-import lt.vilniustech.Renderer;
 import lt.vilniustech.Side;
 import lt.vilniustech.manager.GameManager;
 import lt.vilniustech.rulesets.turkish.TurkishCheckers;
@@ -16,7 +15,7 @@ public class ConsoleGame {
 
     public static void main(String[] args) {
         GameManager manager = new GameManager(new TurkishCheckers());
-        Renderer renderer = new ConsoleRenderer();
+        ConsoleRenderer renderer = new ConsoleRenderer();
         Scanner scanner = new Scanner(System.in);
 
         while(true) {

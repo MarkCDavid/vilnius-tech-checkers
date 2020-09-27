@@ -3,7 +3,7 @@ package lt.vilniustech.consolecheckers;
 import lt.vilniustech.*;
 import lt.vilniustech.rulesets.CheckersRuleset;
 
-public class ConsoleRenderer implements Renderer {
+public class ConsoleRenderer  {
 
     private static final char EMPTY_CELL = ' ';
     private static final char WHITE_PIECE = '⛀';
@@ -11,7 +11,6 @@ public class ConsoleRenderer implements Renderer {
     private static final char BLACK_PIECE = '⛂';
     private static final char BLACK_KING = '⛃';
 
-    @Override
     public void render(Board board) {
         CheckersRuleset ruleset = board.getRuleset();
         Buffer buffer = new Buffer(ruleset.getBoardSize());

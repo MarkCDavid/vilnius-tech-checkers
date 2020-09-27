@@ -20,6 +20,9 @@ public class Coordinate {
         return row;
     }
 
+    public boolean isOdd() { return (row + column) % 2 == 0; }
+    public boolean isEven() { return !isOdd(); }
+
     public Coordinate move(Direction direction){
         return move(direction, 1);
     }

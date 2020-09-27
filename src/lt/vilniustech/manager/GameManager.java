@@ -73,6 +73,10 @@ public class GameManager {
         );
     }
 
+    public List<Move> getAvailableMoves() {
+      return availableMoves;
+    }
+
     public List<Move> getAvailableMoves(Coordinate from) {
         List<Move> moves = new ArrayList<>();
         for(Move move: availableMoves) {
