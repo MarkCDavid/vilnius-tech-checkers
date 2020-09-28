@@ -1,26 +1,23 @@
-package lt.vilniustech.rulesets.italian;
+package lt.vilniustech.rulesets.international;
 
 import lt.vilniustech.*;
-import lt.vilniustech.manager.GameManager;
-import lt.vilniustech.manager.MoveCollectionsBuilder;
 import lt.vilniustech.moves.Move;
 import lt.vilniustech.rulesets.CaptureConstraints;
 import lt.vilniustech.rulesets.CellFill;
 import lt.vilniustech.rulesets.CheckersRuleset;
-import lt.vilniustech.rulesets.english.EnglishCheckersCellFill;
 
 import java.util.List;
 
-public class ItalianCheckers implements CheckersRuleset {
+public class InternationalCheckers implements CheckersRuleset {
 
     @Override
     public String toString() {
-        return "Italian Checkers";
+        return "International Checkers";
     }
 
     @Override
     public int getBoardSize() {
-        return 8;
+        return 10;
     }
 
     @Override
@@ -29,13 +26,11 @@ public class ItalianCheckers implements CheckersRuleset {
     }
 
     @Override
-    public boolean isPromotionImmediate() {
-        return true;
-    }
+    public boolean isPromotionImmediate() { return false; }
 
     @Override
     public boolean canJumpAnywhereBeyond(Piece piece) {
-        return false;
+        return piece.isKing();
     }
 
     @Override
@@ -53,7 +48,7 @@ public class ItalianCheckers implements CheckersRuleset {
 
     @Override
     public CaptureConstraints getCaptureConstraints(Board board, Move move) {
-        return new ItalianCheckersCaptureConstraints(board, move);
+        return new InternationalCheckersCaptureConstraints(board, move);
     }
 
     @Override
@@ -97,6 +92,9 @@ public class ItalianCheckers implements CheckersRuleset {
         return new Piece(Side.WHITE, new Direction[]{
                 new Direction(1, -1),
                 new Direction(-1, -1),
+
+                new Direction(1, 1, true),
+                new Direction(-1, 1, true),
         });
     }
 
@@ -105,6 +103,9 @@ public class ItalianCheckers implements CheckersRuleset {
         return new Piece(Side.BLACK, new Direction[]{
                 new Direction(1, 1),
                 new Direction(-1, 1),
+
+                new Direction(1, -1, true),
+                new Direction(-1, -1, true),
         });
     }
 
@@ -115,7 +116,7 @@ public class ItalianCheckers implements CheckersRuleset {
                 new Direction(-1, -1),
                 new Direction(1, 1),
                 new Direction(-1, 1),
-        }, true);
+        }, getBoardSize(), true);
     }
     @Override
     public Piece createBlackKing() {
@@ -124,7 +125,7 @@ public class ItalianCheckers implements CheckersRuleset {
                 new Direction(-1, -1),
                 new Direction(1, 1),
                 new Direction(-1, 1),
-        }, true);
+        }, getBoardSize(), true);
     }
 
     @Override
@@ -144,6 +145,6 @@ public class ItalianCheckers implements CheckersRuleset {
     public CellFill getBlackCellFill() { return blackCellFill; }
 
 
-    private final CellFill whiteCellFill = new ItalianCheckersCellFill(getBoardSize() - 3, getBoardSize() - 1);
-    private final CellFill blackCellFill = new ItalianCheckersCellFill(0, 2);
+    private final CellFill whiteCellFill = new InternationalCheckersCellFill(getBoardSize() - 4, getBoardSize() - 1);
+    private final CellFill blackCellFill = new InternationalCheckersCellFill(0, 3);
 }

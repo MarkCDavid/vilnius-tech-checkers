@@ -37,7 +37,7 @@ public class Board implements Iterable<Cell> {
         boolean destinationIsKingRow = ruleset.isKingRow(side, move.getTo());
 
         move.apply(this);
-        if(destinationIsKingRow && !piece.isKing()) {
+        if(ruleset.isPromotionImmediate() && destinationIsKingRow && !piece.isKing()) {
             Piece kingPiece = ruleset.createKing(side);
             getCell(move.getTo()).setPiece(kingPiece);
             return false;

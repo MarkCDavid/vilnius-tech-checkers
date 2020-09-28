@@ -3,6 +3,7 @@ package lt.vilniustech.manager.state;
 import lt.vilniustech.Board;
 import lt.vilniustech.Side;
 import lt.vilniustech.manager.MoveCollectionsBuilder;
+import lt.vilniustech.moves.CaptureMove;
 import lt.vilniustech.moves.Move;
 import lt.vilniustech.rulesets.CaptureConstraints;
 import lt.vilniustech.rulesets.Filters;
@@ -16,10 +17,10 @@ public abstract class State {
     public abstract Side getNextSide(Side currentSide);
     public abstract boolean isMultiCapture();
 
-    protected static boolean hasCaptureMoves(Board board, Move move, Side side) {
+    protected static boolean hasCaptureMoves(Board board, Move move, Side side, List<CaptureMove> unavailableMoves) {
         CaptureConstraints captureConstraints = board.getRuleset().getCaptureConstraints(board, move);
         captureConstraints.setMultipleCaptures(true);
-        List<Move> availableMoves = captureConstraints.filterMoves(MoveCollectionsBuilder.getAvailableMoves(board, side, move.getTo(), move.getFrom()));
+        List<Move> availableMoves = captureConstraints.filterMoves(MoveCollectionsBuilder.getAvailableMoves(board, side, move.getTo(), unavailableMoves));
         List<Move> availableCaptureMoves = availableMoves.stream().filter(Filters.captureMoves()).collect(Collectors.toList());
         return availableCaptureMoves.size() > 0;
     }

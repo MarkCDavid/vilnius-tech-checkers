@@ -28,6 +28,16 @@ public class EnglishCheckers implements CheckersRuleset {
     }
 
     @Override
+    public boolean isPromotionImmediate() {
+        return true;
+    }
+
+    @Override
+    public boolean canJumpAnywhereBeyond(Piece piece) {
+        return false;
+    }
+
+    @Override
     public Side processWinningConditions(List<Move> moves, List<Piece> whitePieces, List<Piece> blackPieces) {
         if(whitePieces.size() == 0) return Side.BLACK;
         else if(blackPieces.size() == 0) return Side.WHITE;

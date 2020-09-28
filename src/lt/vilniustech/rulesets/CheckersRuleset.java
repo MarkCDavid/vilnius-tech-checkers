@@ -15,6 +15,8 @@ public interface CheckersRuleset {
 
     int getBoardSize();
     boolean isCaptureImmediate();
+    boolean isPromotionImmediate();
+    boolean canJumpAnywhereBeyond(Piece piece);
     Side processWinningConditions(List<Move> moves, List<Piece> whitePieces, List<Piece> blackPieces);
     Side getFirstToMove();
 

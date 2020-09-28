@@ -2,6 +2,7 @@ package lt.vilniustech.guicheckers;
 
 import lt.vilniustech.rulesets.CheckersRuleset;
 import lt.vilniustech.rulesets.english.EnglishCheckers;
+import lt.vilniustech.rulesets.international.InternationalCheckers;
 import lt.vilniustech.rulesets.italian.ItalianCheckers;
 import lt.vilniustech.rulesets.turkish.TurkishCheckers;
 
@@ -33,6 +34,7 @@ public class MainMenuForm {
         availableRulesModel.addElement(new EnglishCheckers());
         availableRulesModel.addElement(new ItalianCheckers());
         availableRulesModel.addElement(new TurkishCheckers());
+        availableRulesModel.addElement(new InternationalCheckers());
 
         availableRules = new JList<>(availableRulesModel);
         availableRules.setSelectedIndex(0);

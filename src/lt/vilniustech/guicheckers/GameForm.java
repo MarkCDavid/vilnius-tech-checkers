@@ -77,6 +77,9 @@ public class GameForm {
             boolean gameFinished = gamePanel.getGameManager().performMove(availableMove);
 
             getMoveHistory().setEnabled(!gamePanel.getGameManager().getStateMachine().isMultiCapture());
+            drawButton.setEnabled(!gamePanel.getGameManager().getStateMachine().isMultiCapture());
+            surrenderButton.setEnabled(!gamePanel.getGameManager().getStateMachine().isMultiCapture());
+
             if (gameFinished)
                 processGameEnd();
         }

@@ -12,6 +12,10 @@ import java.util.List;
 
 public class CaptureState extends State {
 
+    public List<CaptureMove> getCaptureMoves() {
+        return captureMoves;
+    }
+
     public CaptureState(Board board, CaptureMove move) {
         captureMoves = new ArrayList<>();
         captureMoves.add(move);
@@ -31,7 +35,7 @@ public class CaptureState extends State {
         if(!board.getRuleset().isCaptureImmediate())
             setAllPieces(board);
 
-        if(hasCaptureMoves(board, move, side)) return this;
+        if(hasCaptureMoves(board, move, side, captureMoves)) return this;
 
         if(!board.getRuleset().isCaptureImmediate())
             takeAllPieces(board);

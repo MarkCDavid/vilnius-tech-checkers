@@ -10,9 +10,18 @@ public class Direction {
         return y;
     }
 
+    public boolean isCaptureOnly() {
+        return isCaptureOnly;
+    }
+
     public Direction(int x, int y) {
+        this(x, y, false);
+    }
+
+    public Direction(int x, int y, boolean isCaptureOnly) {
         this.x = bound(x);
         this.y = bound(y);
+        this.isCaptureOnly = isCaptureOnly;
     }
 
     @SuppressWarnings("ManualMinMaxCalculation")
@@ -24,4 +33,5 @@ public class Direction {
 
     private final int x;
     private final int y;
+    private final boolean isCaptureOnly;
 }

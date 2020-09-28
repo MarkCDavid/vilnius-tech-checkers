@@ -69,13 +69,21 @@ public class GameManager {
     public boolean performMove(Move move) {
         if(isFinished()) throw new GameFinishedException(getWinner());
 
+        Piece movingPiece = board.getCell(move.getFrom()).getPiece();
+        boolean destinationIsKingRow = ruleset.isKingRow(movingPiece.getSide(), move.getTo());
+
         stateMachine.performMove(board, move);
 
         CaptureConstraints captureConstraints = ruleset.getCaptureConstraints(board, move);
         captureConstraints.setMultipleCaptures(stateMachine.isMultiCapture());
 
         currentSide = stateMachine.getNextSide(currentSide);
-        availableMoves = captureConstraints.filterMoves(MoveCollectionsBuilder.getAllAvailableMoves(board, currentSide, stateMachine.isMultiCapture() ? move.getFrom() : null));
+        availableMoves = captureConstraints.filterMoves(MoveCollectionsBuilder.getAllAvailableMoves(board, currentSide, stateMachine.isMultiCapture() ? stateMachine.getPerformedMoves() : null));
+
+        if(destinationIsKingRow && !stateMachine.isMultiCapture() && !ruleset.isPromotionImmediate()) {
+            Piece kingPiece = ruleset.createKing(movingPiece.getSide());
+            board.getCell(move.getTo()).setPiece(kingPiece);
+        }
 
         winner = ruleset.processWinningConditions(
                 availableMoves,
@@ -130,7 +138,6 @@ public class GameManager {
     private final StateMachine stateMachine;
 
     private List<Move> availableMoves;
-//    private List<Move> captureChain;
 
     private Side winner = Side.NONE;
     private Side currentSide;

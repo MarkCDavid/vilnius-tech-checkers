@@ -19,12 +19,12 @@ public class MoveCollectionsBuilder {
         return getAllAvailableMoves(board, side, null);
     }
 
-    public static List<Move> getAllAvailableMoves(Board board, Side side, Coordinate unavailable) {
+    public static List<Move> getAllAvailableMoves(Board board, Side side, List<CaptureMove> unavailableMoves) {
 
         ArrayList<Move> availableMoves = new ArrayList<>();
 
         for(Coordinate from: new CoordinateIterator(board.getRuleset().getBoardSize())) {
-            availableMoves.addAll(getAvailableMoves(board, side, from, unavailable));
+            availableMoves.addAll(getAvailableMoves(board, side, from, unavailableMoves));
         }
 
         return availableMoves;
@@ -34,7 +34,7 @@ public class MoveCollectionsBuilder {
         return getAvailableMoves(board, side, from, null);
     }
 
-    public static List<Move> getAvailableMoves(Board board, Side side, Coordinate from, Coordinate unavailable) {
+    public static List<Move> getAvailableMoves(Board board, Side side, Coordinate from, List<CaptureMove> unavailableMoves) {
         ArrayList<Move> availableMoves = new ArrayList<>();
 
         Cell fromCell = board.getCell(from);
@@ -45,26 +45,41 @@ public class MoveCollectionsBuilder {
 
         for(Direction direction : fromPiece.getDirections()) {
             for(int moveSize = 1; moveSize <= fromPiece.getMoveSize(); moveSize++) {
-                Move move = getMove(board, from, direction, moveSize);
-                if(move == null || (unavailable != null && move.getTo().equals(unavailable))) break;
-                availableMoves.add(move);
-                if(move instanceof CaptureMove) break;
+                List<Move> moves = getMove(board, from, direction, moveSize, board.getRuleset().canJumpAnywhereBeyond(fromPiece));
+                boolean hadCapture = false;
+                for(Move move: moves) {
+                    if(unavailableMoves != null && unavailableMoves.stream().anyMatch(m -> move instanceof CaptureMove && ((CaptureMove) move).getOver().equals(m.getOver()))) continue;
+                    availableMoves.add(move);
 
+                    if(move instanceof CaptureMove) hadCapture = true;
+                }
+                if(hadCapture) break;
             }
         }
 
         return availableMoves;
     }
 
-    private static Move getMove(Board board, Coordinate from, Direction direction, int moveSize) {
-        Move simple = new SimpleMove(from, direction, moveSize);
-        if(simple.isValid(board))
-            return simple;
+    private static List<Move> getMove(Board board, Coordinate from, Direction direction, int moveSize, boolean canStopAnywhereBeyond) {
+        List<Move> moves = new ArrayList<>();
 
-        Move capture = new CaptureMove(from, direction, moveSize + 1);
-        if (capture.isValid(board))
-            return capture;
+        if(!direction.isCaptureOnly()) {
+            Move simple = new SimpleMove(from, direction, moveSize);
+            if (simple.isValid(board))
+                moves.add(simple);
+        }
 
-        return null;
+        if(moves.size() > 0) return moves;
+
+        for(int i = 1; i < board.getRuleset().getBoardSize(); i++) {
+            Move capture = new CaptureMove(from, from.move(direction, moveSize), from.move(direction, moveSize + i));
+            if (capture.isValid(board))
+                moves.add(capture);
+
+            if(!canStopAnywhereBeyond)
+                return moves;
+        }
+
+        return moves;
     }
 }

@@ -9,6 +9,7 @@ import lt.vilniustech.moves.SimpleMove;
 import lt.vilniustech.rulesets.CaptureConstraints;
 import lt.vilniustech.rulesets.Filters;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,8 +21,11 @@ public class SimpleState extends State {
         board.applyMove(move);
 
         if(move instanceof SimpleMove) return this;
-        if(move instanceof CaptureMove)
-            return hasCaptureMoves(board, move, side) ? new CaptureState(board, (CaptureMove)move) : this;
+        if(move instanceof CaptureMove) {
+            ArrayList<CaptureMove> unavailable = new ArrayList<>();
+            unavailable.add((CaptureMove) move);
+            return hasCaptureMoves(board, move, side, unavailable) ? new CaptureState(board, (CaptureMove) move) : this;
+        }
 
         throw new IllegalStateException();
     }
