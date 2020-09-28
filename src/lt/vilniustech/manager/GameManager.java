@@ -86,6 +86,7 @@ public class GameManager {
         }
 
         winner = ruleset.processWinningConditions(
+                currentSide,
                 availableMoves,
                 board.getSidePieces(Side.WHITE),
                 board.getSidePieces(Side.BLACK)

@@ -17,7 +17,7 @@ public interface CheckersRuleset {
     boolean isCaptureImmediate();
     boolean isPromotionImmediate();
     boolean canJumpAnywhereBeyond(Piece piece);
-    Side processWinningConditions(List<Move> moves, List<Piece> whitePieces, List<Piece> blackPieces);
+    Side processWinningConditions(Side currentSide, List<Move> moves, List<Piece> whitePieces, List<Piece> blackPieces);
     Side getFirstToMove();
 
     CaptureConstraints getCaptureConstraints(Board board, Move move);

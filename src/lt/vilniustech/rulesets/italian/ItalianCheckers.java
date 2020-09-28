@@ -39,7 +39,7 @@ public class ItalianCheckers implements CheckersRuleset {
     }
 
     @Override
-    public Side processWinningConditions(List<Move> moves, List<Piece> whitePieces, List<Piece> blackPieces) {
+    public Side processWinningConditions(Side currentSide, List<Move> moves, List<Piece> whitePieces, List<Piece> blackPieces) {
         if(whitePieces.size() == 0) return Side.BLACK;
         else if(blackPieces.size() == 0) return Side.WHITE;
         else if(moves.size() == 0) return Side.DRAW;
