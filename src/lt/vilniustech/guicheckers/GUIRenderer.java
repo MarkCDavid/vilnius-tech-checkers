@@ -77,10 +77,14 @@ public class GUIRenderer {
         }
     }
 
+    private final float margin = 0.025f;
     public void drawCheckeredPattern(Graphics2D graphics, Board board) {
+        int cellTextOffset = (int)(cellSize * margin);
         for(Coordinate coordinate: new CoordinateIterator(board.getRuleset().getBoardSize())) {
             Sprite sprite = coordinate.isEven() ? this.blackCell : this.whiteCell;
             sprite.paint(graphics, coordinate.getColumn(), coordinate.getRow(), cellSize);
+            graphics.setColor(coordinate.isEven() ? Color.WHITE : Color.BLACK);
+            graphics.drawString(coordinate.toString(), coordinate.getColumn() * cellSize + cellTextOffset, (coordinate.getRow() + 1) * cellSize - cellTextOffset);
         }
     }
 
