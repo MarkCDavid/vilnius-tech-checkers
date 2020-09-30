@@ -11,6 +11,15 @@ public class Board {
     return ruleset;
   }
 
+  public Map<Coordinate, Piece> getPieceMap() {
+    return pieceMap;
+  }
+
+  public Board() {
+    this.pieceMap = new HashMap<>();
+    this.ruleset = null;
+  }
+
   public Board(CheckersRuleset ruleset) {
     this.ruleset = ruleset;
     this.pieceMap = new HashMap<>();
