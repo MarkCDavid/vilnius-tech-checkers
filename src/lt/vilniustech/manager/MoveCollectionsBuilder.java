@@ -37,10 +37,7 @@ public class MoveCollectionsBuilder {
     public static List<Move> getAvailableMoves(Board board, Side side, Coordinate from, List<CaptureMove> unavailableMoves) {
         ArrayList<Move> availableMoves = new ArrayList<>();
 
-        Cell fromCell = board.getCell(from);
-        if(fromCell == null) return availableMoves;
-
-        Piece fromPiece = fromCell.getPiece();
+        Piece fromPiece = board.getPiece(from);
         if(fromPiece == null || fromPiece.getSide() != side) return availableMoves;
 
         for(Direction direction : fromPiece.getDirections()) {
@@ -69,7 +66,7 @@ public class MoveCollectionsBuilder {
                 moves.add(simple);
         }
 
-        if(moves.size() > 0) return moves;
+        if(!moves.isEmpty()) return moves;
 
         for(int i = 1; i < board.getRuleset().getBoardSize(); i++) {
             Move capture = new CaptureMove(from, from.move(direction, moveSize), from.move(direction, moveSize + i));

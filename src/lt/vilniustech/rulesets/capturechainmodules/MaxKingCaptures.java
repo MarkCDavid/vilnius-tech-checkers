@@ -62,7 +62,7 @@ public class MaxKingCaptures implements CaptureChainModule {
 
     @Override
     public CaptureChainModule initialize(Board board, CaptureMove move) {
-        return new MaxKingCaptures(board.getCell(move.getOver()).getPiece().isKing() ? 1 : 0);
+        return new MaxKingCaptures(board.getPiece(move.getOver()).isKing() ? 1 : 0);
     }
 
     private final int captures;

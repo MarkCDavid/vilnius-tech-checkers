@@ -69,7 +69,7 @@ public class GameManager {
     public boolean performMove(Move move) {
         if(isFinished()) throw new GameFinishedException(getWinner());
 
-        Piece movingPiece = board.getCell(move.getFrom()).getPiece();
+        Piece movingPiece = board.getPiece(move.getFrom());
         boolean destinationIsKingRow = ruleset.isKingRow(movingPiece.getSide(), move.getTo());
 
         stateMachine.performMove(board, move);
@@ -82,7 +82,7 @@ public class GameManager {
 
         if(destinationIsKingRow && !stateMachine.isMultiCapture() && !ruleset.isPromotionImmediate()) {
             Piece kingPiece = ruleset.createKing(movingPiece.getSide());
-            board.getCell(move.getTo()).setPiece(kingPiece);
+            board.putPiece(move.getTo(), kingPiece);
         }
 
         winner = ruleset.processWinningConditions(

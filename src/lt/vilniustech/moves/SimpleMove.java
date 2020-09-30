@@ -31,37 +31,24 @@ public class SimpleMove implements Move {
 
     @Override
     public boolean isValid(Board board) {
-        Cell fromCell = board.getCell(this.from);
-        Cell toCell = board.getCell(this.to);
-        if(fromCell == null || toCell == null) return false;
-
-        Piece fromPiece = fromCell.getPiece();
-        Piece toPiece = toCell.getPiece();
-        return fromPiece != null && toPiece == null;
+        return board.validCoordinate(this.from) &&
+            board.validCoordinate(this.to) &&
+            board.getPiece(this.from) != null &&
+            board.getPiece(this.to) == null;
     }
 
     @Override
     public void apply(Board board) {
         if(isApplied()) return;
-
-        Cell from = board.getCell(this.from);
-        Cell to = board.getCell(this.to);
-        if(from == null || to == null) return;
-
         applied = true;
-        to.setPiece(from.popPiece());
+        board.putPiece(to, board.popPiece(from));
     }
 
     @Override
     public void revert(Board board) {
         if(!isApplied()) return;
-
-        Cell from = board.getCell(this.from);
-        Cell to = board.getCell(this.to);
-        if(from == null || to == null) return;
-
         applied = false;
-        from.setPiece(to.popPiece());
+        board.putPiece(from, board.popPiece(to));
     }
 
     @Override

@@ -37,57 +37,47 @@ public class CaptureMove implements Move {
 
     @Override
     public boolean isValid(Board board) {
-        Cell fromCell = board.getCell(this.from);
-        Cell overCell = board.getCell(this.over);
-        Cell toCell = board.getCell(this.to);
-        if(fromCell == null || toCell == null || overCell == null) return false;
+        Piece fromPiece = board.getPiece(this.from);
+        Piece overPiece = board.getPiece(this.over);
+        Piece toPiece = board.getPiece(this.to);
+        return board.validCoordinate(this.from) &&
+            board.validCoordinate(this.over) &&
+            board.validCoordinate(this.to) &&
+            fromPiece != null && overPiece != null && toPiece == null &&
+            fromPiece.getSide() != overPiece.getSide();
 
-        Piece fromPiece = fromCell.getPiece();
-        Piece overPiece = overCell.getPiece();
-        Piece toPiece = toCell.getPiece();
-        return fromPiece != null && overPiece != null && fromPiece.getSide() != overPiece.getSide() && toPiece == null;
     }
 
     @Override
     public void apply(Board board) {
         if(isApplied()) return;
+        Piece overPiece = board.getPiece(this.over);
 
-        Cell from = board.getCell(this.from);
-        Cell over = board.getCell(this.over);
-        Cell to = board.getCell(this.to);
-
-        if(from == null || over == null || to == null) return;
-        if(over.getPiece() == null) return;
-
-        applied = true;
+        if(overPiece == null) return;
 
         takeCapturedPiece(board);
-        to.setPiece(from.popPiece());
+        board.putPiece(to, board.popPiece(from));
     }
 
     @Override
     public void revert(Board board) {
         if(!isApplied()) return;
 
-        Cell from = board.getCell(this.from);
-        Cell over = board.getCell(this.over);
-        Cell to = board.getCell(this.to);
-
-        if(from == null || over == null || to == null) return;
-        if(over.getPiece() != null) return;
+        Piece overPiece = board.getPiece(this.over);
+        if(overPiece != null) return;
 
         applied = false;
 
         setCapturedPiece(board);
-        from.setPiece(to.popPiece());
+        board.putPiece(from, board.popPiece(to));
     }
 
     public void takeCapturedPiece(Board board) {
-        capturedPiece = board.getCell(this.over).popPiece();
+        capturedPiece = board.popPiece(over);
     }
 
     public void setCapturedPiece(Board board) {
-        board.getCell(this.over).setPiece(capturedPiece);
+        board.putPiece(over, capturedPiece);
     }
 
     @Override

@@ -26,6 +26,6 @@ public abstract class State {
     }
 
     protected static Side getSide(Board board, Move move) {
-        return board.getCell(move.getFrom()).getPiece().getSide();
+        return board.getPiece(move.getFrom()).getSide();
     }
 }

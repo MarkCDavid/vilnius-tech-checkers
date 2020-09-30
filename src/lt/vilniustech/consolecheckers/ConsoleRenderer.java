@@ -18,7 +18,7 @@ public class ConsoleRenderer  {
         for(int row = 0; row < ruleset.getBoardSize(); row++) {
             for(int column = 0; column < ruleset.getBoardSize(); column++) {
                 Coordinate coordinate = new Coordinate(column, row);
-                char symbol = getSymbol(board.getCell(coordinate).getPiece());
+                char symbol = getSymbol(board.getPiece(coordinate));
                 buffer.fillShape(Shapes.getShape(row, column, ruleset.getBoardSize()), row, column, symbol );
             }
         }

@@ -35,7 +35,7 @@ public class GUIRenderer {
 
     public void drawPieces(Graphics2D graphics, Board board) {
         for (Coordinate coordinate : new CoordinateIterator(board.getRuleset().getBoardSize())) {
-            Piece piece = board.getCell(coordinate).getPiece();
+            Piece piece = board.getPiece(coordinate);
             if (piece == null) continue;
             drawPiece(graphics, coordinate.getColumn(), coordinate.getRow(), piece);
         }

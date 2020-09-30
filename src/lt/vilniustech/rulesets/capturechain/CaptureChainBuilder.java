@@ -35,7 +35,7 @@ public class CaptureChainBuilder
         List<CaptureChain> captureChains = new ArrayList<>();
         CaptureChain root = new CaptureChain(board, move, modules);
 
-        Side side = board.getCell(move.getFrom()).getPiece().getSide();
+        Side side = board.getPiece(move.getFrom()).getSide();
 
         move.apply(board);
 

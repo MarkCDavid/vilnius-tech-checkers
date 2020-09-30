@@ -74,7 +74,7 @@ public class EarliestKingCapture implements CaptureChainModule {
 
     @Override
     public CaptureChainModule initialize(Board board, CaptureMove move) {
-        return new EarliestKingCapture(board.getCell(move.getOver()).getPiece().isKing());
+        return new EarliestKingCapture(board.getPiece(move.getOver()).isKing());
     }
 
     private final boolean kingCapture;

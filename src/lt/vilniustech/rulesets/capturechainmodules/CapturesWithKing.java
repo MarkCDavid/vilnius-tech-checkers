@@ -51,7 +51,7 @@ public class CapturesWithKing implements CaptureChainModule {
 
     @Override
     public CaptureChainModule initialize(Board board, CaptureMove move) {
-        return new CapturesWithKing(board.getCell(move.getFrom()).getPiece().isKing());
+        return new CapturesWithKing(board.getPiece(move.getFrom()).isKing());
     }
 
     private final boolean captureWithKing;

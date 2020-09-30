@@ -47,8 +47,8 @@ public class ManCannotCaptureKing implements CaptureChainModule {
 
     @Override
     public CaptureChainModule initialize(Board board, CaptureMove move) {
-        Piece fromPiece = board.getCell(move.getFrom()).getPiece();
-        Piece overPiece = board.getCell(move.getOver()).getPiece();
+        Piece fromPiece = board.getPiece(move.getFrom());
+        Piece overPiece = board.getPiece(move.getOver());
         return new ManCannotCaptureKing(!fromPiece.isKing() && overPiece.isKing());
     }
 
