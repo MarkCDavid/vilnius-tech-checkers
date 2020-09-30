@@ -2,6 +2,7 @@ package lt.vilniustech.consolecheckers;
 
 import lt.vilniustech.Side;
 import lt.vilniustech.manager.GameManager;
+import lt.vilniustech.rulesets.international.InternationalCheckers;
 import lt.vilniustech.rulesets.turkish.TurkishCheckers;
 
 import java.util.Scanner;
@@ -14,7 +15,7 @@ public class ConsoleGame {
     public static final String DRAW_OPTION = "draw";
 
     public static void main(String[] args) {
-        GameManager manager = new GameManager(new TurkishCheckers());
+        GameManager manager = new GameManager(new InternationalCheckers());
         ConsoleRenderer renderer = new ConsoleRenderer();
         Scanner scanner = new Scanner(System.in);
 

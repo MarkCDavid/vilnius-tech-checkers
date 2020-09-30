@@ -1,6 +1,7 @@
 package lt.vilniustech;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class BoardIterator implements Iterator<Cell> {
 
@@ -18,6 +19,8 @@ public class BoardIterator implements Iterator<Cell> {
 
     @Override
     public Cell next() {
+        if(!hasNext())
+            throw new NoSuchElementException();
         return board.getCell(Coordinate.ofIndex(index++, size));
     }
 

@@ -10,7 +10,7 @@ import javax.swing.*;
 
 public class MainMenuForm {
 
-    private JFrame parent;
+    private final JFrame parent;
     private JPanel mainPanel;
     private JButton startButton;
     private JButton exitButton;
