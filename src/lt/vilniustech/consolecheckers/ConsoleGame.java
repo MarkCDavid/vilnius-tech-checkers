@@ -1,10 +1,16 @@
 package lt.vilniustech.consolecheckers;
 
+import lt.vilniustech.Coordinate;
 import lt.vilniustech.Side;
+import lt.vilniustech.manager.CheckersManager;
 import lt.vilniustech.manager.GameManager;
+import lt.vilniustech.manager.IllegalCoordinateException;
+import lt.vilniustech.moves.Move;
 import lt.vilniustech.rulesets.international.InternationalCheckers;
 import lt.vilniustech.rulesets.turkish.TurkishCheckers;
 
+import javax.swing.text.html.Option;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class ConsoleGame {
@@ -15,7 +21,7 @@ public class ConsoleGame {
     public static final String DRAW_OPTION = "draw";
 
     public static void main(String[] args) {
-        GameManager manager = new GameManager(new InternationalCheckers());
+        CheckersManager manager = new GameManager(new InternationalCheckers());
         ConsoleRenderer renderer = new ConsoleRenderer();
         Scanner scanner = new Scanner(System.in);
 
@@ -29,21 +35,33 @@ public class ConsoleGame {
             switch (userInput) {
                 case DRAW_OPTION:
                     manager.setWinner(Side.NONE);
-                    break;
+                    return;
                 case SURRENDER_OPTION:
                     manager.setWinner(Side.opposite(manager.getCurrentSide()));
-                    break;
+                    return;
                 case EXIT_GAME_OPTION:
                     return;
                 default:
-                    String[] move = userInput.split(" ");
-                    if (move.length != 2) {
+                    String[] stringMove = userInput.split(" ");
+                    if (stringMove.length != 2) {
                         System.out.printf("Incorrect amount of arguments. Type '<FROM CELL> <TO CELL>' to make a move.%n");
                         continue;
                     }
-                    manager.processInput(move[0], move[1], exception -> {
-                        System.out.println(exception.getMessage());
-                    });
+
+                    Coordinate from = parse(stringMove[0]);
+                    if(from == null)
+                        continue;
+
+                    Coordinate to = parse(stringMove[1]);
+                    if(to == null)
+                        continue;
+
+                    Optional<Move> move = manager.getAvailableMoves().stream().filter(m -> m.getFrom().equals(from) && m.getTo().equals(to)).findFirst();
+
+                    if(move.isEmpty())
+                        continue;
+
+                    manager.processMove(move.get());
                     break;
             }
 
@@ -53,7 +71,16 @@ public class ConsoleGame {
                 break;
             }
         }
+    }
 
+    private static Coordinate parse(String string) {
+        try {
+            return Coordinate.ofString(string);
+        }
+        catch(IllegalCoordinateException exception) {
+            System.out.printf("Coordinate %s is invalid!%n", string);
+            return null;
+        }
     }
 
 

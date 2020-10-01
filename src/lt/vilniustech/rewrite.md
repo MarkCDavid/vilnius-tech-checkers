@@ -11,18 +11,18 @@ The system simply accepts a move to perform.
 The system checks if the given move is a legitimate one 
 and applies it to the board.
 
-#### Possible Move Generation
-
-The system iterates through all pieces of the currently
-playing side and generate all possible moves. The system
-is able to discard invalid moves early.
-
 #### Winning Condition Check
 
 The system checks the winning conditions based on the 
 executing ruleset and possible moves. If a winner has 
 been determined the system emits an event with the winner 
 information and halts execution.
+
+#### Possible Move Generation
+
+The system iterates through all pieces of the currently
+playing side and generate all possible moves. The system
+is able to discard invalid moves early.
 
 #### Passing possible and executed moves to currently executing state
 

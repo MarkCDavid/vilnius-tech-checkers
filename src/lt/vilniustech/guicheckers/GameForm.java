@@ -2,9 +2,11 @@ package lt.vilniustech.guicheckers;
 
 import lt.vilniustech.Coordinate;
 import lt.vilniustech.Side;
+import lt.vilniustech.events.EventSubscriber;
 import lt.vilniustech.guicheckers.events.CellClickListener;
 import lt.vilniustech.guicheckers.events.MoveHistoryChangeListener;
 import lt.vilniustech.manager.GameManager;
+import lt.vilniustech.manager.events.GameFinishedEvent;
 import lt.vilniustech.moves.Move;
 import lt.vilniustech.rulesets.CheckersRuleset;
 
@@ -26,17 +28,25 @@ public class GameForm {
         drawButton.addActionListener(e -> {
             Side winner = Side.DRAW;
             getGamePanel().getGameManager().setWinner(winner);
-            processGameEnd();
+            processGameEnd(winner);
         });
         surrenderButton.addActionListener(e -> {
             Side winner = Side.opposite(getGamePanel().getGameManager().getCurrentSide());
             getGamePanel().getGameManager().setWinner(winner);
-            processGameEnd();
+            processGameEnd(winner);
         });
     }
 
     private void createUIComponents() {
-        GamePanel gamePanel = setGamePanel(new GamePanel(new GameManager(ruleset)));
+        GameManager manager = new GameManager(ruleset);
+        manager.subscribe(new EventSubscriber<GameFinishedEvent>(GameFinishedEvent.class) {
+
+            @Override
+            protected void receive(GameFinishedEvent event) {
+                processGameEnd(event.getWinner());
+            }
+        });
+        GamePanel gamePanel = setGamePanel(new GamePanel(manager));
         MoveHistory moveHistory = setMoveHistory(new MoveHistory(gamePanel.getGameManager().getBoard()));
         StatusBar statusBar = setStatusBar(new StatusBar());
 
@@ -74,14 +84,16 @@ public class GameForm {
 
             moveHistory.addMove(availableMove);
 
-            boolean gameFinished = gamePanel.getGameManager().performMove(availableMove);
+            gamePanel.getGameManager().processMove(availableMove);
+
+            if(gameFinished)
+                break;
 
             getMoveHistory().setEnabled(!gamePanel.getGameManager().getStateMachine().isMultiCapture());
             drawButton.setEnabled(!gamePanel.getGameManager().getStateMachine().isMultiCapture());
             surrenderButton.setEnabled(!gamePanel.getGameManager().getStateMachine().isMultiCapture());
 
-            if (gameFinished)
-                processGameEnd();
+            break;
         }
         selectedMoves.clear();
     }
@@ -94,8 +106,10 @@ public class GameForm {
         };
     }
 
-    private void processGameEnd() {
-        getStatusBar().setWinner(getGamePanel().getGameManager().getWinner());
+    private boolean gameFinished = false;
+    private void processGameEnd(Side winner) {
+        gameFinished = true;
+        getStatusBar().setWinner(winner);
         getGamePanel().repaint();
         getGamePanel().setEnabled(false);
         getMoveHistory().setEnabled(true);

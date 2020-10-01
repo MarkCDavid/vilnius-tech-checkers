@@ -1,21 +1,21 @@
 package lt.vilniustech.manager;
 
 import lt.vilniustech.*;
+import lt.vilniustech.events.EventEmitter;
+import lt.vilniustech.events.EventSubscriber;
+import lt.vilniustech.events.SubscriptionSupport;
+import lt.vilniustech.manager.events.GameFinishedEvent;
 import lt.vilniustech.manager.state.SimpleState;
 import lt.vilniustech.manager.state.StateMachine;
-import lt.vilniustech.moves.CaptureMove;
 import lt.vilniustech.moves.Move;
-import lt.vilniustech.moves.SimpleMove;
 import lt.vilniustech.rulesets.CaptureConstraints;
 import lt.vilniustech.rulesets.CheckersRuleset;
-import lt.vilniustech.rulesets.Filters;
-import lt.vilniustech.utils.CoordinateIterator;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
-public class GameManager {
+public class GameManager implements CheckersManager, SubscriptionSupport {
 
     public boolean isFinished() {
         return winner != Side.NONE;
@@ -41,61 +41,41 @@ public class GameManager {
     public GameManager(CheckersRuleset ruleset) {
         this.ruleset = ruleset;
         this.board = new Board(ruleset);
+        this.eventEmitter = new EventEmitter();
         this.stateMachine = new StateMachine(new SimpleState());
         this.currentSide = ruleset.getFirstToMove();
         this.availableMoves = MoveCollectionsBuilder.getAllAvailableMoves(board, currentSide);
     }
 
-    public void processInput(String fromString, String toString, OnManagerException onException) {
-        if(isFinished()) {
-            if(onException != null)
-                onException.apply(new GameFinishedException(getWinner()));
+    public void processMove(Move move) {
+        if(isFinished())
+            throw new GameFinishedException(getWinner());
+
+        if(!legitimateMove(move))
+            return;
+
+        board.applyMove(move);
+
+        winner = ruleset.processWinningConditions(currentSide, availableMoves, board.getSidePieces(Side.WHITE), board.getSidePieces(Side.BLACK));
+        if (winner != Side.NONE) {
+            eventEmitter.emit(new GameFinishedEvent(winner));
             return;
         }
-
-        Coordinate from = ofString(fromString, onException);
-        if(from == null) return;
-
-        Coordinate to = ofString(toString, onException);
-        if(to == null) return;
-
-        Move move = getMove(from, to, onException);
-        if(move == null) return;
-
-        performMove(move);
-    }
-
-
-    public boolean performMove(Move move) {
-        if(isFinished()) throw new GameFinishedException(getWinner());
-
-        Piece movingPiece = board.getPiece(move.getFrom());
-        boolean destinationIsKingRow = ruleset.isKingRow(movingPiece.getSide(), move.getTo());
-
-        stateMachine.performMove(board, move);
 
         CaptureConstraints captureConstraints = ruleset.getCaptureConstraints(board, move);
         captureConstraints.setMultipleCaptures(stateMachine.isMultiCapture());
 
         currentSide = stateMachine.getNextSide(currentSide);
         availableMoves = captureConstraints.filterMoves(MoveCollectionsBuilder.getAllAvailableMoves(board, currentSide, stateMachine.isMultiCapture() ? stateMachine.getPerformedMoves() : null));
-
-        if(destinationIsKingRow && !stateMachine.isMultiCapture() && !ruleset.isPromotionImmediate()) {
-            Piece kingPiece = ruleset.createKing(movingPiece.getSide());
-            board.putPiece(move.getTo(), kingPiece);
-        }
-
-        winner = ruleset.processWinningConditions(
-                currentSide,
-                availableMoves,
-                board.getSidePieces(Side.WHITE),
-                board.getSidePieces(Side.BLACK)
-        );
-        return isFinished();
     }
 
+    private boolean legitimateMove(Move move) {
+        return availableMoves.contains(move);
+    }
+
+
     public List<Move> getAvailableMoves() {
-        return isFinished() ? new ArrayList<>() : availableMoves;
+        return isFinished() ? new ArrayList<>() : new ArrayList<>(availableMoves);
     }
 
     public List<Move> getAvailableMoves(Coordinate from) {
@@ -109,33 +89,6 @@ public class GameManager {
         return moves;
     }
 
-
-    private Move getMove(Coordinate from, Coordinate to, OnManagerException onException) {
-        Optional<Move> move = availableMoves.stream()
-                .filter(Filters.moveFromTo(from, to))
-                .findFirst();
-
-        if(move.isEmpty()) {
-            onException.apply(new MoveUnavailableException(from, to));
-            return null;
-        } else {
-            return move.get();
-        }
-    }
-
-
-
-    private Coordinate ofString(String coordinate, OnManagerException onException) {
-        try {
-            return Coordinate.ofString(coordinate);
-        }
-        catch (IllegalCoordinateException exception) {
-            if(onException != null)
-                onException.apply(exception);
-            return null;
-        }
-    }
-
     private final StateMachine stateMachine;
 
     private List<Move> availableMoves;
@@ -145,4 +98,14 @@ public class GameManager {
 
     private final CheckersRuleset ruleset;
     private final Board board;
+
+    public void subscribe(EventSubscriber subscriber) {
+        eventEmitter.subscribe(subscriber);
+    }
+
+    public void unsubscribe(EventSubscriber subscriber) {
+        eventEmitter.subscribe(subscriber);
+    }
+
+    private final EventEmitter eventEmitter;
 }

@@ -77,7 +77,7 @@ public class Coordinate {
 
     public static final Pattern letterNumberCoordinate = Pattern.compile("([A-Z]+)([0-9]+)");
     public static final Pattern numberLetterCoordinate = Pattern.compile("([0-9]+)([A-Z]+)");
-    public static Coordinate ofString(String coordinate) throws IllegalCoordinateException {
+    public static Coordinate ofString(String coordinate) {
         coordinate = coordinate.toUpperCase();
         Matcher numberLetterMatcher = numberLetterCoordinate.matcher(coordinate);
         if(numberLetterMatcher.find())
