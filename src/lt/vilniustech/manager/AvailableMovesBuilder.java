@@ -4,9 +4,7 @@ import lt.vilniustech.*;
 import lt.vilniustech.moves.CaptureMove;
 import lt.vilniustech.moves.Move;
 import lt.vilniustech.moves.SimpleMove;
-import lt.vilniustech.rulesets.CaptureConstraints;
 import lt.vilniustech.rulesets.CheckersRuleset;
-import lt.vilniustech.rulesets.Filters;
 import lt.vilniustech.utils.CoordinateIterator;
 
 import java.util.ArrayList;

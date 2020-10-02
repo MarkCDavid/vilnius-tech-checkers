@@ -90,9 +90,9 @@ public class GameForm {
             if(gameFinished)
                 break;
 
-            getMoveHistory().setEnabled(!gamePanel.getGameManager().getStateMachine().isMultiCapture());
-            drawButton.setEnabled(!gamePanel.getGameManager().getStateMachine().isMultiCapture());
-            surrenderButton.setEnabled(!gamePanel.getGameManager().getStateMachine().isMultiCapture());
+//            getMoveHistory().setEnabled(!gamePanel.getGameManager().getStateMachine().isMultiCapture());
+//            drawButton.setEnabled(!gamePanel.getGameManager().getStateMachine().isMultiCapture());
+//            surrenderButton.setEnabled(!gamePanel.getGameManager().getStateMachine().isMultiCapture());
 
             break;
         }

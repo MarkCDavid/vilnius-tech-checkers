@@ -12,8 +12,8 @@ public class CaptureMove implements Move {
 
     public CaptureMove(Coordinate from, Direction direction, int moveSize, int jumpSize) {
         this.from = from;
-        this.over = from.move(direction, moveSize + jumpSize);
-        this.to = from.move(direction, moveSize);
+        this.over = from.move(direction, moveSize);
+        this.to = from.move(direction, moveSize + jumpSize);
     }
 
     @Override

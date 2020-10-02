@@ -5,8 +5,8 @@ import lt.vilniustech.events.EventEmitter;
 import lt.vilniustech.events.EventSubscriber;
 import lt.vilniustech.events.SubscriptionSupport;
 import lt.vilniustech.manager.events.GameFinishedEvent;
-import lt.vilniustech.manager.state.SimpleState;
-import lt.vilniustech.manager.state.StateMachine;
+import lt.vilniustech.manager.state2.SimpleState;
+import lt.vilniustech.manager.state2.State;
 import lt.vilniustech.moves.Move;
 import lt.vilniustech.rulesets.CaptureConstraints;
 import lt.vilniustech.rulesets.CheckersRuleset;
@@ -35,17 +35,15 @@ public class GameManager implements CheckersManager, SubscriptionSupport {
         return board;
     }
 
-    public StateMachine getStateMachine() { return stateMachine; }
-
     public GameManager(CheckersRuleset ruleset) {
         this.ruleset = ruleset;
         this.board = new Board(ruleset);
         this.eventEmitter = new EventEmitter();
-        this.stateMachine = new StateMachine(new SimpleState());
         this.currentSide = ruleset.getFirstToMove();
         this.movesBuilder = new AvailableMovesBuilder(board);
-        this.availableMoves = movesBuilder.buildAvailableMoves();
-        // Current State should filter here
+
+        this.state = new SimpleState(board, movesBuilder.buildAvailableMoves());
+        this.availableMoves = state.getAvailableMoves();
     }
 
     public void processMove(Move move) {
@@ -64,15 +62,8 @@ public class GameManager implements CheckersManager, SubscriptionSupport {
             return;
         }
 
-        availableMoves = movesBuilder.buildAvailableMoves();
-
-        // Current State filters availableMoves
-
-
-        CaptureConstraints captureConstraints = ruleset.getCaptureConstraints(board, move);
-        captureConstraints.setMultipleCaptures(stateMachine.isMultiCapture());
-
-        currentSide = stateMachine.getNextSide(currentSide);
+        state = state.process(movesBuilder.buildAvailableMoves(), move);
+        availableMoves = state.getAvailableMoves();
     }
 
     private boolean legitimateMove(Move move) {
@@ -95,8 +86,6 @@ public class GameManager implements CheckersManager, SubscriptionSupport {
         return moves;
     }
 
-    private final StateMachine stateMachine;
-
     private List<Move> availableMoves;
 
     private Side winner = Side.NONE;
@@ -113,6 +102,7 @@ public class GameManager implements CheckersManager, SubscriptionSupport {
         eventEmitter.subscribe(subscriber);
     }
 
+    private State state;
     private final EventEmitter eventEmitter;
     private final AvailableMovesBuilder movesBuilder;
 }
