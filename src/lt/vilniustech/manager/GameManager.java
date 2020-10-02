@@ -13,7 +13,6 @@ import lt.vilniustech.rulesets.CheckersRuleset;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class GameManager implements CheckersManager, SubscriptionSupport {
 

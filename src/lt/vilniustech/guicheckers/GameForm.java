@@ -39,13 +39,14 @@ public class GameForm {
 
     private void createUIComponents() {
         GameManager manager = new GameManager(ruleset);
-        manager.subscribe(new EventSubscriber<GameFinishedEvent>(GameFinishedEvent.class) {
 
+        manager.subscribe(new EventSubscriber<>(GameFinishedEvent.class) {
             @Override
             protected void receive(GameFinishedEvent event) {
                 processGameEnd(event.getWinner());
             }
         });
+
         GamePanel gamePanel = setGamePanel(new GamePanel(manager));
         MoveHistory moveHistory = setMoveHistory(new MoveHistory(gamePanel.getGameManager().getBoard()));
         StatusBar statusBar = setStatusBar(new StatusBar());

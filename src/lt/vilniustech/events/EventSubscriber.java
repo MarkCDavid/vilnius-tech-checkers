@@ -1,22 +1,22 @@
 package lt.vilniustech.events;
 
-public abstract class EventSubscriber<T> {
+public abstract class EventSubscriber<T extends Event> {
 
-    public EventSubscriber(Class<? extends Event> eventClass)
+    public EventSubscriber(Class<T> eventClass)
     {
         this.eventClass = eventClass;
     }
 
-    public Class<? extends Event> getEventClass() {
+    public Class<T> getEventClass() {
         return eventClass;
     }
 
-    public void receive(Event event) {
-        //noinspection unchecked
+    @SuppressWarnings("unchecked")
+    public void capture(Event event) {
         receive((T) event);
     }
 
     protected abstract void receive(T event);
 
-    private final Class<? extends Event> eventClass;
+    private final Class<T> eventClass;
 }
