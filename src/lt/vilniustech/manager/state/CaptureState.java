@@ -2,10 +2,8 @@ package lt.vilniustech.manager.state;
 
 import lt.vilniustech.Board;
 import lt.vilniustech.Side;
-import lt.vilniustech.manager.MoveCollectionsBuilder;
 import lt.vilniustech.moves.CaptureMove;
 import lt.vilniustech.moves.Move;
-import lt.vilniustech.moves.SimpleMove;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +27,7 @@ public class CaptureState extends State {
     public State performMove(Board board, Move move) {
         Side side = getSide(board, move);
 
-        board.applyMove(move);
+        move.apply(board);
         captureMoves.add((CaptureMove)move);
 
         if(!board.getRuleset().isCaptureImmediate())

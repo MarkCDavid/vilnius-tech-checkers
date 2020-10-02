@@ -3,8 +3,7 @@ package lt.vilniustech.rulesets.capturechain;
 import lt.vilniustech.Board;
 import lt.vilniustech.Coordinate;
 import lt.vilniustech.Side;
-import lt.vilniustech.manager.GameManager;
-import lt.vilniustech.manager.MoveCollectionsBuilder;
+import lt.vilniustech.manager.AvailableMovesBuilder;
 import lt.vilniustech.moves.CaptureMove;
 import lt.vilniustech.moves.Move;
 import lt.vilniustech.rulesets.capturechainmodules.ModuleFactory;
@@ -54,7 +53,7 @@ public class CaptureChainBuilder
     }
 
     private static List<CaptureMove> getAvailableCaptureMoves(Board board, Side side, Coordinate from) {
-        return MoveCollectionsBuilder.getAvailableMoves(board, side, from).stream()
+        return new AvailableMovesBuilder(board).buildAvailableMoves(from).stream()
                 .filter(move -> move instanceof CaptureMove)
                 .map(move -> (CaptureMove) move)
                 .collect(Collectors.toList());

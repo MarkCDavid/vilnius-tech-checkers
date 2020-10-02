@@ -2,8 +2,6 @@ package lt.vilniustech.rulesets.turkish;
 
 import lt.vilniustech.Board;
 import lt.vilniustech.Side;
-import lt.vilniustech.manager.GameManager;
-import lt.vilniustech.manager.MoveCollectionsBuilder;
 import lt.vilniustech.moves.Move;
 import lt.vilniustech.rulesets.CaptureConstraints;
 import lt.vilniustech.rulesets.Filters;

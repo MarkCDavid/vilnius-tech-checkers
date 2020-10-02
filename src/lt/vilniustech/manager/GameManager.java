@@ -43,7 +43,9 @@ public class GameManager implements CheckersManager, SubscriptionSupport {
         this.eventEmitter = new EventEmitter();
         this.stateMachine = new StateMachine(new SimpleState());
         this.currentSide = ruleset.getFirstToMove();
-        this.availableMoves = MoveCollectionsBuilder.getAllAvailableMoves(board, currentSide);
+        this.movesBuilder = new AvailableMovesBuilder(board);
+        this.availableMoves = movesBuilder.buildAvailableMoves();
+        // Current State should filter here
     }
 
     public void processMove(Move move) {
@@ -53,7 +55,8 @@ public class GameManager implements CheckersManager, SubscriptionSupport {
         if(!legitimateMove(move))
             return;
 
-        board.applyMove(move);
+        move.apply(board);
+
 
         winner = ruleset.processWinningConditions(currentSide, availableMoves, board.getSidePieces(Side.WHITE), board.getSidePieces(Side.BLACK));
         if (winner != Side.NONE) {
@@ -61,11 +64,15 @@ public class GameManager implements CheckersManager, SubscriptionSupport {
             return;
         }
 
+        availableMoves = movesBuilder.buildAvailableMoves();
+
+        // Current State filters availableMoves
+
+
         CaptureConstraints captureConstraints = ruleset.getCaptureConstraints(board, move);
         captureConstraints.setMultipleCaptures(stateMachine.isMultiCapture());
 
         currentSide = stateMachine.getNextSide(currentSide);
-        availableMoves = captureConstraints.filterMoves(MoveCollectionsBuilder.getAllAvailableMoves(board, currentSide, stateMachine.isMultiCapture() ? stateMachine.getPerformedMoves() : null));
     }
 
     private boolean legitimateMove(Move move) {
@@ -107,4 +114,5 @@ public class GameManager implements CheckersManager, SubscriptionSupport {
     }
 
     private final EventEmitter eventEmitter;
+    private final AvailableMovesBuilder movesBuilder;
 }

@@ -1,8 +1,6 @@
 package lt.vilniustech.rulesets.english;
 
 import lt.vilniustech.*;
-import lt.vilniustech.manager.GameManager;
-import lt.vilniustech.manager.MoveCollectionsBuilder;
 import lt.vilniustech.moves.Move;
 import lt.vilniustech.rulesets.CaptureConstraints;
 import lt.vilniustech.rulesets.CellFill;

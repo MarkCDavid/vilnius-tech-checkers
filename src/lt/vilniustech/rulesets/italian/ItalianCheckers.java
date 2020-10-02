@@ -1,13 +1,10 @@
 package lt.vilniustech.rulesets.italian;
 
 import lt.vilniustech.*;
-import lt.vilniustech.manager.GameManager;
-import lt.vilniustech.manager.MoveCollectionsBuilder;
 import lt.vilniustech.moves.Move;
 import lt.vilniustech.rulesets.CaptureConstraints;
 import lt.vilniustech.rulesets.CellFill;
 import lt.vilniustech.rulesets.CheckersRuleset;
-import lt.vilniustech.rulesets.english.EnglishCheckersCellFill;
 
 import java.util.List;
 

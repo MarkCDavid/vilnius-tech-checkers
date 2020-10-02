@@ -1,5 +1,6 @@
 package lt.vilniustech;
 
+import lt.vilniustech.events.EventEmitter;
 import lt.vilniustech.moves.*;
 import lt.vilniustech.rulesets.*;
 
@@ -67,20 +68,6 @@ public class Board {
 
     putPiece(coordinate1, piece2);
     putPiece(coordinate2, piece1);
-  }
-
-  public boolean applyMove(Move move) {
-    Piece piece = getPiece(move.getFrom());
-    Side side = piece.getSide();
-    boolean destinationIsKingRow = ruleset.isKingRow(side, move.getTo());
-
-    move.apply(this);
-    if (ruleset.isPromotionImmediate() && destinationIsKingRow && !piece.isKing()) {
-      Piece kingPiece = ruleset.createKing(side);
-      putPiece(move.getTo(), kingPiece);
-      return false;
-    }
-    return true;
   }
 
   public List<Piece> getSidePieces(Side side) {
