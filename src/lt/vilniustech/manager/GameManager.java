@@ -8,8 +8,8 @@ import lt.vilniustech.manager.events.GameFinishedEvent;
 import lt.vilniustech.manager.state2.SimpleState;
 import lt.vilniustech.manager.state2.State;
 import lt.vilniustech.moves.Move;
-import lt.vilniustech.rulesets.CaptureConstraints;
 import lt.vilniustech.rulesets.CheckersRuleset;
+import lt.vilniustech.side.Side;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,7 @@ import java.util.List;
 public class GameManager implements CheckersManager, SubscriptionSupport {
 
     public boolean isFinished() {
-        return winner != Side.NONE;
+        return winner != null;
     }
 
     public Side getWinner() {
@@ -37,7 +37,7 @@ public class GameManager implements CheckersManager, SubscriptionSupport {
 
     public GameManager(CheckersRuleset ruleset) {
         this.ruleset = ruleset;
-        this.board = new Board(ruleset);
+        this.board = new Board(ruleset.getBoardSize());
         this.eventEmitter = new EventEmitter();
         this.currentSide = ruleset.getFirstToMove();
         this.movesBuilder = new AvailableMovesBuilder(board);
@@ -55,9 +55,8 @@ public class GameManager implements CheckersManager, SubscriptionSupport {
 
         move.apply(board);
 
-
         winner = ruleset.processWinningConditions(currentSide, availableMoves, board.getSidePieces(Side.WHITE), board.getSidePieces(Side.BLACK));
-        if (winner != Side.NONE) {
+        if (isFinished()) {
             eventEmitter.emit(new GameFinishedEvent(winner));
             return;
         }
@@ -88,7 +87,7 @@ public class GameManager implements CheckersManager, SubscriptionSupport {
 
     private List<Move> availableMoves;
 
-    private Side winner = Side.NONE;
+    private Side winner = null;
     private Side currentSide;
 
     private final CheckersRuleset ruleset;

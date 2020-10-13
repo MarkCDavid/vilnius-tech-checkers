@@ -1,9 +1,9 @@
 package lt.vilniustech.rulesets.international;
 
 import lt.vilniustech.Coordinate;
-import lt.vilniustech.rulesets.CellFill;
+import lt.vilniustech.side.PieceSetter;
 
-public class InternationalCheckersCellFill extends CellFill {
+public class InternationalCheckersCellFill extends PieceSetter {
 
     public InternationalCheckersCellFill(int rowFrom, int rowTo) {
         this.rowFrom = Math.min(rowFrom, rowTo);
@@ -11,13 +11,13 @@ public class InternationalCheckersCellFill extends CellFill {
     }
 
     @Override
-    protected boolean fillRow(Coordinate coordinate) {
+    protected boolean setRow(Coordinate coordinate) {
         int row = coordinate.getRow();
         return row >= rowFrom && row <= rowTo;
     }
 
     @Override
-    protected boolean fillColumn(Coordinate coordinate) {
+    protected boolean setColumn(Coordinate coordinate) {
         return (coordinate.getRow() + coordinate.getColumn() + 1) % 2 == 0;
     }
 

@@ -1,42 +1,22 @@
 package lt.vilniustech;
 
-import lt.vilniustech.events.EventEmitter;
-import lt.vilniustech.moves.*;
 import lt.vilniustech.rulesets.*;
 
 import java.util.*;
 
 public class Board {
 
-  public CheckersRuleset getRuleset() {
-    return ruleset;
-  }
-
-  public Map<Coordinate, Piece> getPieceMap() {
-    return pieceMap;
+  public int getBoardSize() {
+    return boardSize;
   }
 
   public Board() {
-    this.pieceMap = new HashMap<>();
-    this.ruleset = null;
+    this(0);
   }
 
-  public Board(CheckersRuleset ruleset) {
-    this.ruleset = ruleset;
+  public Board(int boardSize) {
     this.pieceMap = new HashMap<>();
-
-    for (int row = 0; row < ruleset.getBoardSize(); row++) {
-      for (int column = 0; column < ruleset.getBoardSize(); column++) {
-
-        Coordinate coordinate = new Coordinate(column, row);
-
-        if (ruleset.getCellFill(Side.BLACK).fillCell(coordinate))
-          putPiece(coordinate, ruleset.createPiece(Side.BLACK));
-
-        if (ruleset.getCellFill(Side.WHITE).fillCell(coordinate))
-          putPiece(coordinate, ruleset.createPiece(Side.WHITE));
-      }
-    }
+    this.boardSize = boardSize;
   }
 
   public void putPiece(Coordinate coordinate, Piece piece) {
@@ -70,27 +50,19 @@ public class Board {
     putPiece(coordinate2, piece1);
   }
 
-  public List<Piece> getSidePieces(Side side) {
-    ArrayList<Piece> pieces = new ArrayList<>();
-    for (Piece piece : pieceMap.values()) {
-      if (piece != null && piece.getSide() == side) pieces.add(piece);
-    }
-    return pieces;
-  }
-
   public boolean validCoordinate(Coordinate coordinate) {
     boolean invalidX =
-        coordinate.getColumn() < 0 || coordinate.getColumn() >= ruleset.getBoardSize();
+        coordinate.getColumn() < 0 || coordinate.getColumn() >= boardSize;
     if (invalidX) return false;
 
     boolean invalidY =
-        coordinate.getColumn() < 0 || coordinate.getColumn() >= ruleset.getBoardSize();
+        coordinate.getColumn() < 0 || coordinate.getColumn() >= boardSize;
     if (invalidY) return false;
 
-    int index = coordinate.getIndex(ruleset.getBoardSize());
-    return index >= 0 && index < ruleset.getBoardSize() * ruleset.getBoardSize();
+    int index = coordinate.getIndex(boardSize);
+    return index >= 0 && index < boardSize * boardSize;
   }
 
+  private final int boardSize;
   private final Map<Coordinate, Piece> pieceMap;
-  private final CheckersRuleset ruleset;
 }

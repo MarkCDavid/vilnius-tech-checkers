@@ -3,8 +3,8 @@ package lt.vilniustech.rulesets;
 import lt.vilniustech.Board;
 import lt.vilniustech.Coordinate;
 import lt.vilniustech.Piece;
-import lt.vilniustech.Side;
 import lt.vilniustech.moves.Move;
+import lt.vilniustech.side.*;
 
 import java.util.List;
 
@@ -20,17 +20,17 @@ public interface CheckersRuleset {
     CaptureConstraints getCaptureConstraints(Board board, Move move);
 
     boolean isKingRow(Side side, Coordinate coordinate);
-    CellFill getCellFill(Side side);
+    PieceSetter getCellFill(Side side);
     Piece createPiece(Side side);
     Piece createKing(Side side);
 
     boolean isBlackKingRow(Coordinate coordinate);
-    CellFill getBlackCellFill();
+    PieceSetter getBlackCellFill();
     Piece createBlackPiece();
     Piece createBlackKing();
 
     boolean isWhiteKingRow(Coordinate coordinate);
-    CellFill getWhiteCellFill();
+    PieceSetter getWhiteCellFill();
     Piece createWhitePiece();
     Piece createWhiteKing();
 }

@@ -3,7 +3,7 @@ package lt.vilniustech.rulesets.turkish;
 import lt.vilniustech.*;
 import lt.vilniustech.moves.Move;
 import lt.vilniustech.rulesets.CaptureConstraints;
-import lt.vilniustech.rulesets.CellFill;
+import lt.vilniustech.side.PieceSetter;
 import lt.vilniustech.rulesets.CheckersRuleset;
 
 import java.util.List;
@@ -67,7 +67,7 @@ public class TurkishCheckers implements CheckersRuleset {
     }
 
     @Override
-    public CellFill getCellFill(Side side) {
+    public PieceSetter getCellFill(Side side) {
         switch (side) {
             case BLACK -> { return getBlackCellFill(); }
             case WHITE -> { return getWhiteCellFill(); }
@@ -141,12 +141,12 @@ public class TurkishCheckers implements CheckersRuleset {
     }
 
     @Override
-    public CellFill getWhiteCellFill() { return whiteCellFill; }
+    public PieceSetter getWhiteCellFill() { return whiteCellFill; }
 
     @Override
-    public CellFill getBlackCellFill() { return blackCellFill; }
+    public PieceSetter getBlackCellFill() { return blackCellFill; }
 
 
-    private final CellFill whiteCellFill = new TurkishCheckersCellFill(getBoardSize() - 3, getBoardSize() - 2);
-    private final CellFill blackCellFill = new TurkishCheckersCellFill(1, 2);
+    private final PieceSetter whiteCellFill = new TurkishCheckersCellFill(getBoardSize() - 3, getBoardSize() - 2);
+    private final PieceSetter blackCellFill = new TurkishCheckersCellFill(1, 2);
 }

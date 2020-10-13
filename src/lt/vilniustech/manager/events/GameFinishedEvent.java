@@ -1,7 +1,7 @@
 package lt.vilniustech.manager.events;
 
-import lt.vilniustech.Side;
 import lt.vilniustech.events.Event;
+import lt.vilniustech.side.Side;
 
 public class GameFinishedEvent implements Event {
 

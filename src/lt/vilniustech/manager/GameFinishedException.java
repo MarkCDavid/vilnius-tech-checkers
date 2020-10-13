@@ -1,6 +1,6 @@
 package lt.vilniustech.manager;
 
-import lt.vilniustech.Side;
+import lt.vilniustech.side.Side;
 
 public class GameFinishedException  extends RuntimeException {
     public GameFinishedException(Side winner) {

@@ -9,7 +9,7 @@ class BoardTest {
 
     @org.junit.jupiter.api.Test
     void putPiece() {
-        Board board = new Board(new DummyRuleset());
+        Board board = new Board(new DummyRuleset().getBoardSize());
         Piece piece = new Piece(Side.BLACK, new Direction[] {});
         Coordinate coordinate = new Coordinate(4, 5);
         board.putPiece(coordinate, piece);
@@ -18,7 +18,7 @@ class BoardTest {
 
     @org.junit.jupiter.api.Test
     void getPiece() {
-        Board board = new Board(new InternationalCheckers());
+        Board board = new Board(new DummyRuleset().getBoardSize()s);
         Piece piece = new Piece(Side.BLACK, new Direction[] {});
         Coordinate coordinate = new Coordinate(4, 5);
         board.getPieceMap().put(coordinate, piece);

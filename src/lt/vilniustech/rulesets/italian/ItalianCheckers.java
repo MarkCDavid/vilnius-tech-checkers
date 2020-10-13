@@ -3,7 +3,7 @@ package lt.vilniustech.rulesets.italian;
 import lt.vilniustech.*;
 import lt.vilniustech.moves.Move;
 import lt.vilniustech.rulesets.CaptureConstraints;
-import lt.vilniustech.rulesets.CellFill;
+import lt.vilniustech.side.PieceSetter;
 import lt.vilniustech.rulesets.CheckersRuleset;
 
 import java.util.List;
@@ -63,7 +63,7 @@ public class ItalianCheckers implements CheckersRuleset {
     }
 
     @Override
-    public CellFill getCellFill(Side side) {
+    public PieceSetter getCellFill(Side side) {
         switch (side) {
             case BLACK -> { return getBlackCellFill(); }
             case WHITE -> { return getWhiteCellFill(); }
@@ -135,12 +135,12 @@ public class ItalianCheckers implements CheckersRuleset {
     }
 
     @Override
-    public CellFill getWhiteCellFill() { return whiteCellFill; }
+    public PieceSetter getWhiteCellFill() { return whiteCellFill; }
 
     @Override
-    public CellFill getBlackCellFill() { return blackCellFill; }
+    public PieceSetter getBlackCellFill() { return blackCellFill; }
 
 
-    private final CellFill whiteCellFill = new ItalianCheckersCellFill(getBoardSize() - 3, getBoardSize() - 1);
-    private final CellFill blackCellFill = new ItalianCheckersCellFill(0, 2);
+    private final PieceSetter whiteCellFill = new ItalianCheckersCellFill(getBoardSize() - 3, getBoardSize() - 1);
+    private final PieceSetter blackCellFill = new ItalianCheckersCellFill(0, 2);
 }

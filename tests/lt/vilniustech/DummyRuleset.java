@@ -2,10 +2,8 @@ package lt.vilniustech;
 
 import lt.vilniustech.moves.Move;
 import lt.vilniustech.rulesets.CaptureConstraints;
-import lt.vilniustech.rulesets.CellFill;
+import lt.vilniustech.side.PieceSetter;
 import lt.vilniustech.rulesets.CheckersRuleset;
-import lt.vilniustech.rulesets.english.EnglishCheckersCaptureConstraints;
-import lt.vilniustech.rulesets.english.EnglishCheckersCellFill;
 
 import java.util.List;
 
@@ -76,7 +74,7 @@ public class DummyRuleset implements CheckersRuleset {
     }
 
     @Override
-    public CellFill getCellFill(Side side) {
+    public PieceSetter getCellFill(Side side) {
         switch (side) {
             case BLACK -> { return getBlackCellFill(); }
             case WHITE -> { return getWhiteCellFill(); }
@@ -132,31 +130,31 @@ public class DummyRuleset implements CheckersRuleset {
     }
 
     @Override
-    public CellFill getWhiteCellFill() { return whiteCellFill; }
+    public PieceSetter getWhiteCellFill() { return whiteCellFill; }
 
     @Override
-    public CellFill getBlackCellFill() { return blackCellFill; }
+    public PieceSetter getBlackCellFill() { return blackCellFill; }
 
 
-    private final CellFill whiteCellFill = new CellFill() {
+    private final PieceSetter whiteCellFill = new PieceSetter() {
         @Override
-        protected boolean fillRow(Coordinate coordinate) {
+        protected boolean setRow(Coordinate coordinate) {
             return false;
         }
 
         @Override
-        protected boolean fillColumn(Coordinate coordinate) {
+        protected boolean setColumn(Coordinate coordinate) {
             return false;
         }
     };
-    private final CellFill blackCellFill = new CellFill() {
+    private final PieceSetter blackCellFill = new PieceSetter() {
         @Override
-        protected boolean fillRow(Coordinate coordinate) {
+        protected boolean setRow(Coordinate coordinate) {
             return false;
         }
 
         @Override
-        protected boolean fillColumn(Coordinate coordinate) {
+        protected boolean setColumn(Coordinate coordinate) {
             return false;
         }
     };
