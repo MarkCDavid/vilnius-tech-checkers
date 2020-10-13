@@ -1,7 +1,9 @@
 package lt.vilniustech;
 
+import lt.vilniustech.moves.Move;
 import lt.vilniustech.side.Side;
 
+import java.util.List;
 import java.util.function.Supplier;
 
 public class Piece {
@@ -32,6 +34,14 @@ public class Piece {
         return moveSize;
     }
 
+    public Coordinate getCoordinate() {
+        return coordinate;
+    }
+
+    public void setCoordinate(Coordinate coordinate) {
+        this.coordinate = coordinate;
+    }
+
     private final Supplier<Piece> promoter;
     public Piece promote() {
         if(promoter == null)
@@ -41,7 +51,7 @@ public class Piece {
         promoted.promotionLevel = promotionLevel + 1;
         return promoted;
     }
-
+    private Coordinate coordinate;
     private final Side side;
     private final Direction[] directions;
     private final int moveSize;

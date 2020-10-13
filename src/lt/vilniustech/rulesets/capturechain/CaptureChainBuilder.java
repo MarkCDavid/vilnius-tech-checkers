@@ -5,6 +5,7 @@ import lt.vilniustech.Coordinate;
 import lt.vilniustech.manager.AvailableMovesBuilder;
 import lt.vilniustech.moves.CaptureMove;
 import lt.vilniustech.moves.Move;
+import lt.vilniustech.rulesets.CheckersRuleset;
 import lt.vilniustech.rulesets.capturechainmodules.ModuleFactory;
 import lt.vilniustech.side.Side;
 
@@ -13,8 +14,9 @@ import java.util.stream.Collectors;
 
 public class CaptureChainBuilder
 {
-    public CaptureChainBuilder() {
+    public CaptureChainBuilder(CheckersRuleset ruleset) {
         this.modules = new HashMap<>();
+        this.ruleset = ruleset;
     }
 
     public CaptureChainModule getModule(UUID module) {
@@ -52,8 +54,8 @@ public class CaptureChainBuilder
         return captureChains;
     }
 
-    private static List<CaptureMove> getAvailableCaptureMoves(Board board, Side side, Coordinate from) {
-        return new AvailableMovesBuilder(board).buildAvailableMoves(from).stream()
+    private List<CaptureMove> getAvailableCaptureMoves(Board board, Side side, Coordinate from) {
+        return new AvailableMovesBuilder(board, ruleset).buildAvailableMoves(board.getPiece(from)).stream()
                 .filter(move -> move instanceof CaptureMove)
                 .map(move -> (CaptureMove) move)
                 .collect(Collectors.toList());
@@ -65,4 +67,5 @@ public class CaptureChainBuilder
     }
 
     private final Map<UUID, CaptureChainModule> modules;
+    private final CheckersRuleset ruleset;
 }

@@ -24,6 +24,13 @@ public class SimpleMove implements Move {
         return to;
     }
 
+
+
+    @Override
+    public boolean isCapture() {
+        return false;
+    }
+
     @Override
     public boolean isApplied() {
         return applied;

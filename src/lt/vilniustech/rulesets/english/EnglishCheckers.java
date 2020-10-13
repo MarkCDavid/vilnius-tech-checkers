@@ -43,14 +43,14 @@ public class EnglishCheckers implements CheckersRuleset {
         Side whiteSide = new Side(
                 "White",
                 new EnglishCheckersPieceSetter(getBoardSize() - 3, getBoardSize() - 1),
-                new EnglishCheckersKingRow(getBoardSize() - 1),
+                new EnglishCheckersKingRow(0),
                 new EnglishCheckersWhitePieceFactory()
         );
 
         Side blackSide = new Side(
                 "Black",
                 new EnglishCheckersPieceSetter(0, 2),
-                new EnglishCheckersKingRow(0),
+                new EnglishCheckersKingRow(getBoardSize() - 1),
                 new EnglishCheckersBlackPieceFactory()
         );
 

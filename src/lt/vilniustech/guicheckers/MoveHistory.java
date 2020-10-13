@@ -6,6 +6,7 @@ import lt.vilniustech.guicheckers.events.MoveHistoryChangeSupport;
 import lt.vilniustech.moves.Move;
 
 import javax.swing.*;
+import java.util.List;
 
 public class MoveHistory extends JList<Move> {
 
@@ -42,6 +43,13 @@ public class MoveHistory extends JList<Move> {
         for(int i = from; i <= to; i++) {
             movesModel.get(i).apply(board);
         }
+    }
+
+    public void addMoves(List<Move> moves) {
+        movesModel.clear();
+        movesModel.addAll(moves);
+        setPreviousSelection(moves.get(moves.size() - 1));
+        moveHistoryChangeSupport.emit(getSelectedValue());
     }
 
     public void addMove(Move move) {

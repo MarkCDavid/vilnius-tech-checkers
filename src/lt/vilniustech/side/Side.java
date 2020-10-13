@@ -51,8 +51,6 @@ public class Side {
         return pieces;
     }
 
-
-
     public boolean isKingRow(Coordinate coordinate) {
         return kingRowValidator.isValid(coordinate);
     }

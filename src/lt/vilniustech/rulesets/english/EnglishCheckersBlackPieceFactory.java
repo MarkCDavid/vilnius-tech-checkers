@@ -19,8 +19,8 @@ public class EnglishCheckersBlackPieceFactory extends PieceFactory {
     }
 
     private static final Direction[] pieceDirections = new Direction[]{
-            new Direction(1, -1),
-            new Direction(-1, -1),
+            new Direction(1, 1),
+            new Direction(-1, 1),
     };
 
     private static final Direction[] kingDirections = new Direction[]{

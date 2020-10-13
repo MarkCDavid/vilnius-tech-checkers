@@ -8,6 +8,7 @@ public interface Move {
     Coordinate getFrom();
     Coordinate getTo();
 
+    boolean isCapture();
     boolean isApplied();
     boolean isValid(Board board);
     void apply(Board board);

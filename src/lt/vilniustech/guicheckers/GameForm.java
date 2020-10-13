@@ -83,9 +83,8 @@ public class GameForm {
             if (!availableMove.getTo().equals(to))
                 continue;
 
-            moveHistory.addMove(availableMove);
-
             gamePanel.getGameManager().processMove(availableMove);
+            moveHistory.addMove(gamePanel.getGameManager().getProcessedMove());
 
             if(gameFinished)
                 break;

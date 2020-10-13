@@ -1,68 +1,71 @@
 package lt.vilniustech;
 
-import lt.vilniustech.rulesets.*;
-
 import java.util.*;
 
 public class Board {
 
-  public int getBoardSize() {
-    return boardSize;
-  }
+    public int getBoardSize() {
+        return boardSize;
+    }
 
-  public Board() {
-    this(0);
-  }
+    public Board() {
+        this(0);
+    }
 
-  public Board(int boardSize) {
-    this.pieceMap = new HashMap<>();
-    this.boardSize = boardSize;
-  }
+    public Board(int boardSize) {
+        this.pieceMap = new HashMap<>();
+        this.boardSize = boardSize;
+    }
 
-  public void putPiece(Coordinate coordinate, Piece piece) {
-    if (!validCoordinate(coordinate)) return;
+    public void putPiece(Coordinate coordinate, Piece piece) {
+        if (!validCoordinate(coordinate)) return;
 
-    this.pieceMap.put(coordinate, piece);
-  }
+        this.pieceMap.put(coordinate, piece);
 
-  public Piece getPiece(Coordinate coordinate) {
-    if (!validCoordinate(coordinate)) return null;
+        if(piece != null)
+            piece.setCoordinate(coordinate);
+    }
 
-    return this.pieceMap.getOrDefault(coordinate, null);
-  }
+    public Piece popPiece(Coordinate coordinate) {
+        if (!validCoordinate(coordinate)) return null;
 
-  public Piece popPiece(Coordinate coordinate) {
-    if (!validCoordinate(coordinate)) return null;
+        Piece piece = getPiece(coordinate);
+        this.pieceMap.remove(coordinate);
 
-    Piece piece = this.pieceMap.getOrDefault(coordinate, null);
-    this.pieceMap.remove(coordinate);
-    return piece;
-  }
+        if(piece != null)
+            piece.setCoordinate(null);
 
-  public void swapPieces(Coordinate coordinate1, Coordinate coordinate2) {
-    Piece piece1 = getPiece(coordinate1);
-    Piece piece2 = getPiece(coordinate2);
+        return piece;
+    }
 
-    if (piece1 == null || piece2 == null)
-      return;
+    public Piece getPiece(Coordinate coordinate) {
+        if (!validCoordinate(coordinate)) return null;
 
-    putPiece(coordinate1, piece2);
-    putPiece(coordinate2, piece1);
-  }
+        return this.pieceMap.getOrDefault(coordinate, null);
+    }
 
-  public boolean validCoordinate(Coordinate coordinate) {
-    boolean invalidX =
-        coordinate.getColumn() < 0 || coordinate.getColumn() >= boardSize;
-    if (invalidX) return false;
+    public void swapPieces(Coordinate coordinate1, Coordinate coordinate2) {
+        Piece piece1 = popPiece(coordinate1);
+        Piece piece2 = popPiece(coordinate2);
 
-    boolean invalidY =
-        coordinate.getColumn() < 0 || coordinate.getColumn() >= boardSize;
-    if (invalidY) return false;
+        if (piece1 == null || piece2 == null)
+            return;
 
-    int index = coordinate.getIndex(boardSize);
-    return index >= 0 && index < boardSize * boardSize;
-  }
+        putPiece(coordinate1, piece2);
+        putPiece(coordinate2, piece1);
+    }
 
-  private final int boardSize;
-  private final Map<Coordinate, Piece> pieceMap;
+    public boolean validCoordinate(Coordinate coordinate) {
+        boolean invalidX = coordinate.getColumn() < 0 || coordinate.getColumn() >= boardSize;
+        if (invalidX) return false;
+
+        boolean invalidY = coordinate.getColumn() < 0 || coordinate.getColumn() >= boardSize;
+        if (invalidY) return false;
+
+        int index = coordinate.getIndex(boardSize);
+        return index >= 0 && index < boardSize * boardSize;
+    }
+
+    private final int boardSize;
+    private final Map<Coordinate, Piece> pieceMap;
 }
