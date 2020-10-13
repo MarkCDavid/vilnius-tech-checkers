@@ -1,10 +1,10 @@
 package lt.vilniustech.rulesets.english;
 
 import lt.vilniustech.Board;
-import lt.vilniustech.Side;
 import lt.vilniustech.moves.Move;
 import lt.vilniustech.rulesets.CaptureConstraints;
 import lt.vilniustech.rulesets.Filters;
+import lt.vilniustech.side.Side;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,7 +28,7 @@ public class EnglishCheckersCaptureConstraints implements CaptureConstraints {
 
     @Override
     public Side getNextSide(Side side) {
-        return multipleCaptures ? side : Side.opposite(side);
+        return multipleCaptures ? side : side.getNext();
     }
 
     @Override

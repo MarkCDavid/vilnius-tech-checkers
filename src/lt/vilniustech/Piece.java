@@ -1,6 +1,22 @@
 package lt.vilniustech;
 
+import lt.vilniustech.side.Side;
+
+import java.util.function.Supplier;
+
 public class Piece {
+
+    public Piece(Side side, Direction[] directions, int moveSize, Supplier<Piece> promoter){
+        this.side = side;
+        this.directions = directions;
+        this.moveSize = moveSize;
+        this.promotionLevel = 0;
+        this.promoter = promoter;
+    }
+
+    public Piece(Side side, Direction[] directions, int moveSize){
+        this(side, directions, moveSize, null);
+    }
 
     public Direction[] getDirections() {
         return directions;
@@ -10,33 +26,24 @@ public class Piece {
         return side;
     }
 
-    public boolean isKing() { return king; }
+    public boolean isKing() { return promotionLevel > 0; }
 
     public int getMoveSize() {
         return moveSize;
     }
 
-    public Piece(Side side, Direction[] directions, int moveSize, boolean king){
-        this.side = side;
-        this.directions = directions;
-        this.moveSize = moveSize;
-        this.king = king;
+    private final Supplier<Piece> promoter;
+    public Piece promote() {
+        if(promoter == null)
+            return this;
+
+        Piece promoted = promoter.get();
+        promoted.promotionLevel = promotionLevel + 1;
+        return promoted;
     }
 
-    public Piece(Side side, Direction[] directions, boolean king){
-        this(side, directions, 1, king);
-    }
-
-    public Piece(Side side, Direction[] directions, int moveSize){
-        this(side, directions, moveSize, false);
-    }
-
-    public Piece(Side side, Direction[] directions){
-        this(side, directions, 1, false);
-    }
-
-    private final boolean king;
     private final Side side;
     private final Direction[] directions;
     private final int moveSize;
+    private int promotionLevel;
 }

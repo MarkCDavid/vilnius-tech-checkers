@@ -10,16 +10,27 @@ import java.util.List;
 
 public class Side {
 
-    public Side(String name, PieceSetter cellFill, PieceFactory pieceFactory) {
+    public Side(String name, CoordinateValidator piecePositionValidator, CoordinateValidator kingRowValidator, PieceFactory pieceFactory) {
         this.name = name;
-        this.pieceSetter = cellFill;
+        this.piecePositionValidator = piecePositionValidator;
+        this.kingRowValidator = kingRowValidator;
         this.pieceFactory = pieceFactory;
     }
 
+    public Side getNext() {
+        return next;
+    }
+
+    public void setNext(Side next) {
+        this.next = next;
+    }
+
+
+
     public void fillBoard(Board board) {
         for(Coordinate coordinate : new CoordinateIterator(board.getBoardSize())) {
-            if(pieceSetter.setPiece(coordinate)) {
-                board.putPiece(coordinate, pieceFactory.producePiece());
+            if(piecePositionValidator.isValid(coordinate)) {
+                board.putPiece(coordinate, pieceFactory.producePiece(this));
             }
         }
     }
@@ -32,12 +43,18 @@ public class Side {
             if(piece == null)
                 continue;
 
-            if(pieceFactory.ourProduct(piece)) {
+            if(pieceFactory.ourProduct(this, piece)) {
                 pieces.add(piece);
             }
         }
 
         return pieces;
+    }
+
+
+
+    public boolean isKingRow(Coordinate coordinate) {
+        return kingRowValidator.isValid(coordinate);
     }
 
     @Override
@@ -46,6 +63,8 @@ public class Side {
     }
 
     private final String name;
-    private final PieceSetter pieceSetter;
+    private final CoordinateValidator piecePositionValidator;
+    private final CoordinateValidator kingRowValidator;
     private final PieceFactory pieceFactory;
+    private Side next;
 }

@@ -2,16 +2,15 @@ package lt.vilniustech.manager.state2;
 
 import lt.vilniustech.Board;
 import lt.vilniustech.moves.Move;
-import lt.vilniustech.moves.SimpleMove;
 import lt.vilniustech.rulesets.CheckersRuleset;
 
 import java.util.List;
 
 public class SimpleState implements State {
 
-    public SimpleState(Board board, List<Move> availableMoves) {
+    public SimpleState(Board board, CheckersRuleset ruleset, List<Move> availableMoves) {
         this.board = board;
-        this.ruleset = board.getRuleset();
+        this.ruleset = ruleset;
         this.availableMoves = availableMoves;
     }
 

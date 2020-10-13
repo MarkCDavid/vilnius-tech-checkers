@@ -12,14 +12,13 @@ public class ConsoleRenderer  {
     private static final char BLACK_KING = '⛃';
 
     public void render(Board board) {
-        CheckersRuleset ruleset = board.getRuleset();
-        Buffer buffer = new Buffer(ruleset.getBoardSize());
+        Buffer buffer = new Buffer(board.getBoardSize());
 
-        for(int row = 0; row < ruleset.getBoardSize(); row++) {
-            for(int column = 0; column < ruleset.getBoardSize(); column++) {
+        for(int row = 0; row < board.getBoardSize(); row++) {
+            for(int column = 0; column < board.getBoardSize(); column++) {
                 Coordinate coordinate = new Coordinate(column, row);
                 char symbol = getSymbol(board.getPiece(coordinate));
-                buffer.fillShape(Shapes.getShape(row, column, ruleset.getBoardSize()), row, column, symbol );
+                buffer.fillShape(Shapes.getShape(row, column, board.getBoardSize()), row, column, symbol );
             }
         }
 
@@ -29,9 +28,9 @@ public class ConsoleRenderer  {
     private char getSymbol(Piece piece) {
         if (piece == null) {
             return EMPTY_CELL;
-        } else if (piece.getSide() == Side.BLACK) {
+        } else if (piece.getSide().toString() == "Black") {
             return piece.isKing() ? BLACK_KING : BLACK_PIECE;
-        } else if (piece.getSide() == Side.WHITE) {
+        } else if (piece.getSide().toString() == "White") {
             return piece.isKing() ? WHITE_KING : WHITE_PIECE;
         } else {
             throw new IllegalStateException();

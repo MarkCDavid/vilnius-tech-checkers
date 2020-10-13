@@ -3,9 +3,10 @@ package lt.vilniustech.rulesets.english;
 import lt.vilniustech.*;
 import lt.vilniustech.moves.Move;
 import lt.vilniustech.rulesets.CaptureConstraints;
-import lt.vilniustech.side.PieceSetter;
 import lt.vilniustech.rulesets.CheckersRuleset;
+import lt.vilniustech.side.Side;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class EnglishCheckers implements CheckersRuleset {
@@ -36,111 +37,49 @@ public class EnglishCheckers implements CheckersRuleset {
     }
 
     @Override
-    public Side processWinningConditions(Side currentSide, List<Move> moves, List<Piece> whitePieces, List<Piece> blackPieces) {
-        if(whitePieces.size() == 0) return Side.BLACK;
-        else if(blackPieces.size() == 0) return Side.WHITE;
-        else if(moves.size() == 0) return Side.DRAW;
-        return Side.NONE;
+    public List<Side> getPlayingSides() {
+        List<Side> sides = new ArrayList<>();
+
+        Side whiteSide = new Side(
+                "White",
+                new EnglishCheckersPieceSetter(getBoardSize() - 3, getBoardSize() - 1),
+                new EnglishCheckersKingRow(getBoardSize() - 1),
+                new EnglishCheckersWhitePieceFactory()
+        );
+
+        Side blackSide = new Side(
+                "Black",
+                new EnglishCheckersPieceSetter(0, 2),
+                new EnglishCheckersKingRow(0),
+                new EnglishCheckersBlackPieceFactory()
+        );
+
+
+        whiteSide.setNext(blackSide);
+        blackSide.setNext(whiteSide);
+
+        sides.add(whiteSide);
+        sides.add(blackSide);
+
+        return sides;
     }
 
     @Override
-    public Side getFirstToMove() {
-        return Side.BLACK;
+    public Side processWinningConditions(Board board, List<Move> availableMoves, List<Side> playingSides, Side current) {
+        for(int i = 0; i < playingSides.size(); i++) {
+            Side playingSide = playingSides.get(i % playingSides.size());
+            if(playingSide.getPieces(board).isEmpty())
+                return playingSides.get((i + 1) % playingSides.size());
+        }
+
+        if(availableMoves.isEmpty())
+            return new Side("DRAW", null, null, null);
+
+        return null;
     }
 
     @Override
     public CaptureConstraints getCaptureConstraints(Board board, Move move) {
         return new EnglishCheckersCaptureConstraints(board, move);
     }
-
-    @Override
-    public boolean isKingRow(Side side, Coordinate coordinate) {
-        switch (side) {
-            case BLACK -> { return isBlackKingRow(coordinate); }
-            case WHITE -> { return isWhiteKingRow(coordinate); }
-            default -> throw new IllegalStateException("Unexpected value: " + side);
-        }
-    }
-
-    @Override
-    public PieceSetter getCellFill(Side side) {
-        switch (side) {
-            case BLACK -> { return getBlackCellFill(); }
-            case WHITE -> { return getWhiteCellFill(); }
-            default -> throw new IllegalStateException("Unexpected value: " + side);
-        }
-    }
-
-    @Override
-    public Piece createPiece(Side side) {
-        switch (side) {
-            case BLACK -> { return createBlackPiece(); }
-            case WHITE -> { return createWhitePiece(); }
-            default -> throw new IllegalStateException("Unexpected value: " + side);
-        }
-    }
-
-    @Override
-    public Piece createKing(Side side) {
-        switch (side) {
-            case BLACK -> { return createBlackKing(); }
-            case WHITE -> { return createWhiteKing(); }
-            default -> throw new IllegalStateException("Unexpected value: " + side);
-        }
-    }
-
-    @Override
-    public Piece createWhitePiece() {
-        return new Piece(Side.WHITE, new Direction[]{
-                new Direction(1, -1),
-                new Direction(-1, -1),
-        });
-    }
-
-    @Override
-    public Piece createBlackPiece() {
-        return new Piece(Side.BLACK, new Direction[]{
-                new Direction(1, 1),
-                new Direction(-1, 1),
-        });
-    }
-
-    @Override
-    public Piece createWhiteKing() {
-        return new Piece(Side.WHITE, new Direction[]{
-                new Direction(1, -1),
-                new Direction(-1, -1),
-                new Direction(1, 1),
-                new Direction(-1, 1),
-        }, true);
-    }
-    @Override
-    public Piece createBlackKing() {
-        return new Piece(Side.BLACK, new Direction[]{
-                new Direction(1, -1),
-                new Direction(-1, -1),
-                new Direction(1, 1),
-                new Direction(-1, 1),
-        }, true);
-    }
-
-    @Override
-    public boolean isWhiteKingRow(Coordinate coordinate) {
-        return coordinate.getRow() == 0;
-    }
-
-    @Override
-    public boolean isBlackKingRow(Coordinate coordinate) {
-        return coordinate.getRow() == getBoardSize() - 1;
-    }
-
-    @Override
-    public PieceSetter getWhiteCellFill() { return whiteCellFill; }
-
-    @Override
-    public PieceSetter getBlackCellFill() { return blackCellFill; }
-
-
-    private final PieceSetter whiteCellFill = new EnglishCheckersCellFill(getBoardSize() - 3, getBoardSize() - 1);
-    private final PieceSetter blackCellFill = new EnglishCheckersCellFill(0, 2);
 }

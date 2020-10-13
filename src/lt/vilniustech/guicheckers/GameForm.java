@@ -1,7 +1,6 @@
 package lt.vilniustech.guicheckers;
 
 import lt.vilniustech.Coordinate;
-import lt.vilniustech.Side;
 import lt.vilniustech.events.EventSubscriber;
 import lt.vilniustech.guicheckers.events.CellClickListener;
 import lt.vilniustech.guicheckers.events.MoveHistoryChangeListener;
@@ -9,6 +8,7 @@ import lt.vilniustech.manager.GameManager;
 import lt.vilniustech.manager.events.GameFinishedEvent;
 import lt.vilniustech.moves.Move;
 import lt.vilniustech.rulesets.CheckersRuleset;
+import lt.vilniustech.side.Side;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -26,12 +26,12 @@ public class GameForm {
 
         exitButton.addActionListener(e -> MainMenuForm.show(parent));
         drawButton.addActionListener(e -> {
-            Side winner = Side.DRAW;
+            Side winner = new Side("DRAW", null, null, null);
             getGamePanel().getGameManager().setWinner(winner);
             processGameEnd(winner);
         });
         surrenderButton.addActionListener(e -> {
-            Side winner = Side.opposite(getGamePanel().getGameManager().getCurrentSide());
+            Side winner = getGamePanel().getGameManager().getCurrentSide().getNext();
             getGamePanel().getGameManager().setWinner(winner);
             processGameEnd(winner);
         });

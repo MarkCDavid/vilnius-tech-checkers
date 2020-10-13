@@ -8,29 +8,16 @@ import lt.vilniustech.side.*;
 
 import java.util.List;
 
-public interface CheckersRuleset {
+public interface
+CheckersRuleset {
 
     int getBoardSize();
     boolean isCaptureImmediate();
     boolean isPromotionImmediate();
     boolean canJumpAnywhereBeyond(Piece piece);
-    Side processWinningConditions(Side currentSide, List<Move> moves, List<Piece> whitePieces, List<Piece> blackPieces);
-    Side getFirstToMove();
+
+    List<Side> getPlayingSides();
+    Side processWinningConditions(Board board, List<Move> availableMoves, List<Side> playingSides, Side current);
 
     CaptureConstraints getCaptureConstraints(Board board, Move move);
-
-    boolean isKingRow(Side side, Coordinate coordinate);
-    PieceSetter getCellFill(Side side);
-    Piece createPiece(Side side);
-    Piece createKing(Side side);
-
-    boolean isBlackKingRow(Coordinate coordinate);
-    PieceSetter getBlackCellFill();
-    Piece createBlackPiece();
-    Piece createBlackKing();
-
-    boolean isWhiteKingRow(Coordinate coordinate);
-    PieceSetter getWhiteCellFill();
-    Piece createWhitePiece();
-    Piece createWhiteKing();
 }

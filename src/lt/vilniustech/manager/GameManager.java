@@ -37,12 +37,21 @@ public class GameManager implements CheckersManager, SubscriptionSupport {
 
     public GameManager(CheckersRuleset ruleset) {
         this.ruleset = ruleset;
+
+        this.playingSides = ruleset.getPlayingSides();
+        this.currentSide = this.playingSides.get(0);
+
         this.board = new Board(ruleset.getBoardSize());
+
+        for(Side side: this.playingSides) {
+            side.fillBoard(board);
+        }
+
         this.eventEmitter = new EventEmitter();
-        this.currentSide = ruleset.getFirstToMove();
+
         this.movesBuilder = new AvailableMovesBuilder(board);
 
-        this.state = new SimpleState(board, movesBuilder.buildAvailableMoves());
+        this.state = new SimpleState(board, ruleset, movesBuilder.buildAvailableMoves());
         this.availableMoves = state.getAvailableMoves();
     }
 
@@ -55,14 +64,12 @@ public class GameManager implements CheckersManager, SubscriptionSupport {
 
         move.apply(board);
 
-        winner = ruleset.processWinningConditions(currentSide, availableMoves, board.getSidePieces(Side.WHITE), board.getSidePieces(Side.BLACK));
-        if (isFinished()) {
-            eventEmitter.emit(new GameFinishedEvent(winner));
-            return;
-        }
-
         state = state.process(movesBuilder.buildAvailableMoves(), move);
         availableMoves = state.getAvailableMoves();
+
+        winner = ruleset.processWinningConditions(board, availableMoves, playingSides, currentSide);
+        if (isFinished())
+            eventEmitter.emit(new GameFinishedEvent(winner));
     }
 
     private boolean legitimateMove(Move move) {
@@ -104,4 +111,6 @@ public class GameManager implements CheckersManager, SubscriptionSupport {
     private State state;
     private final EventEmitter eventEmitter;
     private final AvailableMovesBuilder movesBuilder;
+
+    private final List<Side> playingSides;
 }

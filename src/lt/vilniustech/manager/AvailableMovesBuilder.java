@@ -16,7 +16,7 @@ public class AvailableMovesBuilder {
 
         ArrayList<Move> availableMoves = new ArrayList<>();
 
-        for(Coordinate from: new CoordinateIterator(ruleset.getBoardSize())) {
+        for(Coordinate from: new CoordinateIterator(board.getBoardSize())) {
             availableMoves.addAll(buildAvailableMoves(from));
         }
 
@@ -52,7 +52,7 @@ public class AvailableMovesBuilder {
     private List<Move> buildCaptureMovesToDirection(Piece piece, Coordinate from, Direction direction) {
         List<Move> moves = new ArrayList<>();
         for(int moveSize = 1; moveSize <= piece.getMoveSize(); moveSize++) {
-            for(int jumpSize = 1; jumpSize <= ruleset.getBoardSize() - moveSize; jumpSize++) {
+            for(int jumpSize = 1; jumpSize <= board.getBoardSize() - moveSize; jumpSize++) {
                 Move capture = new CaptureMove(from, direction, moveSize, jumpSize);
                 if (capture.isValid(board))
                     moves.add(capture);
@@ -73,9 +73,7 @@ public class AvailableMovesBuilder {
 
     public AvailableMovesBuilder(Board board) {
         this.board = board;
-        this.ruleset = board.getRuleset();
     }
 
-    private final CheckersRuleset ruleset;
     private final Board board;
 }

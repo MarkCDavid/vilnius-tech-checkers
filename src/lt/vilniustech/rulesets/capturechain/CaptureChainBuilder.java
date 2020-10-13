@@ -2,11 +2,11 @@ package lt.vilniustech.rulesets.capturechain;
 
 import lt.vilniustech.Board;
 import lt.vilniustech.Coordinate;
-import lt.vilniustech.Side;
 import lt.vilniustech.manager.AvailableMovesBuilder;
 import lt.vilniustech.moves.CaptureMove;
 import lt.vilniustech.moves.Move;
 import lt.vilniustech.rulesets.capturechainmodules.ModuleFactory;
+import lt.vilniustech.side.Side;
 
 import java.util.*;
 import java.util.stream.Collectors;

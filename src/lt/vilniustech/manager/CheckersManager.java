@@ -1,8 +1,8 @@
 package lt.vilniustech.manager;
 
 import lt.vilniustech.Board;
-import lt.vilniustech.Side;
 import lt.vilniustech.moves.Move;
+import lt.vilniustech.side.Side;
 
 import java.util.List;
 
