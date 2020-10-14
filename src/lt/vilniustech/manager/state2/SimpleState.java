@@ -30,7 +30,7 @@ public class SimpleState extends State {
 
         currentSide = currentSide.getNext();
         this.availableMoves = buildAvailableMoves(processedMove);
-        this.finalizedMove = processedMove;
+        this.processedMove = processedMove;
         return this;
     }
 

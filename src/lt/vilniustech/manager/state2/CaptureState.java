@@ -1,11 +1,9 @@
 package lt.vilniustech.manager.state2;
 
 import lt.vilniustech.Board;
-import lt.vilniustech.manager.AvailableMovesBuilder;
 import lt.vilniustech.moves.CaptureMove;
 import lt.vilniustech.moves.Move;
 import lt.vilniustech.moves.NonImmediateCaptureMove;
-import lt.vilniustech.moves.NonImmediateFinalCaptureMove;
 import lt.vilniustech.rulesets.CaptureConstraints;
 import lt.vilniustech.rulesets.CheckersRuleset;
 import lt.vilniustech.side.Side;
@@ -48,7 +46,7 @@ public class CaptureState extends State {
             return toSimpleState(processedMove);
         }
 
-        this.finalizedMove = processedMove;
+        this.processedMove = processedMove;
         return this;
     }
 
@@ -59,7 +57,7 @@ public class CaptureState extends State {
             finalized = ((NonImmediateCaptureMove) processedMove).finalize(board, captureMoves);
 
         State nextState = new SimpleState(board, ruleset, currentSide.getNext());
-        nextState.finalizedMove = finalized;
+        nextState.processedMove = finalized;
         return nextState;
     }
 

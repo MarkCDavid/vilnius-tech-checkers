@@ -25,21 +25,19 @@ public abstract class State {
         return currentSide;
     }
 
-    public Move getFinalizedMove() {
-        return finalizedMove;
+    public Move getProcessedMove() {
+        return processedMove;
     }
 
     protected void promote(Move processedMove) {
         board.putPiece(processedMove.getTo(), board.popPiece(processedMove.getTo()).promote());
     }
 
-
-
     public abstract State process(Move processedMove);
 
     protected List<Move> availableMoves;
 
-    protected Move finalizedMove;
+    protected Move processedMove;
     protected Side currentSide;
     protected final Board board;
     protected final CheckersRuleset ruleset;

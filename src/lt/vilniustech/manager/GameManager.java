@@ -5,6 +5,7 @@ import lt.vilniustech.events.EventEmitter;
 import lt.vilniustech.events.EventSubscriber;
 import lt.vilniustech.events.SubscriptionSupport;
 import lt.vilniustech.manager.events.GameFinishedEvent;
+import lt.vilniustech.manager.events.MoveProcessedEvent;
 import lt.vilniustech.manager.state2.SimpleState;
 import lt.vilniustech.manager.state2.State;
 import lt.vilniustech.moves.Move;
@@ -46,8 +47,6 @@ public class GameManager implements CheckersManager, SubscriptionSupport {
 
         this.eventEmitter = new EventEmitter();
         this.state = new SimpleState(board, ruleset, this.playingSides.get(0));
-
-        this.processedMoves = new ArrayList<>();
     }
 
     public void processMove(Move move) {
@@ -59,7 +58,7 @@ public class GameManager implements CheckersManager, SubscriptionSupport {
 
         move.apply(board);
         state = state.process(move);
-        processedMoves.add(state.getFinalizedMove());
+        eventEmitter.emit(new MoveProcessedEvent(state.getProcessedMove()));
 
         winner = ruleset.processWinningConditions(board, state.getAvailableMoves(), playingSides, state.getCurrentSide());
         if (isFinished())
@@ -100,13 +99,7 @@ public class GameManager implements CheckersManager, SubscriptionSupport {
     }
 
     private State state;
-    private final EventEmitter eventEmitter;
 
     private final List<Side> playingSides;
-
-    public Move getProcessedMove() {
-        return state.getFinalizedMove();
-    }
-
-    private final List<Move> processedMoves;
+    private final EventEmitter eventEmitter;
 }

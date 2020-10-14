@@ -10,11 +10,11 @@ import java.util.function.Supplier;
 public class EnglishCheckersBlackPieceFactory extends PieceFactory {
 
     @Override
-    public Piece producePiece(Side side) {
-        return new Piece(side, pieceDirections, 1, kindProducer(side));
+    public Piece producePiece() {
+        return new Piece(side, pieceDirections, 1, kindProducer());
     }
 
-    private Supplier<Piece> kindProducer(Side side) {
+    private Supplier<Piece> kindProducer() {
         return () -> new Piece(side, kingDirections, 1);
     }
 

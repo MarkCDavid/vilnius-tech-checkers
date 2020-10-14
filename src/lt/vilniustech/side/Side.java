@@ -15,6 +15,7 @@ public class Side {
         this.piecePositionValidator = piecePositionValidator;
         this.kingRowValidator = kingRowValidator;
         this.pieceFactory = pieceFactory;
+        this.pieceFactory.setSide(this);
     }
 
     public Side getNext() {
@@ -30,7 +31,7 @@ public class Side {
     public void fillBoard(Board board) {
         for(Coordinate coordinate : new CoordinateIterator(board.getBoardSize())) {
             if(piecePositionValidator.isValid(coordinate)) {
-                board.putPiece(coordinate, pieceFactory.producePiece(this));
+                board.putPiece(coordinate, pieceFactory.producePiece());
             }
         }
     }
@@ -43,7 +44,7 @@ public class Side {
             if(piece == null)
                 continue;
 
-            if(pieceFactory.ourProduct(this, piece)) {
+            if(pieceFactory.ourProduct(piece)) {
                 pieces.add(piece);
             }
         }

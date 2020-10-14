@@ -1,11 +1,13 @@
 package lt.vilniustech.guicheckers;
 
 import lt.vilniustech.Coordinate;
+import lt.vilniustech.events.Event;
 import lt.vilniustech.events.EventSubscriber;
 import lt.vilniustech.guicheckers.events.CellClickListener;
 import lt.vilniustech.guicheckers.events.MoveHistoryChangeListener;
 import lt.vilniustech.manager.GameManager;
 import lt.vilniustech.manager.events.GameFinishedEvent;
+import lt.vilniustech.manager.events.MoveProcessedEvent;
 import lt.vilniustech.moves.Move;
 import lt.vilniustech.rulesets.CheckersRuleset;
 import lt.vilniustech.side.Side;
@@ -47,6 +49,13 @@ public class GameForm {
             }
         });
 
+        manager.subscribe(new EventSubscriber<>(MoveProcessedEvent.class) {
+            @Override
+            protected void receive(MoveProcessedEvent event) {
+                getMoveHistory().addMove(event.getMove());
+            }
+        });
+
         GamePanel gamePanel = setGamePanel(new GamePanel(manager));
         MoveHistory moveHistory = setMoveHistory(new MoveHistory(gamePanel.getGameManager().getBoard()));
         StatusBar statusBar = setStatusBar(new StatusBar());
@@ -65,7 +74,7 @@ public class GameForm {
             if (selectMove) {
                 selectMove(gamePanel, coordinate);
             } else {
-                executeMove(gamePanel, moveHistory, coordinate, selectedMoves);
+                executeMove(gamePanel, coordinate, selectedMoves);
             }
             gamePanel.repaint();
             statusBar.setCurrentSide(gamePanel.getGameManager().getCurrentSide());
@@ -77,21 +86,16 @@ public class GameForm {
         gamePanel.setSelectedMoves(gamePanel.getGameManager().getAvailableMoves(from));
     }
 
-    private void executeMove(GamePanel gamePanel, MoveHistory moveHistory, Coordinate to, List<Move> selectedMoves) {
+    private void executeMove(GamePanel gamePanel, Coordinate to, List<Move> selectedMoves) {
         for (Move availableMove : selectedMoves) {
 
             if (!availableMove.getTo().equals(to))
                 continue;
 
             gamePanel.getGameManager().processMove(availableMove);
-            moveHistory.addMove(gamePanel.getGameManager().getProcessedMove());
 
             if(gameFinished)
                 break;
-
-//            getMoveHistory().setEnabled(!gamePanel.getGameManager().getStateMachine().isMultiCapture());
-//            drawButton.setEnabled(!gamePanel.getGameManager().getStateMachine().isMultiCapture());
-//            surrenderButton.setEnabled(!gamePanel.getGameManager().getStateMachine().isMultiCapture());
 
             break;
         }
