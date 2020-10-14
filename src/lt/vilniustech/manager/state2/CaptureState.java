@@ -4,6 +4,8 @@ import lt.vilniustech.Board;
 import lt.vilniustech.moves.CaptureMove;
 import lt.vilniustech.moves.Move;
 import lt.vilniustech.moves.NonImmediateCaptureMove;
+import lt.vilniustech.moves.NonImmediateFinalCaptureMove;
+import lt.vilniustech.moves.finalization.NonImmediateFinalizationArguments;
 import lt.vilniustech.rulesets.CaptureConstraints;
 import lt.vilniustech.rulesets.CheckersRuleset;
 import lt.vilniustech.side.Side;
@@ -51,10 +53,14 @@ public class CaptureState extends State {
     }
 
     private State toSimpleState(Move processedMove) {
-        Move finalized = processedMove;
+        Move finalized = null;
 
-        if(processedMove instanceof NonImmediateCaptureMove)
-            finalized = ((NonImmediateCaptureMove) processedMove).finalize(board, captureMoves);
+        if (processedMove instanceof NonImmediateCaptureMove) {
+            finalized = (NonImmediateFinalCaptureMove) processedMove.finalize(board, new NonImmediateFinalizationArguments(captureMoves));
+        }
+        else {
+            processedMove.finalize(board);
+        }
 
         State nextState = new SimpleState(board, ruleset, currentSide.getNext());
         nextState.processedMove = finalized;

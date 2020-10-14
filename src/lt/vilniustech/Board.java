@@ -44,15 +44,14 @@ public class Board {
         return this.pieceMap.getOrDefault(coordinate, null);
     }
 
-    public void swapPieces(Coordinate coordinate1, Coordinate coordinate2) {
-        Piece piece1 = popPiece(coordinate1);
-        Piece piece2 = popPiece(coordinate2);
+    public void movePiece(Coordinate from, Coordinate to) {
+        Piece fromPiece = getPiece(from);
+        Piece toPiece = getPiece(to);
 
-        if (piece1 == null || piece2 == null)
+        if(fromPiece == null || toPiece != null)
             return;
 
-        putPiece(coordinate1, piece2);
-        putPiece(coordinate2, piece1);
+        putPiece(to, popPiece(from));
     }
 
     public boolean validCoordinate(Coordinate coordinate) {

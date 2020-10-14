@@ -4,11 +4,12 @@ import lt.vilniustech.Board;
 import lt.vilniustech.Coordinate;
 import lt.vilniustech.Direction;
 import lt.vilniustech.Piece;
+import lt.vilniustech.moves.finalization.NonImmediateFinalizationArguments;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class NonImmediateCaptureMove extends CaptureMove {
+public class NonImmediateCaptureMove extends CaptureMove<NonImmediateFinalCaptureMove, NonImmediateFinalizationArguments> {
 
     public NonImmediateCaptureMove(Coordinate from, Coordinate over, Coordinate to) {
         super(from, over, to);
@@ -18,19 +19,13 @@ public class NonImmediateCaptureMove extends CaptureMove {
         super(from, direction, moveSize, jumpSize);
     }
 
-    public NonImmediateFinalCaptureMove finalize(Board board, List<CaptureMove> captureMoves) {
-        NonImmediateFinalCaptureMove finalized = new NonImmediateFinalCaptureMove(from, over, to, captureMoves);
-        finalized.apply(board);
-        return finalized;
-    }
-
     @Override
     public void apply(Board board) {
         if(isApplied()) return;
 
         applied = true;
 
-        board.putPiece(to, board.popPiece(from));
+        board.movePiece(from, to);
     }
 
     @Override
@@ -39,6 +34,18 @@ public class NonImmediateCaptureMove extends CaptureMove {
 
         applied = false;
 
-        board.putPiece(from, board.popPiece(to));
+        board.movePiece(to, from);
+    }
+
+    @Override
+    public NonImmediateFinalCaptureMove finalize(Board board, NonImmediateFinalizationArguments arguments) {
+        NonImmediateFinalCaptureMove finalized = new NonImmediateFinalCaptureMove(from, over, to, arguments.getCaptureMoves());
+        finalized.apply(board);
+        return finalized;
+    }
+
+    @Override
+    public NonImmediateFinalCaptureMove finalize(Board board) {
+        return finalize(board, new NonImmediateFinalizationArguments(new ArrayList<>()));
     }
 }

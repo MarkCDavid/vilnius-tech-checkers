@@ -1,30 +1,17 @@
 package lt.vilniustech.moves;
 
 import lt.vilniustech.*;
+import lt.vilniustech.moves.finalization.EmptyFinalizationArguments;
 
-public class SimpleMove implements Move {
+public class SimpleMove extends Move<SimpleMove, EmptyFinalizationArguments> {
 
     public SimpleMove(Coordinate from, Coordinate to) {
-        this.from = from;
-        this.to = to;
+        super(from, to);
     }
 
     public SimpleMove(Coordinate from, Direction direction, int moveSize) {
-        this.from = from;
-        this.to = from.move(direction, moveSize);
+        super(from, from.move(direction, moveSize));
     }
-
-    @Override
-    public Coordinate getFrom() {
-        return from;
-    }
-
-    @Override
-    public Coordinate getTo() {
-        return to;
-    }
-
-
 
     @Override
     public boolean isCapture() {
@@ -32,39 +19,35 @@ public class SimpleMove implements Move {
     }
 
     @Override
-    public boolean isApplied() {
-        return applied;
-    }
-
-    @Override
-    public boolean isValid(Board board) {
-        return board.validCoordinate(this.from) &&
-            board.validCoordinate(this.to) &&
-            board.getPiece(this.from) != null &&
-            board.getPiece(this.to) == null;
-    }
-
-    @Override
     public void apply(Board board) {
         if(isApplied()) return;
+
         applied = true;
+
         board.putPiece(to, board.popPiece(from));
     }
 
     @Override
     public void revert(Board board) {
         if(!isApplied()) return;
+
         applied = false;
+
         board.putPiece(from, board.popPiece(to));
+    }
+
+    @Override
+    public SimpleMove finalize(Board board, EmptyFinalizationArguments argumentType) {
+        return this;
+    }
+
+    @Override
+    public SimpleMove finalize(Board board) {
+        return finalize(board, new EmptyFinalizationArguments());
     }
 
     @Override
     public String toString() {
         return String.format("%s -> %s", from, to);
     }
-
-    private boolean applied;
-
-    private final Coordinate from;
-    private final Coordinate to;
 }

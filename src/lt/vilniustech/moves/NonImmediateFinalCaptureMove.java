@@ -3,11 +3,12 @@ package lt.vilniustech.moves;
 import lt.vilniustech.Board;
 import lt.vilniustech.Coordinate;
 import lt.vilniustech.Piece;
+import lt.vilniustech.moves.finalization.EmptyFinalizationArguments;
 
 import java.util.HashMap;
 import java.util.List;
 
-public class NonImmediateFinalCaptureMove extends CaptureMove {
+public class NonImmediateFinalCaptureMove extends CaptureMove<NonImmediateFinalCaptureMove, EmptyFinalizationArguments> {
 
     public NonImmediateFinalCaptureMove(Coordinate from, Coordinate over, Coordinate to, List<CaptureMove> captureMoves) {
         super(from, over, to);
@@ -50,6 +51,16 @@ public class NonImmediateFinalCaptureMove extends CaptureMove {
         board.putPiece(from, board.popPiece(to));
     }
 
-    private List<CaptureMove> captureMoves;
-    private HashMap<CaptureMove, Piece> capturedPieces;
+    @Override
+    public NonImmediateFinalCaptureMove finalize(Board board, EmptyFinalizationArguments argumentType) {
+        return this;
+    }
+
+    @Override
+    public NonImmediateFinalCaptureMove finalize(Board board) {
+        return finalize(board, new EmptyFinalizationArguments());
+    }
+
+    private final List<CaptureMove> captureMoves;
+    private final HashMap<CaptureMove, Piece> capturedPieces;
 }

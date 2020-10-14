@@ -1,39 +1,23 @@
 package lt.vilniustech.moves;
 
 import lt.vilniustech.*;
+import lt.vilniustech.moves.finalization.FinalizationArguments;
 
-public abstract class CaptureMove implements Move {
+public abstract class CaptureMove<F, A extends FinalizationArguments> extends Move<F, A> {
 
     public CaptureMove(Coordinate from, Coordinate over, Coordinate to) {
-        this.from = from;
+        super(from, to);
         this.over = over;
-        this.to = to;
     }
 
     public CaptureMove(Coordinate from, Direction direction, int moveSize, int jumpSize) {
-        this.from = from;
+        super(from, from.move(direction, moveSize + jumpSize));
         this.over = from.move(direction, moveSize);
-        this.to = from.move(direction, moveSize + jumpSize);
-    }
-
-    @Override
-    public Coordinate getFrom() {
-        return from;
-    }
-
-    @Override
-    public Coordinate getTo() {
-        return to;
     }
 
     @Override
     public boolean isCapture() {
         return true;
-    }
-
-    @Override
-    public boolean isApplied() {
-        return applied;
     }
 
     public Coordinate getOver() {
@@ -42,15 +26,25 @@ public abstract class CaptureMove implements Move {
 
     @Override
     public boolean isValid(Board board) {
-        Piece fromPiece = board.getPiece(this.from);
-        Piece overPiece = board.getPiece(this.over);
-        Piece toPiece = board.getPiece(this.to);
-        return board.validCoordinate(this.from) &&
-                board.validCoordinate(this.over) &&
-                board.validCoordinate(this.to) &&
-                fromPiece != null && overPiece != null && toPiece == null &&
-                fromPiece.getSide() != overPiece.getSide();
+        if(!super.isValid(board))
+            return false;
 
+        boolean validCoordinates = board.validCoordinate(this.over);
+        if(!validCoordinates)
+            return false;
+
+        Piece overPiece = board.getPiece(this.over);
+        boolean validPieces = overPiece != null;
+        if(!validPieces)
+            return false;
+
+
+        Piece fromPiece = board.getPiece(this.from);
+        boolean jumpOverOpponent = fromPiece.getSide() != overPiece.getSide();
+        if(!jumpOverOpponent)
+            return false;
+
+        return true;
     }
 
     @Override
@@ -58,9 +52,5 @@ public abstract class CaptureMove implements Move {
         return String.format("%s --%s-> %s", from, over, to);
     }
 
-    protected boolean applied;
-
-    protected final Coordinate from;
     protected final Coordinate over;
-    protected final Coordinate to;
 }
