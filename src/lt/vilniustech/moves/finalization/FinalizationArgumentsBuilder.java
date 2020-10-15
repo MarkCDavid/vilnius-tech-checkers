@@ -16,11 +16,11 @@ import java.util.List;
 
 public class FinalizationArgumentsBuilder {
 
-    public FinalizationArgumentsBuilder(Board board, CheckersRuleset ruleset, MoveHistory history) {
+    public FinalizationArgumentsBuilder(Board board, CheckersRuleset ruleset, MoveHistory history, AvailableMovesBuilder availableMovesBuilder) {
         this.board = board;
         this.ruleset = ruleset;
         this.history = history;
-        this.movesBuilder = new AvailableMovesBuilder(board, ruleset, history);
+        this.movesBuilder = availableMovesBuilder;
     }
 
     public FinalizationArguments build(Side side, Move move) {

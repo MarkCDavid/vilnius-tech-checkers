@@ -39,10 +39,10 @@ public class TurkishCheckersCaptureConstraints implements CaptureConstraints {
 
     @Override
     public void setMultiCapture(boolean multiCapture) {
-        this.multiCapture = multiCapture;
+
     }
 
-    private boolean multiCapture;
+
 
     private final CaptureChainBuilder captureChainBuilder;
     private final Board board;

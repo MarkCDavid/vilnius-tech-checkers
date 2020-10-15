@@ -79,6 +79,7 @@ public class EnglishCheckers implements CheckersRuleset {
                 return playingSides.get((i + 1) % playingSides.size());
         }
 
+        // TODO: FIX
         if(availableMoves.isEmpty())
             return new Side("DRAW", null, null, null);
 

@@ -4,7 +4,6 @@ import lt.vilniustech.*;
 import lt.vilniustech.moves.base.CaptureMove;
 import lt.vilniustech.moves.base.Move;
 import lt.vilniustech.moves.factory.MoveFactory;
-import lt.vilniustech.rulesets.CheckersRuleset;
 import lt.vilniustech.side.Side;
 
 import java.util.ArrayList;
@@ -81,15 +80,13 @@ public class AvailableMovesBuilder {
     }
 
 
-    public AvailableMovesBuilder(Board board, CheckersRuleset ruleset, MoveHistory moveHistory) {
+    public AvailableMovesBuilder(Board board, MoveHistory moveHistory, MoveFactory moveFactory) {
         this.board = board;
-        this.ruleset = ruleset;
         this.moveHistory = moveHistory;
-        this.moveFactory = ruleset.getMoveFactory();
+        this.moveFactory = moveFactory;
     }
 
     private final Board board;
-    private final CheckersRuleset ruleset;
     private final MoveHistory moveHistory;
     private final MoveFactory moveFactory;
 }

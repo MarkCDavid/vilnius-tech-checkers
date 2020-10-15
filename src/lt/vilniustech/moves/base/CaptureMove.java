@@ -1,10 +1,6 @@
 package lt.vilniustech.moves.base;
 
 import lt.vilniustech.*;
-import lt.vilniustech.utils.iterator.DirectionalIterable;
-import lt.vilniustech.utils.iterator.DirectionalIterator;
-
-import java.util.Iterator;
 
 public abstract class CaptureMove extends Move {
 
@@ -16,11 +12,6 @@ public abstract class CaptureMove extends Move {
     public CaptureMove(Coordinate from, Direction direction, int moveSize, int jumpSize) {
         super(from, from.move(direction, moveSize + jumpSize));
         this.over = from.move(direction, moveSize);
-    }
-
-    @Override
-    public boolean isCapture() {
-        return true;
     }
 
     public Piece getCapturedPiece() {
@@ -63,7 +54,6 @@ public abstract class CaptureMove extends Move {
             return;
 
         Piece overPiece = board.getPiece(this.over);
-
         if(overPiece == null)
             return;
 
@@ -76,7 +66,6 @@ public abstract class CaptureMove extends Move {
             return;
 
         Piece overPiece = board.getPiece(this.over);
-
         if(overPiece != null)
             return;
 

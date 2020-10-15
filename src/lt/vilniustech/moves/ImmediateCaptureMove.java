@@ -49,7 +49,4 @@ public class ImmediateCaptureMove extends CaptureMove {
         promotionMove = argumentType.isPromote();
         return this;
     }
-
-
-    private Piece capturedPiece;
 }

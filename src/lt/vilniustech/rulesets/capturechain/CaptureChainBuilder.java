@@ -57,7 +57,7 @@ public class CaptureChainBuilder
     }
 
     private List<CaptureMove> getAvailableCaptureMoves(Board board, Side side, Coordinate from) {
-        return new AvailableMovesBuilder(board, ruleset, history).buildAvailableMoves(board.getPiece(from)).stream()
+        return new AvailableMovesBuilder(board, history, ruleset.getMoveFactory()).buildAvailableMoves(board.getPiece(from)).stream()
                 .filter(move -> move instanceof CaptureMove)
                 .map(move -> (CaptureMove) move)
                 .collect(Collectors.toList());

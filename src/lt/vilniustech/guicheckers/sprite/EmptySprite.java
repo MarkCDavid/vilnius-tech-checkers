@@ -2,7 +2,7 @@ package lt.vilniustech.guicheckers.sprite;
 
 import java.awt.*;
 
-public class EmptySprite extends Sprite {
+public class EmptySprite implements Sprite {
 
     @Override
     public void paint(Graphics2D graphics, int x, int y, int width, int height, float margin) { }

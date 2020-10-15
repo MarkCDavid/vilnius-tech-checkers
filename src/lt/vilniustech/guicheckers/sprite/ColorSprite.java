@@ -2,7 +2,7 @@ package lt.vilniustech.guicheckers.sprite;
 
 import java.awt.*;
 
-public abstract class ColorSprite extends Sprite {
+public abstract class ColorSprite implements Sprite {
 
     public ColorSprite(Color color) {
         this.color = color;

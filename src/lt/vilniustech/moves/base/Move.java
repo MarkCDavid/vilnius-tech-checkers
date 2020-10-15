@@ -46,8 +46,8 @@ public abstract class Move {
         return false;
     }
 
-    public abstract boolean isCapture();
     public abstract boolean hasUncaptured();
+
     public void apply(Board board) {
         if(isApplied()) return;
         applied = true;

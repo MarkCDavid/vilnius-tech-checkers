@@ -7,6 +7,7 @@ import lt.vilniustech.events.SubscriptionSupport;
 import lt.vilniustech.manager.events.GameFinishedEvent;
 import lt.vilniustech.manager.events.MoveProcessedEvent;
 import lt.vilniustech.manager.exceptions.GameFinishedException;
+import lt.vilniustech.manager.exceptions.IllegitimateMoveException;
 import lt.vilniustech.moves.base.Move;
 import lt.vilniustech.moves.finalization.FinalizationArguments;
 import lt.vilniustech.moves.finalization.FinalizationArgumentsBuilder;
@@ -17,7 +18,7 @@ import lt.vilniustech.side.Side;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameManager implements CheckersManager, SubscriptionSupport {
+public class GameManager implements SubscriptionSupport {
 
     public boolean isFinished() {
         return winner != null;
@@ -39,19 +40,22 @@ public class GameManager implements CheckersManager, SubscriptionSupport {
     }
 
     public GameManager(CheckersRuleset ruleset) {
-        this.ruleset = ruleset;
-        this.playingSides = ruleset.getPlayingSides();
+        this.moveHistory = new MoveHistory();
+        this.eventEmitter = new EventEmitter();
 
+        this.ruleset = ruleset;
+
+        this.playingSides = ruleset.getPlayingSides();
         this.board = new Board(ruleset.getBoardSize());
+
         for(Side side: this.playingSides) {
             side.fillBoard(board);
         }
 
-        this.eventEmitter = new EventEmitter();
         this.currentSide = this.playingSides.get(0);
-        this.moveHistory = new MoveHistory();
-        this.availableMovesBuilder = new AvailableMovesBuilder(board, ruleset, moveHistory  );
-        this.finalizationArgumentsBuilder = new FinalizationArgumentsBuilder(board, ruleset, moveHistory);
+
+        this.availableMovesBuilder = new AvailableMovesBuilder(board, moveHistory, ruleset.getMoveFactory());
+        this.finalizationArgumentsBuilder = new FinalizationArgumentsBuilder(board, ruleset, moveHistory, this.availableMovesBuilder);
 
         this.availableMoves = availableMovesBuilder.buildAvailableMoves(currentSide);
     }
@@ -61,7 +65,7 @@ public class GameManager implements CheckersManager, SubscriptionSupport {
             throw new GameFinishedException(getWinner());
 
         if(!legitimateMove(move))
-            return; // Illegitimate Move Exception ??
+            throw new IllegitimateMoveException(move);
 
         FinalizationArguments arguments = finalizationArgumentsBuilder.build(getCurrentSide(), move);
         move = move.finalizeMove(board, moveHistory, arguments);
@@ -88,7 +92,6 @@ public class GameManager implements CheckersManager, SubscriptionSupport {
         return availableMoves.contains(move);
     }
 
-
     public List<Move> getAvailableMoves() {
         return isFinished() ? new ArrayList<>() : new ArrayList<>(availableMoves);
     }
@@ -109,16 +112,8 @@ public class GameManager implements CheckersManager, SubscriptionSupport {
     private final CheckersRuleset ruleset;
     private final Board board;
 
-    public void subscribe(EventSubscriber subscriber) {
-        eventEmitter.subscribe(subscriber);
-    }
-
-    public void unsubscribe(EventSubscriber subscriber) {
-        eventEmitter.subscribe(subscriber);
-    }
-
     private final List<Side> playingSides;
-    private final EventEmitter eventEmitter;
+
     private final MoveHistory moveHistory;
 
     private Side currentSide;
@@ -126,4 +121,12 @@ public class GameManager implements CheckersManager, SubscriptionSupport {
 
     private final AvailableMovesBuilder availableMovesBuilder;
     private final FinalizationArgumentsBuilder finalizationArgumentsBuilder;
+
+    public void subscribe(EventSubscriber subscriber) {
+        eventEmitter.subscribe(subscriber);
+    }
+    public void unsubscribe(EventSubscriber subscriber) {
+        eventEmitter.subscribe(subscriber);
+    }
+    private final EventEmitter eventEmitter;
 }

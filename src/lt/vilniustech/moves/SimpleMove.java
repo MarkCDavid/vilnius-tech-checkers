@@ -16,11 +16,6 @@ public class SimpleMove extends Move {
     }
 
     @Override
-    public boolean isCapture() {
-        return false;
-    }
-
-    @Override
     public boolean hasUncaptured() {
         return false;
     }

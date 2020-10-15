@@ -28,26 +28,26 @@ public class TurkishCheckersPieceFactory extends PieceFactory {
     private final int boardSize;
 
 
-    public static final Direction[] BLACK_PIECE_DIRECTIONS = new Direction[]{
+    protected static final Direction[] BLACK_PIECE_DIRECTIONS = new Direction[]{
             new Direction(1, 0),
             new Direction(-1, 0),
             new Direction(0, 1),
     };
 
-    public static final Direction[] BLACK_KING_DIRECTIONS = new Direction[]{
+    protected static final Direction[] BLACK_KING_DIRECTIONS = new Direction[]{
             new Direction(1, 0),
             new Direction(-1, 0),
             new Direction(0, 1),
             new Direction(0, -1),
     };
 
-    public static final Direction[] WHITE_PIECE_DIRECTIONS = new Direction[]{
+    protected static final Direction[] WHITE_PIECE_DIRECTIONS = new Direction[]{
             new Direction(1, 0),
             new Direction(-1, 0),
             new Direction(0, -1),
     };
 
-    public static final Direction[] WHITE_KING_DIRECTIONS = new Direction[]{
+    protected static final Direction[] WHITE_KING_DIRECTIONS = new Direction[]{
             new Direction(1, 0),
             new Direction(-1, 0),
             new Direction(0, 1),

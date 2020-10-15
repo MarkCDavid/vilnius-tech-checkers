@@ -15,18 +15,18 @@ public class Side {
         this.piecePositionValidator = piecePositionValidator;
         this.kingRowValidator = kingRowValidator;
         this.pieceFactory = pieceFactory;
-        this.pieceFactory.setSide(this);
+
+        // TODO: FIX
+        if(this.pieceFactory != null)
+            this.pieceFactory.setSide(this);
     }
 
     public Side getNext() {
         return next;
     }
-
     public void setNext(Side next) {
         this.next = next;
     }
-
-
 
     public void fillBoard(Board board) {
         for(Coordinate coordinate : new CoordinateIterator(board.getBoardSize())) {

@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class ImageSprite extends Sprite {
+public class ImageSprite implements Sprite {
 
     public static ImageSprite invalidSprite() {
         return new ImageSprite(getInvalidImage());
