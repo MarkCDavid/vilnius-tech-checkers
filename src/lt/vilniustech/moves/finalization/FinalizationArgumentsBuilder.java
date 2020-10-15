@@ -70,7 +70,7 @@ public class FinalizationArgumentsBuilder {
     private boolean captureMovesUnavailable(Move move) {
         CaptureConstraints constraints = ruleset.getCaptureConstraints(board, history, move);
         constraints.setMultiCapture(true);
-        return constraints.filterMoves(movesBuilder.buildAvailableMoves(board.getPiece(move.getTo()))).isEmpty();
+        return constraints.filterMoves(movesBuilder.buildAvailableMoves(board.getPiece(move.getTo()))).stream().noneMatch(m -> m instanceof CaptureMove);
     }
 
     private final Board board;

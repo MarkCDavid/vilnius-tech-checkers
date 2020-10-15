@@ -3,9 +3,9 @@ package lt.vilniustech.rulesets.turkish;
 import lt.vilniustech.Coordinate;
 import lt.vilniustech.side.CoordinateValidator;
 
-public class TurkishCheckersCellFill extends CoordinateValidator {
+public class TurkishCheckersPieceSetter extends CoordinateValidator {
 
-    public TurkishCheckersCellFill(int rowFrom, int rowTo) {
+    public TurkishCheckersPieceSetter(int rowFrom, int rowTo) {
         this.rowFrom = Math.min(rowFrom, rowTo);
         this.rowTo  = Math.max(rowFrom, rowTo);
     }

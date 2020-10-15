@@ -51,14 +51,29 @@ public class AvailableMovesBuilder {
     private List<Move> buildCaptureMovesToDirection(Piece piece, Direction direction) {
         List<Move> moves = new ArrayList<>();
         for(int moveSize = 1; moveSize <= piece.getMoveSize(); moveSize++) {
+
+            boolean noObstacles = true;
+
+            for(int i = 1; i < moveSize; i++) {
+                if (board.getPiece(piece.getCoordinate().move(direction, i)) != null) {
+                    noObstacles = false;
+                    break;
+                }
+            }
+
+            if(!noObstacles)
+                break;
+
             for(int jumpSize = 1; jumpSize <= board.getBoardSize() - moveSize; jumpSize++) {
 
                 if(jumpSize > 1 && !ruleset.canJumpAnywhereBeyond(piece))
-                    return moves;
+                    break;
 
                 CaptureMove capture = ruleset.isCaptureImmediate() ?
                         new ImmediateCaptureMove(piece.getCoordinate(), direction, moveSize, jumpSize) :
                         new NonImmediateCaptureMove(piece.getCoordinate(), direction, moveSize, jumpSize);
+
+
 
                 if (capture.isValid(board)) {
                     boolean valid = true;
@@ -91,8 +106,9 @@ public class AvailableMovesBuilder {
         List<Move> moves = new ArrayList<>();
         for(int moveSize = 1; moveSize <= piece.getMoveSize(); moveSize++) {
             Move simple = new SimpleMove(piece.getCoordinate(), direction, moveSize);
-            if (simple.isValid(board))
-                moves.add(simple);
+            if (!simple.isValid(board))
+                break;
+            moves.add(simple);
         }
         return moves;
     }
