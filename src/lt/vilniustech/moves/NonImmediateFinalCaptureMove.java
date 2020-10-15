@@ -14,7 +14,7 @@ import java.util.List;
 
 public class NonImmediateFinalCaptureMove extends CaptureMove {
 
-    public NonImmediateFinalCaptureMove(Coordinate from, Coordinate over, Coordinate to, List<Move> captureMoves) {
+    public NonImmediateFinalCaptureMove(Coordinate from, Coordinate over, Coordinate to, List<Move> captureMoves, boolean promote) {
         super(from, over, to);
 
         this.captureMoves = new ArrayList<>();
@@ -26,6 +26,8 @@ public class NonImmediateFinalCaptureMove extends CaptureMove {
 
             this.captureMoves.add((CaptureMove)captureMove);
         }
+
+        this.promotionMove = promote;
 
         this.capturedPieces = new HashMap<>();
     }
@@ -44,7 +46,9 @@ public class NonImmediateFinalCaptureMove extends CaptureMove {
         }
 
         capturedPieces.put(this, board.popPiece(this.getOver()));
-        board.putPiece(to, board.popPiece(from));
+
+        unpromotedPiece = board.popPiece(from);
+        board.putPiece(to, promotionMove ? unpromotedPiece.promote() : unpromotedPiece);
     }
 
     @Override
@@ -61,11 +65,14 @@ public class NonImmediateFinalCaptureMove extends CaptureMove {
         }
 
         board.putPiece(this.getOver(), capturedPieces.get(this));
-        board.putPiece(from, board.popPiece(to));
+
+        board.popPiece(to);
+        board.putPiece(from, unpromotedPiece);
     }
 
     @Override
     public Move finalizeMove(Board board, MoveHistorySupport support, FinalizationArguments argumentType) {
+        promotionMove = argumentType.isPromote();
         return this;
     }
 

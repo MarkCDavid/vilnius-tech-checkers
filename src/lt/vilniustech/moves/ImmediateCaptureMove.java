@@ -32,8 +32,8 @@ public class ImmediateCaptureMove extends CaptureMove {
         applied = true;
 
         capturedPiece = board.popPiece(over);
-        board.movePiece(from, to);
-        board.putPiece(to, board.popPiece(from));
+        unpromotedPiece = board.popPiece(from);
+        board.putPiece(to, promotionMove ? unpromotedPiece.promote() : unpromotedPiece);
     }
 
     @Override
@@ -49,12 +49,15 @@ public class ImmediateCaptureMove extends CaptureMove {
         applied = false;
 
         board.putPiece(over, capturedPiece);
-        board.movePiece(to, from);
+
+        board.popPiece(to);
+        board.putPiece(from, unpromotedPiece);
     }
 
 
     @Override
     public Move finalizeMove(Board board, MoveHistorySupport history, FinalizationArguments argumentType) {
+        promotionMove = argumentType.isPromote();
         return this;
     }
 

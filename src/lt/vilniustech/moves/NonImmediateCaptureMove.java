@@ -24,7 +24,8 @@ public class NonImmediateCaptureMove extends CaptureMove {
 
         applied = true;
 
-        board.movePiece(from, to);
+        unpromotedPiece = board.popPiece(from);
+        board.putPiece(to, promotionMove ? unpromotedPiece.promote() : unpromotedPiece);
     }
 
     @Override
@@ -33,14 +34,17 @@ public class NonImmediateCaptureMove extends CaptureMove {
 
         applied = false;
 
-        board.movePiece(to, from);
+        board.popPiece(to);
+        board.putPiece(from, unpromotedPiece);
     }
 
     @Override
     public Move finalizeMove(Board board, MoveHistorySupport support, FinalizationArguments arguments) {
-        if(!arguments.isSwitchSide())
+        if (!arguments.isSwitchSide()) {
+            promotionMove = arguments.isPromote();
             return this;
+        }
 
-        return new NonImmediateFinalCaptureMove(from, over, to, support.getMoveHistory());
+        return new NonImmediateFinalCaptureMove(from, over, to, support.getMoveHistory(), arguments.isPromote());
     }
 }

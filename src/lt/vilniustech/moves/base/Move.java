@@ -2,6 +2,7 @@ package lt.vilniustech.moves.base;
 
 import lt.vilniustech.Board;
 import lt.vilniustech.Coordinate;
+import lt.vilniustech.Piece;
 import lt.vilniustech.manager.MoveHistorySupport;
 import lt.vilniustech.moves.finalization.FinalizationArguments;
 
@@ -43,6 +44,14 @@ public abstract class Move {
     public abstract Move finalizeMove(Board board, MoveHistorySupport support, FinalizationArguments argumentType);
 
     protected boolean applied;
+
+    protected Piece unpromotedPiece;
+
+    protected void setPromotionMove(boolean promotionMove) {
+        this.promotionMove = promotionMove;
+    }
+
+    protected boolean promotionMove;
 
     protected final Coordinate from;
     protected final Coordinate to;

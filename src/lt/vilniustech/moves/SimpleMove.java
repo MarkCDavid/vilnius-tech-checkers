@@ -26,7 +26,8 @@ public class SimpleMove extends Move {
 
         applied = true;
 
-        board.putPiece(to, board.popPiece(from));
+        unpromotedPiece = board.popPiece(from);
+        board.putPiece(to, promotionMove ? unpromotedPiece.promote() : unpromotedPiece);
     }
 
     @Override
@@ -35,11 +36,13 @@ public class SimpleMove extends Move {
 
         applied = false;
 
-        board.putPiece(from, board.popPiece(to));
+        board.popPiece(to);
+        board.putPiece(from, unpromotedPiece);
     }
 
     @Override
     public Move finalizeMove(Board board, MoveHistorySupport history, FinalizationArguments argumentType) {
+        promotionMove = argumentType.isPromote();
         return this;
     }
 
