@@ -2,7 +2,7 @@ package lt.vilniustech.moves.finalization;
 
 import lt.vilniustech.Board;
 import lt.vilniustech.manager.AvailableMovesBuilder;
-import lt.vilniustech.manager.MoveHistorySupport;
+import lt.vilniustech.moves.MoveHistory;
 import lt.vilniustech.moves.base.CaptureMove;
 import lt.vilniustech.moves.base.Move;
 import lt.vilniustech.rulesets.CaptureConstraints;
@@ -12,9 +12,11 @@ import lt.vilniustech.utils.TemporaryAddHistory;
 import lt.vilniustech.utils.TemporaryMove;
 import lt.vilniustech.utils.TemporaryPromotion;
 
+import java.util.List;
+
 public class FinalizationArgumentsBuilder {
 
-    public FinalizationArgumentsBuilder(Board board, CheckersRuleset ruleset, MoveHistorySupport history) {
+    public FinalizationArgumentsBuilder(Board board, CheckersRuleset ruleset, MoveHistory history) {
         this.board = board;
         this.ruleset = ruleset;
         this.history = history;
@@ -70,11 +72,12 @@ public class FinalizationArgumentsBuilder {
     private boolean captureMovesUnavailable(Move move) {
         CaptureConstraints constraints = ruleset.getCaptureConstraints(board, history, move);
         constraints.setMultiCapture(true);
-        return constraints.filterMoves(movesBuilder.buildAvailableMoves(board.getPiece(move.getTo()))).stream().noneMatch(m -> m instanceof CaptureMove);
+        List<Move> availableMoves = movesBuilder.buildAvailableMoves(board.getPiece(move.getTo()));
+        return constraints.filterMoves(availableMoves).stream().noneMatch(m -> m instanceof CaptureMove);
     }
 
     private final Board board;
     private final CheckersRuleset ruleset;
-    private final MoveHistorySupport history;
+    private final MoveHistory history;
     private final AvailableMovesBuilder movesBuilder;
 }

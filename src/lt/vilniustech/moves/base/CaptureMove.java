@@ -19,6 +19,10 @@ public abstract class CaptureMove extends Move {
         return true;
     }
 
+    public Piece getCapturedPiece() {
+        return capturedPiece;
+    }
+
     public Coordinate getOver() {
         return over;
     }
@@ -51,5 +55,7 @@ public abstract class CaptureMove extends Move {
         return String.format("%s --%s-> %s", from, over, to);
     }
 
+    protected Piece capturedPiece;
     protected final Coordinate over;
+
 }

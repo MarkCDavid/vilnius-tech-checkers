@@ -3,7 +3,7 @@ package lt.vilniustech.moves;
 import lt.vilniustech.Board;
 import lt.vilniustech.Coordinate;
 import lt.vilniustech.Direction;
-import lt.vilniustech.manager.MoveHistorySupport;
+import lt.vilniustech.Piece;
 import lt.vilniustech.moves.base.CaptureMove;
 import lt.vilniustech.moves.base.Move;
 import lt.vilniustech.moves.finalization.FinalizationArguments;
@@ -19,13 +19,24 @@ public class NonImmediateCaptureMove extends CaptureMove {
     }
 
     @Override
+    public boolean hasUncaptured() {
+        return true;
+    }
+
+    @Override
     public void apply(Board board) {
         if(isApplied()) return;
 
         applied = true;
 
+        capturedPiece = board.getPiece(over);
         unpromotedPiece = board.popPiece(from);
         board.putPiece(to, promotionMove ? unpromotedPiece.promote() : unpromotedPiece);
+    }
+
+    @Override
+    public Piece getCapturedPiece() {
+        return capturedPiece;
     }
 
     @Override
@@ -39,12 +50,14 @@ public class NonImmediateCaptureMove extends CaptureMove {
     }
 
     @Override
-    public Move finalizeMove(Board board, MoveHistorySupport support, FinalizationArguments arguments) {
+    public Move finalizeMove(Board board, MoveHistory history, FinalizationArguments arguments) {
         if (!arguments.isSwitchSide()) {
             promotionMove = arguments.isPromote();
             return this;
         }
 
-        return new NonImmediateFinalCaptureMove(from, over, to, support.getMoveHistory(), arguments.isPromote());
+        return new NonImmediateFinalCaptureMove(from, over, to, history, arguments.isPromote());
     }
+
+
 }

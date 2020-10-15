@@ -1,7 +1,6 @@
 package lt.vilniustech.moves;
 
 import lt.vilniustech.*;
-import lt.vilniustech.manager.MoveHistorySupport;
 import lt.vilniustech.moves.base.Move;
 import lt.vilniustech.moves.finalization.FinalizationArguments;
 
@@ -17,6 +16,11 @@ public class SimpleMove extends Move {
 
     @Override
     public boolean isCapture() {
+        return false;
+    }
+
+    @Override
+    public boolean hasUncaptured() {
         return false;
     }
 
@@ -41,7 +45,7 @@ public class SimpleMove extends Move {
     }
 
     @Override
-    public Move finalizeMove(Board board, MoveHistorySupport history, FinalizationArguments argumentType) {
+    public Move finalizeMove(Board board, MoveHistory history, FinalizationArguments argumentType) {
         promotionMove = argumentType.isPromote();
         return this;
     }

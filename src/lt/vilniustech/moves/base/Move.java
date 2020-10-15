@@ -3,7 +3,7 @@ package lt.vilniustech.moves.base;
 import lt.vilniustech.Board;
 import lt.vilniustech.Coordinate;
 import lt.vilniustech.Piece;
-import lt.vilniustech.manager.MoveHistorySupport;
+import lt.vilniustech.moves.MoveHistory;
 import lt.vilniustech.moves.finalization.FinalizationArguments;
 
 public abstract class Move {
@@ -38,10 +38,11 @@ public abstract class Move {
     }
 
     public abstract boolean isCapture();
+    public abstract boolean hasUncaptured();
     public abstract void apply(Board board);
     public abstract void revert(Board board);
 
-    public abstract Move finalizeMove(Board board, MoveHistorySupport support, FinalizationArguments argumentType);
+    public abstract Move finalizeMove(Board board, MoveHistory history, FinalizationArguments argumentType);
 
     protected boolean applied;
 

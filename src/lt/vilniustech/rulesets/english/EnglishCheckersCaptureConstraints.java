@@ -1,7 +1,7 @@
 package lt.vilniustech.rulesets.english;
 
 import lt.vilniustech.Board;
-import lt.vilniustech.manager.MoveHistorySupport;
+import lt.vilniustech.moves.MoveHistory;
 import lt.vilniustech.moves.base.Move;
 import lt.vilniustech.rulesets.CaptureConstraints;
 import lt.vilniustech.rulesets.Filters;
@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 public class EnglishCheckersCaptureConstraints implements CaptureConstraints {
 
-    public EnglishCheckersCaptureConstraints(Board board, MoveHistorySupport support, Move move) {
+    public EnglishCheckersCaptureConstraints(Board board, MoveHistory history, Move move) {
         this.move = move;
     }
 

@@ -1,8 +1,10 @@
 package lt.vilniustech.rulesets.english;
 
 import lt.vilniustech.*;
-import lt.vilniustech.manager.MoveHistorySupport;
+import lt.vilniustech.moves.MoveHistory;
 import lt.vilniustech.moves.base.Move;
+import lt.vilniustech.moves.factory.MoveFactory;
+import lt.vilniustech.moves.factory.NonImmediateMoveFactory;
 import lt.vilniustech.rulesets.CaptureConstraints;
 import lt.vilniustech.rulesets.CheckersRuleset;
 import lt.vilniustech.side.Side;
@@ -23,8 +25,8 @@ public class EnglishCheckers implements CheckersRuleset {
     }
 
     @Override
-    public boolean isCaptureImmediate() {
-        return false;
+    public MoveFactory getMoveFactory() {
+        return new NonImmediateMoveFactory();
     }
 
     @Override
@@ -90,7 +92,7 @@ public class EnglishCheckers implements CheckersRuleset {
     }
 
     @Override
-    public CaptureConstraints getCaptureConstraints(Board board, MoveHistorySupport history, Move move) {
+    public CaptureConstraints getCaptureConstraints(Board board, MoveHistory history, Move move) {
         return new EnglishCheckersCaptureConstraints(board, history, move);
     }
 }

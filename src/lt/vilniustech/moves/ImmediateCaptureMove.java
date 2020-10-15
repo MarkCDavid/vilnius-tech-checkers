@@ -4,7 +4,6 @@ import lt.vilniustech.Board;
 import lt.vilniustech.Coordinate;
 import lt.vilniustech.Direction;
 import lt.vilniustech.Piece;
-import lt.vilniustech.manager.MoveHistorySupport;
 import lt.vilniustech.moves.base.CaptureMove;
 import lt.vilniustech.moves.base.Move;
 import lt.vilniustech.moves.finalization.FinalizationArguments;
@@ -17,6 +16,11 @@ public class ImmediateCaptureMove extends CaptureMove {
 
     public ImmediateCaptureMove(Coordinate from, Direction direction, int moveSize, int jumpSize) {
         super(from, direction, moveSize, jumpSize);
+    }
+
+    @Override
+    public boolean hasUncaptured() {
+        return false;
     }
 
     @Override
@@ -56,7 +60,7 @@ public class ImmediateCaptureMove extends CaptureMove {
 
 
     @Override
-    public Move finalizeMove(Board board, MoveHistorySupport history, FinalizationArguments argumentType) {
+    public Move finalizeMove(Board board, MoveHistory history, FinalizationArguments argumentType) {
         promotionMove = argumentType.isPromote();
         return this;
     }

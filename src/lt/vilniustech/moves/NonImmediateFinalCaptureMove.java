@@ -3,7 +3,6 @@ package lt.vilniustech.moves;
 import lt.vilniustech.Board;
 import lt.vilniustech.Coordinate;
 import lt.vilniustech.Piece;
-import lt.vilniustech.manager.MoveHistorySupport;
 import lt.vilniustech.moves.base.CaptureMove;
 import lt.vilniustech.moves.base.Move;
 import lt.vilniustech.moves.finalization.FinalizationArguments;
@@ -14,22 +13,25 @@ import java.util.List;
 
 public class NonImmediateFinalCaptureMove extends CaptureMove {
 
-    public NonImmediateFinalCaptureMove(Coordinate from, Coordinate over, Coordinate to, List<Move> captureMoves, boolean promote) {
+    public NonImmediateFinalCaptureMove(Coordinate from, Coordinate over, Coordinate to, MoveHistory history, boolean promote) {
         super(from, over, to);
 
         this.captureMoves = new ArrayList<>();
 
-        for(int i = captureMoves.size() - 1; i >= 0; i--) {
-            Move captureMove = captureMoves.get(i);
-            if(!(captureMove instanceof NonImmediateCaptureMove))
+        for(Move previousMove : history.backwards()) {
+            if(!previousMove.hasUncaptured())
                 break;
 
-            this.captureMoves.add((CaptureMove)captureMove);
+            this.captureMoves.add((CaptureMove)previousMove);
         }
 
         this.promotionMove = promote;
-
         this.capturedPieces = new HashMap<>();
+    }
+
+    @Override
+    public boolean hasUncaptured() {
+        return false;
     }
 
     @Override
@@ -40,6 +42,8 @@ public class NonImmediateFinalCaptureMove extends CaptureMove {
         if(overPiece == null) return;
 
         applied = true;
+
+        capturedPiece = board.getPiece(over);
 
         for(CaptureMove captureMove: captureMoves) {
             capturedPieces.put(captureMove, board.popPiece(captureMove.getOver()));
@@ -71,7 +75,7 @@ public class NonImmediateFinalCaptureMove extends CaptureMove {
     }
 
     @Override
-    public Move finalizeMove(Board board, MoveHistorySupport support, FinalizationArguments argumentType) {
+    public Move finalizeMove(Board board, MoveHistory history, FinalizationArguments argumentType) {
         promotionMove = argumentType.isPromote();
         return this;
     }

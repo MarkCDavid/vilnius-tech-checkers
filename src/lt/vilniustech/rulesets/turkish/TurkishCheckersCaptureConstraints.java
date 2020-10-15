@@ -1,7 +1,7 @@
 package lt.vilniustech.rulesets.turkish;
 
 import lt.vilniustech.Board;
-import lt.vilniustech.manager.MoveHistorySupport;
+import lt.vilniustech.moves.MoveHistory;
 import lt.vilniustech.moves.base.Move;
 import lt.vilniustech.rulesets.CaptureConstraints;
 import lt.vilniustech.rulesets.CheckersRuleset;
@@ -9,14 +9,13 @@ import lt.vilniustech.rulesets.Filters;
 import lt.vilniustech.rulesets.capturechain.CaptureChain;
 import lt.vilniustech.rulesets.capturechain.CaptureChainBuilder;
 import lt.vilniustech.rulesets.capturechainmodules.*;
-import lt.vilniustech.side.Side;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class TurkishCheckersCaptureConstraints implements CaptureConstraints {
 
-    public TurkishCheckersCaptureConstraints(Board board, CheckersRuleset ruleset, MoveHistorySupport support, Move move) {
+    public TurkishCheckersCaptureConstraints(Board board, CheckersRuleset ruleset, MoveHistory support, Move move) {
         this.board = board;
 
         this.captureChainBuilder = new CaptureChainBuilder(ruleset, support);

@@ -1,8 +1,10 @@
 package lt.vilniustech.rulesets.turkish;
 
 import lt.vilniustech.*;
-import lt.vilniustech.manager.MoveHistorySupport;
+import lt.vilniustech.moves.MoveHistory;
 import lt.vilniustech.moves.base.Move;
+import lt.vilniustech.moves.factory.ImmediateMoveFactory;
+import lt.vilniustech.moves.factory.MoveFactory;
 import lt.vilniustech.rulesets.CaptureConstraints;
 import lt.vilniustech.rulesets.CheckersRuleset;
 import lt.vilniustech.side.Side;
@@ -23,8 +25,8 @@ public class TurkishCheckers implements CheckersRuleset {
     }
 
     @Override
-    public boolean isCaptureImmediate() {
-        return true;
+    public MoveFactory getMoveFactory() {
+        return new ImmediateMoveFactory();
     }
 
     @Override
@@ -96,7 +98,7 @@ public class TurkishCheckers implements CheckersRuleset {
 
 
     @Override
-    public CaptureConstraints getCaptureConstraints(Board board, MoveHistorySupport support, Move move) {
-        return new TurkishCheckersCaptureConstraints(board, this, support, move);
+    public CaptureConstraints getCaptureConstraints(Board board, MoveHistory history, Move move) {
+        return new TurkishCheckersCaptureConstraints(board, this, history, move);
     }
 }

@@ -6,6 +6,7 @@ import lt.vilniustech.events.EventSubscriber;
 import lt.vilniustech.events.SubscriptionSupport;
 import lt.vilniustech.manager.events.GameFinishedEvent;
 import lt.vilniustech.manager.events.MoveProcessedEvent;
+import lt.vilniustech.moves.MoveHistory;
 import lt.vilniustech.moves.base.Move;
 import lt.vilniustech.moves.finalization.FinalizationArguments;
 import lt.vilniustech.moves.finalization.FinalizationArgumentsBuilder;
@@ -16,7 +17,7 @@ import lt.vilniustech.side.Side;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameManager implements CheckersManager, MoveHistorySupport, SubscriptionSupport {
+public class GameManager implements CheckersManager, SubscriptionSupport {
 
     public boolean isFinished() {
         return winner != null;
@@ -48,9 +49,9 @@ public class GameManager implements CheckersManager, MoveHistorySupport, Subscri
 
         this.eventEmitter = new EventEmitter();
         this.currentSide = this.playingSides.get(0);
-        this.moveHistory = new ArrayList<>();
-        this.availableMovesBuilder = new AvailableMovesBuilder(board, ruleset, this);
-        this.finalizationArgumentsBuilder = new FinalizationArgumentsBuilder(board, ruleset, this);
+        this.moveHistory = new MoveHistory();
+        this.availableMovesBuilder = new AvailableMovesBuilder(board, ruleset, moveHistory  );
+        this.finalizationArgumentsBuilder = new FinalizationArgumentsBuilder(board, ruleset, moveHistory);
 
         this.availableMoves = availableMovesBuilder.buildAvailableMoves(currentSide);
     }
@@ -63,7 +64,7 @@ public class GameManager implements CheckersManager, MoveHistorySupport, Subscri
             return; // Illegitimate Move Exception ??
 
         FinalizationArguments arguments = finalizationArgumentsBuilder.build(getCurrentSide(), move);
-        move = move.finalizeMove(board, this, arguments);
+        move = move.finalizeMove(board, moveHistory, arguments);
         move.apply(board);
         moveHistory.add(move);
         eventEmitter.emit(new MoveProcessedEvent(move));
@@ -74,7 +75,7 @@ public class GameManager implements CheckersManager, MoveHistorySupport, Subscri
         if(arguments.isSwitchSide())
             currentSide = currentSide.getNext();
 
-        CaptureConstraints captureConstraints = ruleset.getCaptureConstraints(board, this, move);
+        CaptureConstraints captureConstraints = ruleset.getCaptureConstraints(board, moveHistory, move);
         captureConstraints.setMultiCapture(!arguments.isSwitchSide());
         availableMoves = captureConstraints.filterMoves(availableMovesBuilder.buildAvailableMoves(currentSide));
 
@@ -118,13 +119,7 @@ public class GameManager implements CheckersManager, MoveHistorySupport, Subscri
 
     private final List<Side> playingSides;
     private final EventEmitter eventEmitter;
-
-    @Override
-    public List<Move> getMoveHistory() {
-        return moveHistory;
-    }
-
-    private final List<Move> moveHistory;
+    private final MoveHistory moveHistory;
 
     private Side currentSide;
     private List<Move> availableMoves;

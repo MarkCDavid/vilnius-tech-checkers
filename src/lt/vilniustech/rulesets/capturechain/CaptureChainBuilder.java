@@ -3,7 +3,7 @@ package lt.vilniustech.rulesets.capturechain;
 import lt.vilniustech.Board;
 import lt.vilniustech.Coordinate;
 import lt.vilniustech.manager.AvailableMovesBuilder;
-import lt.vilniustech.manager.MoveHistorySupport;
+import lt.vilniustech.moves.MoveHistory;
 import lt.vilniustech.moves.base.CaptureMove;
 import lt.vilniustech.moves.base.Move;
 import lt.vilniustech.rulesets.CheckersRuleset;
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class CaptureChainBuilder
 {
-    public CaptureChainBuilder(CheckersRuleset ruleset, MoveHistorySupport history) {
+    public CaptureChainBuilder(CheckersRuleset ruleset, MoveHistory history) {
         this.modules = new HashMap<>();
         this.ruleset = ruleset;
         this.history = history;
@@ -70,5 +70,5 @@ public class CaptureChainBuilder
 
     private final Map<UUID, CaptureChainModule> modules;
     private final CheckersRuleset ruleset;
-    private final MoveHistorySupport history;
+    private final MoveHistory history;
 }
