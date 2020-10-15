@@ -7,7 +7,7 @@ import lt.vilniustech.guicheckers.events.MoveHistoryChangeListener;
 import lt.vilniustech.manager.GameManager;
 import lt.vilniustech.manager.events.GameFinishedEvent;
 import lt.vilniustech.manager.events.MoveProcessedEvent;
-import lt.vilniustech.moves.base.AbstractMove;
+import lt.vilniustech.moves.base.Move;
 import lt.vilniustech.rulesets.CheckersRuleset;
 import lt.vilniustech.side.Side;
 
@@ -67,7 +67,7 @@ public class GameForm {
         return coordinate -> {
             if (!moveHistory.isPresent()) return;
 
-            List<AbstractMove> selectedMoves = gamePanel.getSelectedMoves();
+            List<Move> selectedMoves = gamePanel.getSelectedMoves();
             boolean selectMove = selectedMoves.size() == 0;
 
             if (selectMove) {
@@ -85,8 +85,8 @@ public class GameForm {
         gamePanel.setSelectedMoves(gamePanel.getGameManager().getAvailableMoves(from));
     }
 
-    private void executeMove(GamePanel gamePanel, Coordinate to, List<AbstractMove> selectedMoves) {
-        for (AbstractMove availableMove : selectedMoves) {
+    private void executeMove(GamePanel gamePanel, Coordinate to, List<Move> selectedMoves) {
+        for (Move availableMove : selectedMoves) {
 
             if (!availableMove.getTo().equals(to))
                 continue;
@@ -134,7 +134,7 @@ public class GameForm {
     }
 
 
-    private JList<AbstractMove> moveHistory;
+    private JList<Move> moveHistory;
     private MoveHistory getMoveHistory() {
         return (MoveHistory) this.moveHistory;
     }

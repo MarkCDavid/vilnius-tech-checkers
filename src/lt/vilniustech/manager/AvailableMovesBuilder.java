@@ -65,7 +65,7 @@ public class AvailableMovesBuilder {
                     List<Move> history = moveHistorySupport.getMoveHistory();
                     for(int i = history.size() - 1; i >= 0; i--) {
                         Move previousMove = history.get(i);
-                        if(!valid || !previousMove.isCapture()) {
+                        if(!valid || !previousMove.isCapture() || previousMove instanceof NonImmediateFinalCaptureMove) {
                             break;
                         }
 

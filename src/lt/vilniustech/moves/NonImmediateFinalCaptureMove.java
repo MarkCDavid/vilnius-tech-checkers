@@ -3,20 +3,30 @@ package lt.vilniustech.moves;
 import lt.vilniustech.Board;
 import lt.vilniustech.Coordinate;
 import lt.vilniustech.Piece;
-import lt.vilniustech.moves.base.AbstractCaptureMove;
+import lt.vilniustech.manager.MoveHistorySupport;
 import lt.vilniustech.moves.base.CaptureMove;
 import lt.vilniustech.moves.base.Move;
-import lt.vilniustech.moves.finalization.EmptyFinalizationArguments;
-import lt.vilniustech.moves.finalization.Finajv;
+import lt.vilniustech.moves.finalization.FinalizationArguments;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class NonImmediateFinalCaptureMove extends AbstractCaptureMove<NonImmediateFinalCaptureMove, EmptyFinalizationArguments> {
+public class NonImmediateFinalCaptureMove extends CaptureMove {
 
-    public NonImmediateFinalCaptureMove(Coordinate from, Coordinate over, Coordinate to, List<CaptureMove> captureMoves) {
+    public NonImmediateFinalCaptureMove(Coordinate from, Coordinate over, Coordinate to, List<Move> captureMoves) {
         super(from, over, to);
-        this.captureMoves = captureMoves;
+
+        this.captureMoves = new ArrayList<>();
+
+        for(int i = captureMoves.size() - 1; i >= 0; i--) {
+            Move captureMove = captureMoves.get(i);
+            if(!(captureMove instanceof NonImmediateCaptureMove))
+                break;
+
+            this.captureMoves.add((CaptureMove)captureMove);
+        }
+
         this.capturedPieces = new HashMap<>();
     }
 
@@ -33,9 +43,7 @@ public class NonImmediateFinalCaptureMove extends AbstractCaptureMove<NonImmedia
             capturedPieces.put(captureMove, board.popPiece(captureMove.getOver()));
         }
 
-        if(board.getPiece(from) == null)
-            return;
-
+        capturedPieces.put(this, board.popPiece(this.getOver()));
         board.putPiece(to, board.popPiece(from));
     }
 
@@ -52,21 +60,12 @@ public class NonImmediateFinalCaptureMove extends AbstractCaptureMove<NonImmedia
             board.putPiece(captureMove.getOver(), capturedPieces.get(captureMove));
         }
 
+        board.putPiece(this.getOver(), capturedPieces.get(this));
         board.putPiece(from, board.popPiece(to));
     }
 
     @Override
-    public NonImmediateFinalCaptureMove finalize(Board board, EmptyFinalizationArguments argumentType) {
-        return this;
-    }
-
-    @Override
-    public NonImmediateFinalCaptureMove finalizeMove(Board board) {
-        return finalize(board, new EmptyFinalizationArguments());
-    }
-
-    @Override
-    public Move finalizeMove(Board board, Finajv finajv) {
+    public Move finalizeMove(Board board, MoveHistorySupport support, FinalizationArguments argumentType) {
         return this;
     }
 

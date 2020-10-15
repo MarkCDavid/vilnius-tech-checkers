@@ -1,7 +1,7 @@
 package lt.vilniustech.guicheckers.events;
 
-import lt.vilniustech.moves.base.AbstractMove;
+import lt.vilniustech.moves.base.Move;
 
 public interface MoveHistoryChangeListener {
-    void onSelectedChange(AbstractMove move);
+    void onSelectedChange(Move move);
 }

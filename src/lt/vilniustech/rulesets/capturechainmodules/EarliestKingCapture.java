@@ -1,7 +1,7 @@
 package lt.vilniustech.rulesets.capturechainmodules;
 
 import lt.vilniustech.Board;
-import lt.vilniustech.moves.base.AbstractCaptureMove;
+import lt.vilniustech.moves.base.CaptureMove;
 import lt.vilniustech.rulesets.capturechain.CaptureChain;
 import lt.vilniustech.rulesets.capturechain.CaptureChainModule;
 
@@ -73,7 +73,7 @@ public class EarliestKingCapture implements CaptureChainModule {
     }
 
     @Override
-    public CaptureChainModule initialize(Board board, AbstractCaptureMove move) {
+    public CaptureChainModule initialize(Board board, CaptureMove move) {
         return new EarliestKingCapture(board.getPiece(move.getOver()).isKing());
     }
 

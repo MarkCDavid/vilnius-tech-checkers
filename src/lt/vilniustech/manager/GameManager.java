@@ -6,11 +6,9 @@ import lt.vilniustech.events.EventSubscriber;
 import lt.vilniustech.events.SubscriptionSupport;
 import lt.vilniustech.manager.events.GameFinishedEvent;
 import lt.vilniustech.manager.events.MoveProcessedEvent;
-import lt.vilniustech.manager.state2.SimpleState;
-import lt.vilniustech.manager.state2.AbstractState;
-import lt.vilniustech.moves.base.AbstractMove;
 import lt.vilniustech.moves.base.Move;
 import lt.vilniustech.moves.finalization.FinalizationArguments;
+import lt.vilniustech.rulesets.CaptureConstraints;
 import lt.vilniustech.rulesets.CheckersRuleset;
 import lt.vilniustech.side.Side;
 
@@ -31,7 +29,7 @@ public class GameManager implements CheckersManager, MoveHistorySupport, Subscri
     }
 
     public Side getCurrentSide() {
-        return this.state.getCurrentSide();
+        return this.currentSide;
     }
 
     public Board getBoard() {
@@ -48,43 +46,54 @@ public class GameManager implements CheckersManager, MoveHistorySupport, Subscri
         }
 
         this.eventEmitter = new EventEmitter();
-        this.state = new SimpleState(board, ruleset, this.playingSides.get(0));
+        this.currentSide = this.playingSides.get(0);
         this.moveHistory = new ArrayList<>();
+        this.builder = new AvailableMovesBuilder(board, this, ruleset);
+        this.availableMoves = builder.buildAvailableMoves(currentSide);
     }
 
-    public void processMove(AbstractMove move) {
+    public void processMove(Move move) {
         if(isFinished())
             throw new GameFinishedException(getWinner());
 
         if(!legitimateMove(move))
             return; // Illegitimate Move Exception ??
 
-        FinalizationArguments arguments = FinalizationArguments.build(board, getCurrentSide(), move);
-        move = move.finalizeMove(board, arguments);
+        FinalizationArguments arguments = FinalizationArguments.build(board, ruleset, this, getCurrentSide(), move);
+        move = move.finalizeMove(board, this, arguments);
         move.apply(board);
-
         moveHistory.add(move);
         eventEmitter.emit(new MoveProcessedEvent(move));
 
-        winner = ruleset.processWinningConditions(board, state.getAvailableMoves(), playingSides, state.getCurrentSide());
+        if(arguments.isPromote())
+            board.putPiece(move.getTo(), board.popPiece(move.getTo()).promote());
+
+        if(arguments.isSwitchSide())
+            currentSide = currentSide.getNext();
+
+        CaptureConstraints captureConstraints = ruleset.getCaptureConstraints(board, this, move);
+        captureConstraints.setMultiCapture(!arguments.isSwitchSide());
+        availableMoves = captureConstraints.filterMoves(builder.buildAvailableMoves(currentSide));
+
+        winner = ruleset.processWinningConditions(board, availableMoves, playingSides, currentSide);
         if (isFinished())
             eventEmitter.emit(new GameFinishedEvent(winner));
     }
 
-    private boolean legitimateMove(AbstractMove move) {
-        return state.getAvailableMoves().contains(move);
+    private boolean legitimateMove(Move move) {
+        return availableMoves.contains(move);
     }
 
 
-    public List<AbstractMove> getAvailableMoves() {
-        return isFinished() ? new ArrayList<>() : new ArrayList<>(state.getAvailableMoves());
+    public List<Move> getAvailableMoves() {
+        return isFinished() ? new ArrayList<>() : new ArrayList<>(availableMoves);
     }
 
-    public List<AbstractMove> getAvailableMoves(Coordinate from) {
-        List<AbstractMove> moves = new ArrayList<>();
+    public List<Move> getAvailableMoves(Coordinate from) {
+        List<Move> moves = new ArrayList<>();
         if(isFinished()) return moves;
 
-        for(AbstractMove move: state.getAvailableMoves()) {
+        for(Move move: getAvailableMoves()) {
             if(move.getFrom().equals(from))
                 moves.add(move);
         }
@@ -104,8 +113,6 @@ public class GameManager implements CheckersManager, MoveHistorySupport, Subscri
         eventEmitter.subscribe(subscriber);
     }
 
-    private AbstractState state;
-
     private final List<Side> playingSides;
     private final EventEmitter eventEmitter;
 
@@ -115,4 +122,9 @@ public class GameManager implements CheckersManager, MoveHistorySupport, Subscri
     }
 
     private final List<Move> moveHistory;
+
+    private Side currentSide;
+    private List<Move> availableMoves;
+
+    private final AvailableMovesBuilder builder;
 }

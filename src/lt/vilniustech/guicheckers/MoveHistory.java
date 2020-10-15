@@ -3,12 +3,12 @@ package lt.vilniustech.guicheckers;
 import lt.vilniustech.Board;
 import lt.vilniustech.guicheckers.events.MoveHistoryChangeListener;
 import lt.vilniustech.guicheckers.events.MoveHistoryChangeSupport;
-import lt.vilniustech.moves.base.AbstractMove;
+import lt.vilniustech.moves.base.Move;
 
 import javax.swing.*;
 import java.util.List;
 
-public class MoveHistory extends JList<AbstractMove> {
+public class MoveHistory extends JList<Move> {
 
     public MoveHistory(Board board) {
         this.movesModel = new DefaultListModel<>();
@@ -45,14 +45,14 @@ public class MoveHistory extends JList<AbstractMove> {
         }
     }
 
-    public void addMoves(List<AbstractMove> moves) {
+    public void addMoves(List<Move> moves) {
         movesModel.clear();
         movesModel.addAll(moves);
         setPreviousSelection(moves.get(moves.size() - 1));
         moveHistoryChangeSupport.emit(getSelectedValue());
     }
 
-    public void addMove(AbstractMove move) {
+    public void addMove(Move move) {
         movesModel.addElement(move);
         setPreviousSelection(move);
         moveHistoryChangeSupport.emit(getSelectedValue());
@@ -66,20 +66,20 @@ public class MoveHistory extends JList<AbstractMove> {
         moveHistoryChangeSupport.removeHistoryChangeListener(listener);
     }
 
-    private AbstractMove getPreviousSelection() {
+    private Move getPreviousSelection() {
         if(previousSelection == null)
             previousSelection = movesModel.get(movesModel.getSize() - 1);
         return previousSelection;
     }
 
-    private void setPreviousSelection(AbstractMove previousSelection) {
+    private void setPreviousSelection(Move previousSelection) {
         this.previousSelection = previousSelection;
         setSelectedIndex(movesModel.indexOf(previousSelection));
     }
 
-    private AbstractMove previousSelection;
+    private Move previousSelection;
 
-    private final DefaultListModel<AbstractMove> movesModel;
+    private final DefaultListModel<Move> movesModel;
     private final MoveHistoryChangeSupport moveHistoryChangeSupport;
 
 }

@@ -1,20 +1,20 @@
 package lt.vilniustech.manager.events;
 
 import lt.vilniustech.events.Event;
-import lt.vilniustech.moves.base.AbstractMove;
+import lt.vilniustech.moves.base.Move;
 
 public class MoveProcessedEvent implements Event {
 
-    public AbstractMove getMove() {
+    public Move getMove() {
         return move;
     }
 
-    public MoveProcessedEvent(AbstractMove move)
+    public MoveProcessedEvent(Move move)
     {
         this.move = move;
     }
 
-    private final AbstractMove move;
+    private final Move move;
 
 
 }

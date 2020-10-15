@@ -4,13 +4,12 @@ import lt.vilniustech.Board;
 import lt.vilniustech.Coordinate;
 import lt.vilniustech.Direction;
 import lt.vilniustech.Piece;
-import lt.vilniustech.moves.base.AbstractCaptureMove;
+import lt.vilniustech.manager.MoveHistorySupport;
+import lt.vilniustech.moves.base.CaptureMove;
 import lt.vilniustech.moves.base.Move;
-import lt.vilniustech.moves.finalization.EmptyFinalizationArguments;
-import lt.vilniustech.moves.finalization.Finajv;
 import lt.vilniustech.moves.finalization.FinalizationArguments;
 
-public class ImmediateCaptureMove extends AbstractCaptureMove<ImmediateCaptureMove, EmptyFinalizationArguments> {
+public class ImmediateCaptureMove extends CaptureMove {
 
     public ImmediateCaptureMove(Coordinate from, Coordinate over, Coordinate to) {
         super(from, over, to);
@@ -53,24 +52,12 @@ public class ImmediateCaptureMove extends AbstractCaptureMove<ImmediateCaptureMo
         board.movePiece(to, from);
     }
 
-    @Override
-    public ImmediateCaptureMove finalizeMove(Board board, FinalizationArguments argumentType) {
-        return null;
-    }
 
-    public ImmediateCaptureMove finalizeMove(Board board, EmptyFinalizationArguments argumentType) {
+    @Override
+    public Move finalizeMove(Board board, MoveHistorySupport history, FinalizationArguments argumentType) {
         return this;
     }
 
-    @Override
-    public ImmediateCaptureMove finalizeMove(Board board) {
-        return finalizeMove(board, new EmptyFinalizationArguments());
-    }
-
-    @Override
-    public Move finalizeMove(Board board, Finajv finajv) {
-        return this;
-    }
 
     private Piece capturedPiece;
 }

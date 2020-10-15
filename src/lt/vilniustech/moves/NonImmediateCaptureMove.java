@@ -3,15 +3,12 @@ package lt.vilniustech.moves;
 import lt.vilniustech.Board;
 import lt.vilniustech.Coordinate;
 import lt.vilniustech.Direction;
-import lt.vilniustech.moves.base.AbstractCaptureMove;
+import lt.vilniustech.manager.MoveHistorySupport;
+import lt.vilniustech.moves.base.CaptureMove;
 import lt.vilniustech.moves.base.Move;
-import lt.vilniustech.moves.finalization.Finajv;
 import lt.vilniustech.moves.finalization.FinalizationArguments;
-import lt.vilniustech.moves.finalization.NonImmediateFinalizationArguments;
 
-import java.util.ArrayList;
-
-public class NonImmediateCaptureMove extends AbstractCaptureMove<NonImmediateFinalCaptureMove, NonImmediateFinalizationArguments> {
+public class NonImmediateCaptureMove extends CaptureMove {
 
     public NonImmediateCaptureMove(Coordinate from, Coordinate over, Coordinate to) {
         super(from, over, to);
@@ -40,23 +37,10 @@ public class NonImmediateCaptureMove extends AbstractCaptureMove<NonImmediateFin
     }
 
     @Override
-    public NonImmediateFinalCaptureMove finalizeMove(Board board, FinalizationArguments argumentType) {
-        return null;
-    }
+    public Move finalizeMove(Board board, MoveHistorySupport support, FinalizationArguments arguments) {
+        if(!arguments.isSwitchSide())
+            return this;
 
-    public NonImmediateFinalCaptureMove finalizeMove(Board board, NonImmediateFinalizationArguments arguments) {
-        NonImmediateFinalCaptureMove finalized = new NonImmediateFinalCaptureMove(from, over, to, arguments.getCaptureMoves());
-        finalized.apply(board);
-        return finalized;
-    }
-
-    @Override
-    public Move finalizeMove(Board board, Finajv finajv) {
-        return this;
-    }
-
-    @Override
-    public NonImmediateFinalCaptureMove finalizeMove(Board board) {
-        return finalizeMove(board, new NonImmediateFinalizationArguments(new ArrayList<>()));
+        return new NonImmediateFinalCaptureMove(from, over, to, support.getMoveHistory());
     }
 }

@@ -1,21 +1,21 @@
 package lt.vilniustech.rulesets;
 
 import lt.vilniustech.Coordinate;
-import lt.vilniustech.moves.base.AbstractCaptureMove;
-import lt.vilniustech.moves.base.AbstractMove;
+import lt.vilniustech.moves.base.CaptureMove;
+import lt.vilniustech.moves.base.Move;
 
 import java.util.function.Predicate;
 
 public class Filters {
 
-    public static Predicate<AbstractMove> captureMoves() {
-        return move -> move instanceof AbstractCaptureMove;
+    public static Predicate<Move> captureMoves() {
+        return move -> move instanceof CaptureMove;
     }
-    public static Predicate<AbstractMove> movesFromDestination(AbstractMove currentMove) {
+    public static Predicate<Move> movesFromDestination(Move currentMove) {
         return move -> move.getFrom().equals(currentMove.getTo());
     }
 
-    public static Predicate<AbstractMove> moveFromTo(Coordinate from, Coordinate to) {
+    public static Predicate<Move> moveFromTo(Coordinate from, Coordinate to) {
         return move -> move.getFrom().equals(from) && move.getTo().equals(to);
     }
 

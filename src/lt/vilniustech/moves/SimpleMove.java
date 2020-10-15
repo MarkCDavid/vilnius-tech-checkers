@@ -1,13 +1,11 @@
 package lt.vilniustech.moves;
 
 import lt.vilniustech.*;
-import lt.vilniustech.moves.base.AbstractMove;
+import lt.vilniustech.manager.MoveHistorySupport;
 import lt.vilniustech.moves.base.Move;
-import lt.vilniustech.moves.finalization.EmptyFinalizationArguments;
-import lt.vilniustech.moves.finalization.Finajv;
 import lt.vilniustech.moves.finalization.FinalizationArguments;
 
-public class SimpleMove extends AbstractMove<SimpleMove, EmptyFinalizationArguments> {
+public class SimpleMove extends Move {
 
     public SimpleMove(Coordinate from, Coordinate to) {
         super(from, to);
@@ -41,27 +39,7 @@ public class SimpleMove extends AbstractMove<SimpleMove, EmptyFinalizationArgume
     }
 
     @Override
-    public Move finalizeMove(Board board, FinalizationArguments argumentType) {
-        return null;
-    }
-
-    @Override
-    public Move finalizeMove(Board board, SimpleMove argumentType) {
-        return null;
-    }
-
-    @Override
-    public SimpleMove finalize(Board board, EmptyFinalizationArguments argumentType) {
-        return this;
-    }
-
-    @Override
-    public SimpleMove finalizeMove(Board board) {
-        return finalize(board, new EmptyFinalizationArguments());
-    }
-
-    @Override
-    public Move finalizeMove(Board board, Finajv finajv) {
+    public Move finalizeMove(Board board, MoveHistorySupport history, FinalizationArguments argumentType) {
         return this;
     }
 

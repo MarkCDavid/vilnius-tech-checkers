@@ -1,7 +1,7 @@
 package lt.vilniustech.manager;
 
 import lt.vilniustech.Board;
-import lt.vilniustech.moves.base.AbstractMove;
+import lt.vilniustech.moves.base.Move;
 import lt.vilniustech.side.Side;
 
 import java.util.List;
@@ -9,8 +9,8 @@ import java.util.List;
 public interface CheckersManager {
 
     boolean isFinished();
-    void processMove(AbstractMove move);
-    List<AbstractMove> getAvailableMoves();
+    void processMove(Move move);
+    List<Move> getAvailableMoves();
     Board getBoard();
     Side getCurrentSide();
     Side getWinner();
