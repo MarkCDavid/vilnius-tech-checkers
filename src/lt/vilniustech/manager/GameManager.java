@@ -8,6 +8,7 @@ import lt.vilniustech.manager.events.GameFinishedEvent;
 import lt.vilniustech.manager.events.MoveProcessedEvent;
 import lt.vilniustech.moves.base.Move;
 import lt.vilniustech.moves.finalization.FinalizationArguments;
+import lt.vilniustech.moves.finalization.FinalizationArgumentsBuilder;
 import lt.vilniustech.rulesets.CaptureConstraints;
 import lt.vilniustech.rulesets.CheckersRuleset;
 import lt.vilniustech.side.Side;
@@ -48,8 +49,10 @@ public class GameManager implements CheckersManager, MoveHistorySupport, Subscri
         this.eventEmitter = new EventEmitter();
         this.currentSide = this.playingSides.get(0);
         this.moveHistory = new ArrayList<>();
-        this.builder = new AvailableMovesBuilder(board, this, ruleset);
-        this.availableMoves = builder.buildAvailableMoves(currentSide);
+        this.availableMovesBuilder = new AvailableMovesBuilder(board, ruleset, this);
+        this.finalizationArgumentsBuilder = new FinalizationArgumentsBuilder(board, ruleset, this);
+
+        this.availableMoves = availableMovesBuilder.buildAvailableMoves(currentSide);
     }
 
     public void processMove(Move move) {
@@ -59,7 +62,7 @@ public class GameManager implements CheckersManager, MoveHistorySupport, Subscri
         if(!legitimateMove(move))
             return; // Illegitimate Move Exception ??
 
-        FinalizationArguments arguments = FinalizationArguments.build(board, ruleset, this, getCurrentSide(), move);
+        FinalizationArguments arguments = finalizationArgumentsBuilder.build(getCurrentSide(), move);
         move = move.finalizeMove(board, this, arguments);
         move.apply(board);
         moveHistory.add(move);
@@ -73,7 +76,7 @@ public class GameManager implements CheckersManager, MoveHistorySupport, Subscri
 
         CaptureConstraints captureConstraints = ruleset.getCaptureConstraints(board, this, move);
         captureConstraints.setMultiCapture(!arguments.isSwitchSide());
-        availableMoves = captureConstraints.filterMoves(builder.buildAvailableMoves(currentSide));
+        availableMoves = captureConstraints.filterMoves(availableMovesBuilder.buildAvailableMoves(currentSide));
 
         winner = ruleset.processWinningConditions(board, availableMoves, playingSides, currentSide);
         if (isFinished())
@@ -126,5 +129,6 @@ public class GameManager implements CheckersManager, MoveHistorySupport, Subscri
     private Side currentSide;
     private List<Move> availableMoves;
 
-    private final AvailableMovesBuilder builder;
+    private final AvailableMovesBuilder availableMovesBuilder;
+    private final FinalizationArgumentsBuilder finalizationArgumentsBuilder;
 }

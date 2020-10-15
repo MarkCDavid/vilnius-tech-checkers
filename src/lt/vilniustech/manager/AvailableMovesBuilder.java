@@ -97,7 +97,7 @@ public class AvailableMovesBuilder {
         return moves;
     }
 
-    public AvailableMovesBuilder(Board board, MoveHistorySupport moveHistorySupport, CheckersRuleset ruleset) {
+    public AvailableMovesBuilder(Board board, CheckersRuleset ruleset, MoveHistorySupport moveHistorySupport) {
         this.board = board;
         this.ruleset = ruleset;
         this.moveHistorySupport = moveHistorySupport;
