@@ -1,6 +1,6 @@
-package lt.vilniustech.utils;
+package lt.vilniustech.utils.temporary;
 
-import lt.vilniustech.moves.MoveHistory;
+import lt.vilniustech.manager.MoveHistory;
 import lt.vilniustech.moves.base.Move;
 
 public class TemporaryAddHistory implements AutoCloseable {

@@ -3,6 +3,7 @@ package lt.vilniustech.moves;
 import lt.vilniustech.Board;
 import lt.vilniustech.Coordinate;
 import lt.vilniustech.Piece;
+import lt.vilniustech.manager.MoveHistory;
 import lt.vilniustech.moves.base.CaptureMove;
 import lt.vilniustech.moves.base.Move;
 import lt.vilniustech.moves.finalization.FinalizationArguments;

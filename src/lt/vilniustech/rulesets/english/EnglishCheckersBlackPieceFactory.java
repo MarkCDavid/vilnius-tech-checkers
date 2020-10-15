@@ -10,11 +10,11 @@ public class EnglishCheckersBlackPieceFactory extends PieceFactory {
 
     @Override
     public Piece producePiece() {
-        return new Piece(side, pieceDirections, 1, kingProducer());
+        return new Piece(side, pieceDirections, 1, 1, kingProducer());
     }
 
     private Supplier<Piece> kingProducer() {
-        return () -> new Piece(side, kingDirections, 1);
+        return () -> new Piece(side, kingDirections, 1, 1);
     }
 
     private static final Direction[] pieceDirections = new Direction[]{

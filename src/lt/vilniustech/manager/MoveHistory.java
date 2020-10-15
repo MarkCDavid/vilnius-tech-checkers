@@ -1,7 +1,7 @@
-package lt.vilniustech.moves;
+package lt.vilniustech.manager;
 
 import lt.vilniustech.moves.base.Move;
-import lt.vilniustech.utils.BackwardsIterator;
+import lt.vilniustech.utils.iterator.BackwardsIterator;
 
 import java.util.*;
 

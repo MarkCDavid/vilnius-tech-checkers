@@ -1,6 +1,10 @@
 package lt.vilniustech.moves.base;
 
 import lt.vilniustech.*;
+import lt.vilniustech.utils.iterator.DirectionalIterable;
+import lt.vilniustech.utils.iterator.DirectionalIterator;
+
+import java.util.Iterator;
 
 public abstract class CaptureMove extends Move {
 
@@ -34,6 +38,9 @@ public abstract class CaptureMove extends Move {
 
         boolean validCoordinates = board.validCoordinate(this.over);
         if(!validCoordinates)
+            return false;
+
+        if (obstacles(board, from, over) || obstacles(board, over, to))
             return false;
 
         Piece overPiece = board.getPiece(this.over);

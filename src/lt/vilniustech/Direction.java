@@ -24,6 +24,16 @@ public class Direction {
         this.isCaptureOnly = isCaptureOnly;
     }
 
+    public Direction(Coordinate from, Coordinate to) {
+        this.x = bound(to.getColumn() - from.getColumn());
+        this.y = bound(to.getRow() - from.getRow());
+        this.isCaptureOnly = false;
+    }
+
+    public Direction inverse() {
+        return new Direction(-x, -y, isCaptureOnly);
+    }
+
     @SuppressWarnings("ManualMinMaxCalculation")
     private int bound(int value) {
         if(value < -1) return -1;

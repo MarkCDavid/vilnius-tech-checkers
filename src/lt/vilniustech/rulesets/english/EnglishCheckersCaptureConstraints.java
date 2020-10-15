@@ -1,7 +1,7 @@
 package lt.vilniustech.rulesets.english;
 
 import lt.vilniustech.Board;
-import lt.vilniustech.moves.MoveHistory;
+import lt.vilniustech.manager.MoveHistory;
 import lt.vilniustech.moves.base.Move;
 import lt.vilniustech.rulesets.CaptureConstraints;
 import lt.vilniustech.rulesets.Filters;

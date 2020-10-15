@@ -6,16 +6,19 @@ import java.util.function.Supplier;
 
 public class Piece {
 
-    public Piece(Side side, Direction[] directions, int moveSize, Supplier<Piece> promoter){
+    public Piece(Side side, Direction[] directions, int moveSize, int jumpSize, Supplier<Piece> promoter){
         this.side = side;
         this.directions = directions;
+
         this.moveSize = moveSize;
+        this.jumpSize = jumpSize;
+
         this.promotionLevel = 0;
         this.promoter = promoter;
     }
 
-    public Piece(Side side, Direction[] directions, int moveSize){
-        this(side, directions, moveSize, null);
+    public Piece(Side side, Direction[] directions, int moveSize, int jumpSize){
+        this(side, directions, moveSize, jumpSize, null);
     }
 
     public Direction[] getDirections() {
@@ -30,6 +33,10 @@ public class Piece {
 
     public int getMoveSize() {
         return moveSize;
+    }
+
+    public int getJumpSize() {
+        return jumpSize;
     }
 
     public Coordinate getCoordinate() {
@@ -53,5 +60,7 @@ public class Piece {
     private final Side side;
     private final Direction[] directions;
     private final int moveSize;
+
+    private final int jumpSize;
     private int promotionLevel;
 }

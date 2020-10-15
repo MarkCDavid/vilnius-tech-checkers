@@ -1,4 +1,4 @@
-package lt.vilniustech.utils;
+package lt.vilniustech.utils.iterator;
 
 import java.util.Iterator;
 import java.util.List;

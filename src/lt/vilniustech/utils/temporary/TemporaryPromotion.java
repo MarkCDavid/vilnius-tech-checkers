@@ -1,4 +1,4 @@
-package lt.vilniustech.utils;
+package lt.vilniustech.utils.temporary;
 
 import lt.vilniustech.Board;
 import lt.vilniustech.Piece;

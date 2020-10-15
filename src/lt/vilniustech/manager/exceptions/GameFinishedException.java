@@ -1,4 +1,4 @@
-package lt.vilniustech.manager;
+package lt.vilniustech.manager.exceptions;
 
 import lt.vilniustech.side.Side;
 

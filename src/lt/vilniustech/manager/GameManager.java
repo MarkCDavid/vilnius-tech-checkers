@@ -6,7 +6,7 @@ import lt.vilniustech.events.EventSubscriber;
 import lt.vilniustech.events.SubscriptionSupport;
 import lt.vilniustech.manager.events.GameFinishedEvent;
 import lt.vilniustech.manager.events.MoveProcessedEvent;
-import lt.vilniustech.moves.MoveHistory;
+import lt.vilniustech.manager.exceptions.GameFinishedException;
 import lt.vilniustech.moves.base.Move;
 import lt.vilniustech.moves.finalization.FinalizationArguments;
 import lt.vilniustech.moves.finalization.FinalizationArgumentsBuilder;

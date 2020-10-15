@@ -8,7 +8,7 @@ import lt.vilniustech.guicheckers.sprite.ColorRectSprite;
 import lt.vilniustech.guicheckers.sprite.ImageSprite;
 import lt.vilniustech.guicheckers.sprite.Sprite;
 import lt.vilniustech.moves.base.Move;
-import lt.vilniustech.utils.CoordinateIterator;
+import lt.vilniustech.utils.iterator.CoordinateIterator;
 
 import java.awt.*;
 import java.util.List;

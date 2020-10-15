@@ -2,7 +2,7 @@ package lt.vilniustech.rulesets;
 
 import lt.vilniustech.Board;
 import lt.vilniustech.Piece;
-import lt.vilniustech.moves.MoveHistory;
+import lt.vilniustech.manager.MoveHistory;
 import lt.vilniustech.moves.base.Move;
 import lt.vilniustech.moves.factory.MoveFactory;
 import lt.vilniustech.side.*;
@@ -20,9 +20,6 @@ CheckersRuleset {
     boolean isPromotionHalting();
 
     boolean canJumpOverPieceOnlyOnce();
-
-
-    boolean canJumpAnywhereBeyond(Piece piece);
 
     List<Side> getPlayingSides();
     Side processWinningConditions(Board board, List<Move> availableMoves, List<Side> playingSides, Side current);

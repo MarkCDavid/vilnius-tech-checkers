@@ -14,11 +14,11 @@ public class TurkishCheckersWhitePieceFactory extends PieceFactory {
 
     @Override
     public Piece producePiece() {
-        return new Piece(side, pieceDirections, 1, kingProducer());
+        return new Piece(side, pieceDirections, 1, 1, kingProducer());
     }
 
     private Supplier<Piece> kingProducer() {
-        return () -> new Piece(side, kingDirections, boardSize);
+        return () -> new Piece(side, kingDirections, boardSize, boardSize);
     }
 
     private static final Direction[] pieceDirections = new Direction[]{

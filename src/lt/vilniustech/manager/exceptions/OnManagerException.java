@@ -1,4 +1,4 @@
-package lt.vilniustech.manager;
+package lt.vilniustech.manager.exceptions;
 
 public interface OnManagerException {
     void apply(Exception exception);

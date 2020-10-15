@@ -3,7 +3,7 @@ package lt.vilniustech.side;
 import lt.vilniustech.Board;
 import lt.vilniustech.Coordinate;
 import lt.vilniustech.Piece;
-import lt.vilniustech.utils.CoordinateIterator;
+import lt.vilniustech.utils.iterator.CoordinateIterator;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -3,8 +3,9 @@ package lt.vilniustech.moves.base;
 import lt.vilniustech.Board;
 import lt.vilniustech.Coordinate;
 import lt.vilniustech.Piece;
-import lt.vilniustech.moves.MoveHistory;
+import lt.vilniustech.manager.MoveHistory;
 import lt.vilniustech.moves.finalization.FinalizationArguments;
+import lt.vilniustech.utils.iterator.DirectionalIterable;
 
 public abstract class Move {
 
@@ -35,6 +36,14 @@ public abstract class Move {
             return false;
 
         return true;
+    }
+
+    protected boolean obstacles(Board board, Coordinate begin, Coordinate end) {
+        for(Coordinate coordinate: new DirectionalIterable(begin, end, false)) {
+            if(board.getPiece(coordinate) != null)
+                return true;
+        }
+        return false;
     }
 
     public abstract boolean isCapture();

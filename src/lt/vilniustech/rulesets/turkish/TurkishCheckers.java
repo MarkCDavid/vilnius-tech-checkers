@@ -1,7 +1,7 @@
 package lt.vilniustech.rulesets.turkish;
 
 import lt.vilniustech.*;
-import lt.vilniustech.moves.MoveHistory;
+import lt.vilniustech.manager.MoveHistory;
 import lt.vilniustech.moves.base.Move;
 import lt.vilniustech.moves.factory.ImmediateMoveFactory;
 import lt.vilniustech.moves.factory.MoveFactory;
@@ -43,12 +43,6 @@ public class TurkishCheckers implements CheckersRuleset {
     public boolean canJumpOverPieceOnlyOnce() {
         return true;
     }
-
-    @Override
-    public boolean canJumpAnywhereBeyond(Piece piece) {
-        return false;
-    }
-
 
     @Override
     public Side processWinningConditions(Board board, List<Move> availableMoves, List<Side> playingSides, Side current) {

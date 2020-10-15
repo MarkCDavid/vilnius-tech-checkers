@@ -1,7 +1,7 @@
 package lt.vilniustech.rulesets.english;
 
 import lt.vilniustech.*;
-import lt.vilniustech.moves.MoveHistory;
+import lt.vilniustech.manager.MoveHistory;
 import lt.vilniustech.moves.base.Move;
 import lt.vilniustech.moves.factory.MoveFactory;
 import lt.vilniustech.moves.factory.NonImmediateMoveFactory;
@@ -42,11 +42,6 @@ public class EnglishCheckers implements CheckersRuleset {
     @Override
     public boolean canJumpOverPieceOnlyOnce() {
         return true;
-    }
-
-    @Override
-    public boolean canJumpAnywhereBeyond(Piece piece) {
-        return false;
     }
 
     @Override

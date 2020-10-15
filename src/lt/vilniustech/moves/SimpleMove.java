@@ -1,6 +1,7 @@
 package lt.vilniustech.moves;
 
 import lt.vilniustech.*;
+import lt.vilniustech.manager.MoveHistory;
 import lt.vilniustech.moves.base.Move;
 import lt.vilniustech.moves.finalization.FinalizationArguments;
 
@@ -22,6 +23,17 @@ public class SimpleMove extends Move {
     @Override
     public boolean hasUncaptured() {
         return false;
+    }
+
+    @Override
+    public boolean isValid(Board board) {
+        if(!super.isValid(board))
+            return false;
+
+        if (obstacles(board, from, to))
+            return false;
+
+        return true;
     }
 
     @Override

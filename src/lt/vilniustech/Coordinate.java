@@ -1,6 +1,6 @@
 package lt.vilniustech;
 
-import lt.vilniustech.manager.IllegalCoordinateException;
+import lt.vilniustech.manager.exceptions.IllegalCoordinateException;
 
 import java.util.Objects;
 import java.util.regex.Matcher;

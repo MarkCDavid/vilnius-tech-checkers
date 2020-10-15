@@ -3,7 +3,7 @@ package lt.vilniustech.rulesets.capturechain;
 import lt.vilniustech.Board;
 import lt.vilniustech.Coordinate;
 import lt.vilniustech.manager.AvailableMovesBuilder;
-import lt.vilniustech.moves.MoveHistory;
+import lt.vilniustech.manager.MoveHistory;
 import lt.vilniustech.moves.base.CaptureMove;
 import lt.vilniustech.moves.base.Move;
 import lt.vilniustech.rulesets.CheckersRuleset;

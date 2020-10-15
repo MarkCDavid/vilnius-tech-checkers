@@ -1,8 +1,9 @@
-package lt.vilniustech.utils;
+package lt.vilniustech.utils.iterator;
 
 import lt.vilniustech.Coordinate;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class CoordinateIterator implements Iterable<Coordinate>, Iterator<Coordinate> {
 
@@ -19,6 +20,9 @@ public class CoordinateIterator implements Iterable<Coordinate>, Iterator<Coordi
 
     @Override
     public Coordinate next() {
+        if(!hasNext())
+            throw new NoSuchElementException();
+
         Coordinate coordinate = new Coordinate(row, column);
         nextState();
         return coordinate;
@@ -38,6 +42,6 @@ public class CoordinateIterator implements Iterable<Coordinate>, Iterator<Coordi
 
     @Override
     public Iterator<Coordinate> iterator() {
-        return this;
+        return new CoordinateIterator(size);
     }
 }

@@ -2,15 +2,15 @@ package lt.vilniustech.moves.finalization;
 
 import lt.vilniustech.Board;
 import lt.vilniustech.manager.AvailableMovesBuilder;
-import lt.vilniustech.moves.MoveHistory;
+import lt.vilniustech.manager.MoveHistory;
 import lt.vilniustech.moves.base.CaptureMove;
 import lt.vilniustech.moves.base.Move;
 import lt.vilniustech.rulesets.CaptureConstraints;
 import lt.vilniustech.rulesets.CheckersRuleset;
 import lt.vilniustech.side.Side;
-import lt.vilniustech.utils.TemporaryAddHistory;
-import lt.vilniustech.utils.TemporaryMove;
-import lt.vilniustech.utils.TemporaryPromotion;
+import lt.vilniustech.utils.temporary.TemporaryAddHistory;
+import lt.vilniustech.utils.temporary.TemporaryMove;
+import lt.vilniustech.utils.temporary.TemporaryPromotion;
 
 import java.util.List;
 

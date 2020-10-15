@@ -4,7 +4,7 @@
 //import lt.vilniustech.Side;
 //import lt.vilniustech.manager.CheckersManager;
 //import lt.vilniustech.manager.GameManager;
-//import lt.vilniustech.manager.IllegalCoordinateException;
+//import lt.vilniustech.manager.exceptions.IllegalCoordinateException;
 //import lt.vilniustech.moves.Move;
 //import lt.vilniustech.rulesets.international.InternationalCheckers;
 //import lt.vilniustech.rulesets.turkish.TurkishCheckers;

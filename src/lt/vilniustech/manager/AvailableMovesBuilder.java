@@ -1,7 +1,6 @@
 package lt.vilniustech.manager;
 
 import lt.vilniustech.*;
-import lt.vilniustech.moves.*;
 import lt.vilniustech.moves.base.CaptureMove;
 import lt.vilniustech.moves.base.Move;
 import lt.vilniustech.moves.factory.MoveFactory;
@@ -49,17 +48,8 @@ public class AvailableMovesBuilder {
     private List<Move> buildCaptureMovesToDirection(Piece piece, Direction direction) {
         List<Move> moves = new ArrayList<>();
         for(int moveSize = 1; moveSize <= piece.getMoveSize(); moveSize++) {
-
-            if(obstacles(piece, direction, moveSize))
-                break;
-
-            for(int jumpSize = 1; jumpSize <= board.getBoardSize() - moveSize; jumpSize++) {
-
-                if(jumpSize > 1 && !ruleset.canJumpAnywhereBeyond(piece))
-                    break;
-
+            for(int jumpSize = 1; jumpSize <= piece.getJumpSize() - moveSize + 1; jumpSize++) {
                 var captureMove = moveFactory.createCaptureMove(piece.getCoordinate(), direction, moveSize, jumpSize);
-
                 if (captureMove.isValid(board) && !jumpOverJumped(captureMove)) {
                     moves.add(captureMove);
                 }
@@ -72,9 +62,8 @@ public class AvailableMovesBuilder {
         List<Move> moves = new ArrayList<>();
         for(int moveSize = 1; moveSize <= piece.getMoveSize(); moveSize++) {
             Move simple = moveFactory.createMove(piece.getCoordinate(), direction, moveSize);
-            if (!simple.isValid(board))
-                break;
-            moves.add(simple);
+            if (simple.isValid(board))
+                moves.add(simple);
         }
         return moves;
     }
@@ -91,13 +80,6 @@ public class AvailableMovesBuilder {
         return false;
     }
 
-    private boolean obstacles(Piece piece, Direction direction, int moveSize) {
-        if(moveSize <= 1)
-            return false;
-
-        var obstacle = piece.getCoordinate().move(direction, moveSize - 1);
-        return board.getPiece(obstacle) != null;
-    }
 
     public AvailableMovesBuilder(Board board, CheckersRuleset ruleset, MoveHistory moveHistory) {
         this.board = board;
