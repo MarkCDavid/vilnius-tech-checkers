@@ -27,14 +27,13 @@ public class GameForm {
 
         exitButton.addActionListener(e -> MainMenuForm.show(parent));
         drawButton.addActionListener(e -> {
-            Side winner = new Side("DRAW", null, null, null);
-            getGamePanel().getGameManager().setWinner(winner);
-            processGameEnd(winner);
+            getGamePanel().getGameManager().setWinner(Side.DRAW);
+            processGameEnd(Side.DRAW);
         });
         surrenderButton.addActionListener(e -> {
             Side winner = getGamePanel().getGameManager().getCurrentSide().getNext();
-            getGamePanel().getGameManager().setWinner(winner);
-            processGameEnd(winner);
+            getGamePanel().getGameManager().setWinner(winner.toString());
+            processGameEnd(winner.toString());
         });
     }
 
@@ -68,7 +67,7 @@ public class GameForm {
             if (!moveHistory.isPresent()) return;
 
             List<Move> selectedMoves = gamePanel.getSelectedMoves();
-            boolean selectMove = selectedMoves.size() == 0;
+            boolean selectMove = selectedMoves.isEmpty();
 
             if (selectMove) {
                 selectMove(gamePanel, coordinate);
@@ -76,7 +75,7 @@ public class GameForm {
                 executeMove(gamePanel, coordinate, selectedMoves);
             }
             gamePanel.repaint();
-            statusBar.setCurrentSide(gamePanel.getGameManager().getCurrentSide());
+            statusBar.setCurrentSide(gamePanel.getGameManager().getCurrentSide().toString());
             moveHistory.setSelectedIndex(moveHistory.getMaxSelectionIndex());
         };
     }
@@ -110,7 +109,7 @@ public class GameForm {
     }
 
     private boolean gameFinished = false;
-    private void processGameEnd(Side winner) {
+    private void processGameEnd(String winner) {
         gameFinished = true;
         getStatusBar().setWinner(winner);
         getGamePanel().repaint();

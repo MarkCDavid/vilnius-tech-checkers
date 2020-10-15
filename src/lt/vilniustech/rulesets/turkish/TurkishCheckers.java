@@ -40,26 +40,21 @@ public class TurkishCheckers implements CheckersRuleset {
     }
 
     @Override
-    public boolean canJumpOverPieceOnlyOnce() {
-        return true;
-    }
-
-    @Override
-    public Side processWinningConditions(Board board, List<Move> availableMoves, List<Side> playingSides, Side current) {
+    public String processWinningConditions(Board board, List<Move> availableMoves, List<Side> playingSides, Side current) {
 
         List<Piece> pieces0 = playingSides.get(0).getPieces(board);
         List<Piece> pieces1 = playingSides.get(1).getPieces(board);
 
-        if(pieces0.isEmpty()) return playingSides.get(1);
-        if(pieces1.isEmpty()) return playingSides.get(0);
+        if(pieces0.isEmpty()) return playingSides.get(1).toString();
+        if(pieces1.isEmpty()) return playingSides.get(0).toString();
 
         if(pieces0.size() == 1 && pieces1.size() == 1) {
-            if(pieces0.get(0).isKing() && !pieces1.get(0).isKing()) return playingSides.get(0);
-            if(pieces1.get(0).isKing() && !pieces0.get(0).isKing()) return playingSides.get(1);
+            if(pieces0.get(0).isKing() && !pieces1.get(0).isKing()) return playingSides.get(0).toString();
+            if(pieces1.get(0).isKing() && !pieces0.get(0).isKing()) return playingSides.get(1).toString();
         }
 
         if(availableMoves.isEmpty())
-            return new Side("DRAW", null, null, null);
+            return "Draw";
         return null;
     }
 

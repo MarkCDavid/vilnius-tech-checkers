@@ -40,11 +40,6 @@ public class EnglishCheckers implements CheckersRuleset {
     }
 
     @Override
-    public boolean canJumpOverPieceOnlyOnce() {
-        return true;
-    }
-
-    @Override
     public List<Side> getPlayingSides() {
         List<Side> sides = new ArrayList<>();
 
@@ -72,16 +67,15 @@ public class EnglishCheckers implements CheckersRuleset {
     }
 
     @Override
-    public Side processWinningConditions(Board board, List<Move> availableMoves, List<Side> playingSides, Side current) {
+    public String processWinningConditions(Board board, List<Move> availableMoves, List<Side> playingSides, Side current) {
         for(int i = 0; i < playingSides.size(); i++) {
             Side playingSide = playingSides.get(i % playingSides.size());
             if(playingSide.getPieces(board).isEmpty())
-                return playingSides.get((i + 1) % playingSides.size());
+                return playingSides.get((i + 1) % playingSides.size()).toString();
         }
 
-        // TODO: FIX
         if(availableMoves.isEmpty())
-            return new Side("DRAW", null, null, null);
+            return "Draw";
 
         return null;
     }

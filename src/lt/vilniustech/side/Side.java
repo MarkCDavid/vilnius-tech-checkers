@@ -10,15 +10,14 @@ import java.util.List;
 
 public class Side {
 
+    public static final String DRAW = "Draw";
+
     public Side(String name, CoordinateValidator piecePositionValidator, CoordinateValidator kingRowValidator, PieceFactory pieceFactory) {
         this.name = name;
         this.piecePositionValidator = piecePositionValidator;
         this.kingRowValidator = kingRowValidator;
         this.pieceFactory = pieceFactory;
-
-        // TODO: FIX
-        if(this.pieceFactory != null)
-            this.pieceFactory.setSide(this);
+        this.pieceFactory.setSide(this);
     }
 
     public Side getNext() {

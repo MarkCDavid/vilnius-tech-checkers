@@ -5,16 +5,16 @@ import lt.vilniustech.side.Side;
 
 public class GameFinishedEvent implements Event {
 
-    public Side getWinner() {
+    public String getWinner() {
         return winner;
     }
 
-    public GameFinishedEvent(Side winner)
+    public GameFinishedEvent(String winner)
     {
         this.winner = winner;
     }
 
-    private final Side winner;
+    private final String winner;
 
 
 }

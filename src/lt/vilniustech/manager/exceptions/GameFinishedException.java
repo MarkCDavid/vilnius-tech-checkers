@@ -1,16 +1,14 @@
 package lt.vilniustech.manager.exceptions;
 
-import lt.vilniustech.side.Side;
-
 public class GameFinishedException  extends RuntimeException {
-    public GameFinishedException(Side winner) {
+    public GameFinishedException(String winner) {
         super(String.format("The game is finished with '%s' as a winner!", winner));
         this.winner = winner;
     }
 
-    private final Side winner;
+    private final String winner;
 
-    public Side getWinner() {
+    public String getWinner() {
         return winner;
     }
 }

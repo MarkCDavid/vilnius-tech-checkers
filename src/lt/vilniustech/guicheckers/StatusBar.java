@@ -6,26 +6,26 @@ import javax.swing.*;
 
 public class StatusBar extends JLabel {
 
-    public void setCurrentSide(Side side) {
+    public void setCurrentSide(String side) {
         currentSide = side;
         updateStatusBarText();
     }
 
-    public void setWinner(Side side) {
+    public void setWinner(String  side) {
         winner = side;
         updateStatusBarText();
     }
     private void updateFinalStatusBarText() {
-        setText(String.format("The winner is: %s", winner.toString()));
+        setText(String.format("The winner is: %s", winner));
         repaint();
     }
 
     private void updateStatusBarText() {
         if(winner != null) updateFinalStatusBarText();
-        else setText(String.format("Current move: %s", currentSide.toString()));
+        else setText(String.format("Current move: %s", currentSide));
         repaint();
     }
 
-    private Side currentSide;
-    private Side winner = null;
+    private String currentSide;
+    private String winner = null;
 }

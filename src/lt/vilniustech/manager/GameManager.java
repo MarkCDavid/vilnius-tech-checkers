@@ -24,10 +24,10 @@ public class GameManager implements SubscriptionSupport {
         return winner != null;
     }
 
-    public Side getWinner() {
+    public String getWinner() {
         return winner;
     }
-    public void setWinner(Side winner) {
+    public void setWinner(String winner) {
         this.winner = winner;
     }
 
@@ -107,7 +107,7 @@ public class GameManager implements SubscriptionSupport {
         return moves;
     }
 
-    private Side winner = null;
+    private String winner = null;
 
     private final CheckersRuleset ruleset;
     private final Board board;
