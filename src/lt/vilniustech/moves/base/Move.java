@@ -48,8 +48,14 @@ public abstract class Move {
 
     public abstract boolean isCapture();
     public abstract boolean hasUncaptured();
-    public abstract void apply(Board board);
-    public abstract void revert(Board board);
+    public void apply(Board board) {
+        if(isApplied()) return;
+        applied = true;
+    }
+    public void revert(Board board) {
+        if(!isApplied()) return;
+        applied = false;
+    }
 
     public abstract Move finalizeMove(Board board, MoveHistory history, FinalizationArguments argumentType);
 

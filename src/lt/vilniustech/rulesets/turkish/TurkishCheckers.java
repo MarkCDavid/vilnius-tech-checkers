@@ -71,14 +71,14 @@ public class TurkishCheckers implements CheckersRuleset {
                 "White",
                 new TurkishCheckersPieceSetter(getBoardSize() - 3, getBoardSize() - 2),
                 new TurkishCheckersKingRow(0),
-                new TurkishCheckersWhitePieceFactory(getBoardSize())
+                new TurkishCheckersPieceFactory(TurkishCheckersPieceFactory.WHITE_PIECE_DIRECTIONS, TurkishCheckersPieceFactory.WHITE_KING_DIRECTIONS, getBoardSize())
         );
 
         Side blackSide = new Side(
                 "Black",
                 new TurkishCheckersPieceSetter(1, 2),
                 new TurkishCheckersKingRow(getBoardSize() - 1),
-                new TurkishCheckersBlackPieceFactory(getBoardSize())
+                new TurkishCheckersPieceFactory(TurkishCheckersPieceFactory.BLACK_PIECE_DIRECTIONS, TurkishCheckersPieceFactory.BLACK_KING_DIRECTIONS, getBoardSize())
         );
 
         whiteSide.setNext(blackSide);

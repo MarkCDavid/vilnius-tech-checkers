@@ -58,6 +58,32 @@ public abstract class CaptureMove extends Move {
     }
 
     @Override
+    public void apply(Board board) {
+        if(isApplied())
+            return;
+
+        Piece overPiece = board.getPiece(this.over);
+
+        if(overPiece == null)
+            return;
+
+        applied = true;
+    }
+
+    @Override
+    public void revert(Board board) {
+        if(!isApplied())
+            return;
+
+        Piece overPiece = board.getPiece(this.over);
+
+        if(overPiece != null)
+            return;
+
+        applied = false;
+    }
+
+    @Override
     public String toString() {
         return String.format("%s --%s-> %s", from, over, to);
     }

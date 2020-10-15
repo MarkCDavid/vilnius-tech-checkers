@@ -26,9 +26,7 @@ public class NonImmediateCaptureMove extends CaptureMove {
 
     @Override
     public void apply(Board board) {
-        if(isApplied()) return;
-
-        applied = true;
+        super.apply(board);
 
         capturedPiece = board.getPiece(over);
         unpromotedPiece = board.popPiece(from);
@@ -42,9 +40,7 @@ public class NonImmediateCaptureMove extends CaptureMove {
 
     @Override
     public void revert(Board board) {
-        if(!isApplied()) return;
-
-        applied = false;
+        super.revert(board);
 
         board.popPiece(to);
         board.putPiece(from, unpromotedPiece);

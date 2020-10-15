@@ -52,16 +52,15 @@ public class EnglishCheckers implements CheckersRuleset {
                 "White",
                 new EnglishCheckersPieceSetter(getBoardSize() - 3, getBoardSize() - 1),
                 new EnglishCheckersKingRow(0),
-                new EnglishCheckersWhitePieceFactory()
+                new EnglishCheckersPieceFactory(EnglishCheckersPieceFactory.WHITE_PIECE_DIRECTIONS, EnglishCheckersPieceFactory.WHITE_KING_DIRECTIONS)
         );
 
         Side blackSide = new Side(
                 "Black",
                 new EnglishCheckersPieceSetter(0, 2),
                 new EnglishCheckersKingRow(getBoardSize() - 1),
-                new EnglishCheckersBlackPieceFactory()
+                new EnglishCheckersPieceFactory(EnglishCheckersPieceFactory.BLACK_PIECE_DIRECTIONS, EnglishCheckersPieceFactory.BLACK_KING_DIRECTIONS)
         );
-
 
         whiteSide.setNext(blackSide);
         blackSide.setNext(whiteSide);

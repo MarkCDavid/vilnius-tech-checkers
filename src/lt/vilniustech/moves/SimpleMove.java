@@ -38,9 +38,7 @@ public class SimpleMove extends Move {
 
     @Override
     public void apply(Board board) {
-        if(isApplied()) return;
-
-        applied = true;
+        super.apply(board);
 
         unpromotedPiece = board.popPiece(from);
         board.putPiece(to, promotionMove ? unpromotedPiece.promote() : unpromotedPiece);
@@ -48,9 +46,7 @@ public class SimpleMove extends Move {
 
     @Override
     public void revert(Board board) {
-        if(!isApplied()) return;
-
-        applied = false;
+        super.revert(board);
 
         board.popPiece(to);
         board.putPiece(from, unpromotedPiece);

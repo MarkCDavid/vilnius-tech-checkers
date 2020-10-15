@@ -26,15 +26,7 @@ public class ImmediateCaptureMove extends CaptureMove {
 
     @Override
     public void apply(Board board) {
-        if(isApplied())
-            return;
-
-        Piece overPiece = board.getPiece(this.over);
-
-        if(overPiece == null)
-            return;
-
-        applied = true;
+        super.apply(board);
 
         capturedPiece = board.popPiece(over);
         unpromotedPiece = board.popPiece(from);
@@ -43,15 +35,7 @@ public class ImmediateCaptureMove extends CaptureMove {
 
     @Override
     public void revert(Board board) {
-        if(!isApplied())
-            return;
-
-        Piece overPiece = board.getPiece(this.over);
-
-        if(overPiece != null)
-            return;
-
-        applied = false;
+        super.revert(board);
 
         board.putPiece(over, capturedPiece);
 
