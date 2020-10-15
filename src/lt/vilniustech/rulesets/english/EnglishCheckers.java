@@ -1,7 +1,7 @@
 package lt.vilniustech.rulesets.english;
 
 import lt.vilniustech.*;
-import lt.vilniustech.moves.Move;
+import lt.vilniustech.moves.base.AbstractMove;
 import lt.vilniustech.rulesets.CaptureConstraints;
 import lt.vilniustech.rulesets.CheckersRuleset;
 import lt.vilniustech.side.Side;
@@ -65,7 +65,7 @@ public class EnglishCheckers implements CheckersRuleset {
     }
 
     @Override
-    public Side processWinningConditions(Board board, List<Move> availableMoves, List<Side> playingSides, Side current) {
+    public Side processWinningConditions(Board board, List<AbstractMove> availableMoves, List<Side> playingSides, Side current) {
         for(int i = 0; i < playingSides.size(); i++) {
             Side playingSide = playingSides.get(i % playingSides.size());
             if(playingSide.getPieces(board).isEmpty())
@@ -79,7 +79,7 @@ public class EnglishCheckers implements CheckersRuleset {
     }
 
     @Override
-    public CaptureConstraints getCaptureConstraints(Board board, Move move) {
+    public CaptureConstraints getCaptureConstraints(Board board, AbstractMove move) {
         return new EnglishCheckersCaptureConstraints(board, move);
     }
 }

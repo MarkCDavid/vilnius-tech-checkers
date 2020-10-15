@@ -3,12 +3,16 @@ package lt.vilniustech.moves;
 import lt.vilniustech.Board;
 import lt.vilniustech.Coordinate;
 import lt.vilniustech.Piece;
+import lt.vilniustech.moves.base.AbstractCaptureMove;
+import lt.vilniustech.moves.base.CaptureMove;
+import lt.vilniustech.moves.base.Move;
 import lt.vilniustech.moves.finalization.EmptyFinalizationArguments;
+import lt.vilniustech.moves.finalization.Finajv;
 
 import java.util.HashMap;
 import java.util.List;
 
-public class NonImmediateFinalCaptureMove extends CaptureMove<NonImmediateFinalCaptureMove, EmptyFinalizationArguments> {
+public class NonImmediateFinalCaptureMove extends AbstractCaptureMove<NonImmediateFinalCaptureMove, EmptyFinalizationArguments> {
 
     public NonImmediateFinalCaptureMove(Coordinate from, Coordinate over, Coordinate to, List<CaptureMove> captureMoves) {
         super(from, over, to);
@@ -57,8 +61,13 @@ public class NonImmediateFinalCaptureMove extends CaptureMove<NonImmediateFinalC
     }
 
     @Override
-    public NonImmediateFinalCaptureMove finalize(Board board) {
+    public NonImmediateFinalCaptureMove finalizeMove(Board board) {
         return finalize(board, new EmptyFinalizationArguments());
+    }
+
+    @Override
+    public Move finalizeMove(Board board, Finajv finajv) {
+        return this;
     }
 
     private final List<CaptureMove> captureMoves;

@@ -2,15 +2,15 @@ package lt.vilniustech.manager.state2;
 
 import lt.vilniustech.Board;
 import lt.vilniustech.manager.AvailableMovesBuilder;
-import lt.vilniustech.moves.Move;
+import lt.vilniustech.moves.base.Move;
 import lt.vilniustech.rulesets.CheckersRuleset;
 import lt.vilniustech.side.Side;
 
 import java.util.List;
 
-public abstract class State {
+public abstract class AbstractState<T extends Move> {
 
-    protected State(Board board, CheckersRuleset ruleset, Side currentSide) {
+    protected AbstractState(Board board, CheckersRuleset ruleset, Side currentSide) {
         this.board = board;
         this.ruleset = ruleset;
         this.availableMovesBuilder = new AvailableMovesBuilder(board, ruleset);
@@ -29,11 +29,35 @@ public abstract class State {
         return processedMove;
     }
 
-    protected void promote(Move processedMove) {
+    protected void promote(T processedMove) {
         board.putPiece(processedMove.getTo(), board.popPiece(processedMove.getTo()).promote());
     }
 
-    public abstract State process(Move processedMove);
+    public AbstractState process(T processedMove) {
+
+
+
+        AbstractState state = processCore(processedMove);
+
+        boolean stateSwitch = state != this;
+
+
+
+        if(stateSwitch) {
+
+        }
+        else {
+
+        }
+
+        return state;
+    }
+
+    public abstract AbstractState processCore(T processedMove);
+
+    protected AbstractState switchTo(AbstractState state, T processedMove) {
+        return state.process(processedMove);
+    }
 
     protected List<Move> availableMoves;
 

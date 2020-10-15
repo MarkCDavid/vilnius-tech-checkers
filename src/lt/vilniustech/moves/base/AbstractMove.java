@@ -1,12 +1,12 @@
-package lt.vilniustech.moves;
+package lt.vilniustech.moves.base;
 
 import lt.vilniustech.Board;
 import lt.vilniustech.Coordinate;
 import lt.vilniustech.moves.finalization.FinalizationArguments;
 
-public abstract class Move<F, A extends FinalizationArguments> {
+public abstract class AbstractMove implements Move {
 
-    public Move(Coordinate from, Coordinate to) {
+    public AbstractMove(Coordinate from, Coordinate to) {
         this.from = from;
         this.to = to;
     }
@@ -39,8 +39,7 @@ public abstract class Move<F, A extends FinalizationArguments> {
     public abstract void apply(Board board);
     public abstract void revert(Board board);
 
-    public abstract F finalize(Board board, A argumentType);
-    public abstract F finalize(Board board);
+    public abstract Move finalizeMove(Board board, FinalizationArguments argumentType);
 
     protected boolean applied;
 

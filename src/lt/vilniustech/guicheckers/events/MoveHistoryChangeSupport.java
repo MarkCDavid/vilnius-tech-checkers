@@ -1,6 +1,6 @@
 package lt.vilniustech.guicheckers.events;
 
-import lt.vilniustech.moves.Move;
+import lt.vilniustech.moves.base.AbstractMove;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,7 @@ public class MoveHistoryChangeSupport  {
         cellClickListeners.remove(listener);
     }
 
-    public void emit(Move move) {
+    public void emit(AbstractMove move) {
         for(MoveHistoryChangeListener listener: cellClickListeners) {
             listener.onSelectedChange(move);
         }

@@ -1,6 +1,6 @@
 package lt.vilniustech.moves.finalization;
 
-import lt.vilniustech.moves.CaptureMove;
+import lt.vilniustech.moves.base.CaptureMove;
 
 import java.util.List;
 

@@ -1,14 +1,16 @@
 package lt.vilniustech.manager.state2;
 
 import lt.vilniustech.Board;
-import lt.vilniustech.moves.Move;
+import lt.vilniustech.moves.ImmediateCaptureMove;
+import lt.vilniustech.moves.NonImmediateCaptureMove;
+import lt.vilniustech.moves.base.Move;
 import lt.vilniustech.rulesets.CheckersRuleset;
 import lt.vilniustech.side.Side;
 
 import java.util.List;
 
 
-public class SimpleState extends State {
+public class SimpleState extends AbstractState {
 
     public SimpleState(Board board, CheckersRuleset ruleset, Side currentSide) {
         this(board, ruleset, currentSide, null);
@@ -20,9 +22,15 @@ public class SimpleState extends State {
     }
 
     @Override
-    public State process(Move processedMove) {
-        if(processedMove.isCapture())
-            return new CaptureState(board, ruleset, currentSide).process(processedMove);
+    public AbstractState process(Move processedMove) {
+        if (processedMove.isCapture()) {
+            if (ruleset.isCaptureImmediate()) {
+                return new ImmediateCaptureState(board, ruleset, currentSide).process((ImmediateCaptureMove) processedMove);
+            }
+            else{
+                return new NonImmediateCaptureState(board, ruleset, currentSide).process((NonImmediateCaptureMove) processedMove);
+            }
+        }
 
         if (currentSide.isKingRow(processedMove.getTo())) {
             promote(processedMove);
@@ -30,7 +38,7 @@ public class SimpleState extends State {
 
         currentSide = currentSide.getNext();
         this.availableMoves = buildAvailableMoves(processedMove);
-        this.processedMove = (Move)processedMove.finalize(board);
+        this.processedMove = processedMove.finalizeMove(board);
         return this;
     }
 

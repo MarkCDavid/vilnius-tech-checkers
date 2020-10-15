@@ -1,16 +1,16 @@
-package lt.vilniustech.moves;
+package lt.vilniustech.moves.base;
 
 import lt.vilniustech.*;
 import lt.vilniustech.moves.finalization.FinalizationArguments;
 
-public abstract class CaptureMove<F, A extends FinalizationArguments> extends Move<F, A> {
+public abstract class AbstractCaptureMove<F extends Move, A extends FinalizationArguments> extends AbstractMove<F, A> implements CaptureMove {
 
-    public CaptureMove(Coordinate from, Coordinate over, Coordinate to) {
+    public AbstractCaptureMove(Coordinate from, Coordinate over, Coordinate to) {
         super(from, to);
         this.over = over;
     }
 
-    public CaptureMove(Coordinate from, Direction direction, int moveSize, int jumpSize) {
+    public AbstractCaptureMove(Coordinate from, Direction direction, int moveSize, int jumpSize) {
         super(from, from.move(direction, moveSize + jumpSize));
         this.over = from.move(direction, moveSize);
     }

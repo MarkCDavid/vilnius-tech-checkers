@@ -1,21 +1,21 @@
 package lt.vilniustech.rulesets.capturechain;
 
 import lt.vilniustech.Board;
-import lt.vilniustech.moves.CaptureMove;
-import lt.vilniustech.moves.Move;
+import lt.vilniustech.moves.base.AbstractCaptureMove;
+import lt.vilniustech.moves.base.AbstractMove;
 import lt.vilniustech.rulesets.capturechainmodules.ModuleFactory;
 
 import java.util.*;
 
 public class CaptureChain {
 
-    public Move getMove() {
+    public AbstractMove getMove() {
         return move;
     }
 
     public CaptureChainModule getModule(UUID module) { return modules.get(module); }
 
-    public CaptureChain(Board board, CaptureMove move, Map<UUID, CaptureChainModule> modules) {
+    public CaptureChain(Board board, AbstractCaptureMove move, Map<UUID, CaptureChainModule> modules) {
         this.move = move;
         this.modules = new HashMap<>();
         for(UUID moduleId: modules.keySet()) {
@@ -47,7 +47,7 @@ public class CaptureChain {
         this.modules = new HashMap<>();
     }
 
-    private Move move;
+    private AbstractMove move;
     private final Map<UUID, CaptureChainModule> modules;
 
 }

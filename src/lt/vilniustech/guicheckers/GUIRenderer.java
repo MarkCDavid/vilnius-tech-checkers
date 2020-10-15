@@ -7,7 +7,7 @@ import lt.vilniustech.guicheckers.sprite.ColorEllipseSprite;
 import lt.vilniustech.guicheckers.sprite.ColorRectSprite;
 import lt.vilniustech.guicheckers.sprite.ImageSprite;
 import lt.vilniustech.guicheckers.sprite.Sprite;
-import lt.vilniustech.moves.Move;
+import lt.vilniustech.moves.base.AbstractMove;
 import lt.vilniustech.utils.CoordinateIterator;
 
 import java.awt.*;
@@ -51,9 +51,9 @@ public class GUIRenderer {
         sprite.paint(graphics, row, column, cellSize, MARGIN);
     }
 
-    public void drawAvailableMoves(Graphics2D graphics, Board board, List<Move> availableMoves) {
+    public void drawAvailableMoves(Graphics2D graphics, Board board, List<AbstractMove> availableMoves) {
         for (Coordinate coordinate : new CoordinateIterator(board.getBoardSize())) {
-            for (Move availableMove : availableMoves) {
+            for (AbstractMove availableMove : availableMoves) {
                 if (!availableMove.getFrom().equals(coordinate))
                     continue;
                 availableCell.paint(graphics, coordinate.getColumn(), coordinate.getRow(), cellSize, HIGHLIGHT_MARGIN);
@@ -61,9 +61,9 @@ public class GUIRenderer {
         }
     }
 
-    public void drawSelectedMoves(Graphics2D graphics, Board board, List<Move> selectedMoves) {
+    public void drawSelectedMoves(Graphics2D graphics, Board board, List<AbstractMove> selectedMoves) {
         for (Coordinate coordinate : new CoordinateIterator(board.getBoardSize())) {
-            for (Move selectedMove : selectedMoves) {
+            for (AbstractMove selectedMove : selectedMoves) {
                 Sprite sprite = null;
 
                 if (selectedMove.getFrom().equals(coordinate)) sprite = selectedFromCell;

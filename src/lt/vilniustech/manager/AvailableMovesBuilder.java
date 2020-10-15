@@ -2,6 +2,8 @@ package lt.vilniustech.manager;
 
 import lt.vilniustech.*;
 import lt.vilniustech.moves.*;
+import lt.vilniustech.moves.base.CaptureMove;
+import lt.vilniustech.moves.base.Move;
 import lt.vilniustech.rulesets.CheckersRuleset;
 import lt.vilniustech.side.Side;
 
@@ -9,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AvailableMovesBuilder {
-
 
     public List<Move> buildAvailableMoves(Side side) {
 
@@ -51,15 +52,36 @@ public class AvailableMovesBuilder {
         List<Move> moves = new ArrayList<>();
         for(int moveSize = 1; moveSize <= piece.getMoveSize(); moveSize++) {
             for(int jumpSize = 1; jumpSize <= board.getBoardSize() - moveSize; jumpSize++) {
+
                 if(jumpSize > 1 && !ruleset.canJumpAnywhereBeyond(piece))
                     return moves;
 
-                Move capture = ruleset.isCaptureImmediate() ?
+                CaptureMove capture = ruleset.isCaptureImmediate() ?
                         new ImmediateCaptureMove(piece.getCoordinate(), direction, moveSize, jumpSize) :
                         new NonImmediateCaptureMove(piece.getCoordinate(), direction, moveSize, jumpSize);
 
-                if (capture.isValid(board))
-                    moves.add(capture);
+                if (capture.isValid(board)) {
+                    boolean valid = true;
+                    List<Move> history = moveHistorySupport.getMoveHistory();
+                    for(int i = history.size() - 1; i >= 0; i--) {
+                        Move previousMove = history.get(i);
+                        if(!valid || !previousMove.isCapture()) {
+                            break;
+                        }
+
+                        CaptureMove previousCaptureMove = (CaptureMove) previousMove;
+
+                        Piece currentOverPiece = board.getPiece(capture.getOver());
+                        Piece previousOverPiece = board.getPiece(previousCaptureMove.getOver());
+
+                        if(currentOverPiece == previousOverPiece) {
+                            valid = false;
+                        }
+                    }
+
+                    if(valid)
+                        moves.add(capture);
+                }
             }
         }
         return moves;
@@ -75,11 +97,13 @@ public class AvailableMovesBuilder {
         return moves;
     }
 
-    public AvailableMovesBuilder(Board board, CheckersRuleset ruleset) {
+    public AvailableMovesBuilder(Board board, MoveHistorySupport moveHistorySupport, CheckersRuleset ruleset) {
         this.board = board;
         this.ruleset = ruleset;
+        this.moveHistorySupport = moveHistorySupport;
     }
 
     private final Board board;
     private final CheckersRuleset ruleset;
+    private final MoveHistorySupport moveHistorySupport;
 }

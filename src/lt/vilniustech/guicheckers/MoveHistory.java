@@ -3,12 +3,12 @@ package lt.vilniustech.guicheckers;
 import lt.vilniustech.Board;
 import lt.vilniustech.guicheckers.events.MoveHistoryChangeListener;
 import lt.vilniustech.guicheckers.events.MoveHistoryChangeSupport;
-import lt.vilniustech.moves.Move;
+import lt.vilniustech.moves.base.AbstractMove;
 
 import javax.swing.*;
 import java.util.List;
 
-public class MoveHistory extends JList<Move> {
+public class MoveHistory extends JList<AbstractMove> {
 
     public MoveHistory(Board board) {
         this.movesModel = new DefaultListModel<>();
@@ -45,14 +45,14 @@ public class MoveHistory extends JList<Move> {
         }
     }
 
-    public void addMoves(List<Move> moves) {
+    public void addMoves(List<AbstractMove> moves) {
         movesModel.clear();
         movesModel.addAll(moves);
         setPreviousSelection(moves.get(moves.size() - 1));
         moveHistoryChangeSupport.emit(getSelectedValue());
     }
 
-    public void addMove(Move move) {
+    public void addMove(AbstractMove move) {
         movesModel.addElement(move);
         setPreviousSelection(move);
         moveHistoryChangeSupport.emit(getSelectedValue());
@@ -66,20 +66,20 @@ public class MoveHistory extends JList<Move> {
         moveHistoryChangeSupport.removeHistoryChangeListener(listener);
     }
 
-    private Move getPreviousSelection() {
+    private AbstractMove getPreviousSelection() {
         if(previousSelection == null)
             previousSelection = movesModel.get(movesModel.getSize() - 1);
         return previousSelection;
     }
 
-    private void setPreviousSelection(Move previousSelection) {
+    private void setPreviousSelection(AbstractMove previousSelection) {
         this.previousSelection = previousSelection;
         setSelectedIndex(movesModel.indexOf(previousSelection));
     }
 
-    private Move previousSelection;
+    private AbstractMove previousSelection;
 
-    private final DefaultListModel<Move> movesModel;
+    private final DefaultListModel<AbstractMove> movesModel;
     private final MoveHistoryChangeSupport moveHistoryChangeSupport;
 
 }

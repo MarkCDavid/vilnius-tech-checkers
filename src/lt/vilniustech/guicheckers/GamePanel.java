@@ -4,7 +4,7 @@ import lt.vilniustech.*;
 import lt.vilniustech.guicheckers.events.CellClickListener;
 import lt.vilniustech.guicheckers.events.CellClickSupport;
 import lt.vilniustech.manager.GameManager;
-import lt.vilniustech.moves.Move;
+import lt.vilniustech.moves.base.AbstractMove;
 
 import javax.swing.*;
 import java.awt.*;
@@ -49,15 +49,15 @@ public class GamePanel extends JPanel {
         return gameManager;
     }
 
-    public void setSelectedMoves(List<Move> selectedMoves) {
+    public void setSelectedMoves(List<AbstractMove> selectedMoves) {
         this.selectedMoves = selectedMoves;
     }
 
-    public List<Move> getSelectedMoves() {
+    public List<AbstractMove> getSelectedMoves() {
         return this.selectedMoves;
     }
 
-    private List<Move> selectedMoves = new ArrayList<>();
+    private List<AbstractMove> selectedMoves = new ArrayList<>();
 
     public GamePanel(GameManager gameManager) {
         this.renderer = new GUIRenderer();

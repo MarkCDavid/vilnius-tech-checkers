@@ -1,9 +1,7 @@
 package lt.vilniustech;
 
-import lt.vilniustech.moves.Move;
 import lt.vilniustech.side.Side;
 
-import java.util.List;
 import java.util.function.Supplier;
 
 public class Piece {
