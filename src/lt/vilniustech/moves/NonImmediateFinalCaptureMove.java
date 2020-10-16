@@ -39,13 +39,14 @@ public class NonImmediateFinalCaptureMove extends CaptureMove {
     public void apply(Board board) {
         super.apply(board);
 
-        capturedPiece = board.getPiece(over);
+
 
         for(CaptureMove captureMove: captureMoves) {
             capturedPieces.put(captureMove, board.popPiece(captureMove.getOver()));
         }
 
-        capturedPieces.put(this, board.popPiece(this.getOver()));
+        capturedPieces.put(this, board.popPiece(over));
+        capturedPiece = capturedPieces.get(this);
 
         unpromotedPiece = board.popPiece(from);
         board.putPiece(to, promotionMove ? unpromotedPiece.promote() : unpromotedPiece);
@@ -59,7 +60,7 @@ public class NonImmediateFinalCaptureMove extends CaptureMove {
             board.putPiece(captureMove.getOver(), capturedPieces.get(captureMove));
         }
 
-        board.putPiece(this.getOver(), capturedPieces.get(this));
+        board.putPiece(over, capturedPieces.get(this));
 
         board.popPiece(to);
         board.putPiece(from, unpromotedPiece);

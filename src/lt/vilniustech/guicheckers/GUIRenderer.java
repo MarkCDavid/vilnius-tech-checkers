@@ -3,31 +3,33 @@ package lt.vilniustech.guicheckers;
 import lt.vilniustech.Board;
 import lt.vilniustech.Coordinate;
 import lt.vilniustech.Piece;
-import lt.vilniustech.guicheckers.sprite.ColorEllipseSprite;
-import lt.vilniustech.guicheckers.sprite.ColorRectSprite;
-import lt.vilniustech.guicheckers.sprite.ImageSprite;
-import lt.vilniustech.guicheckers.sprite.Sprite;
+import lt.vilniustech.guicheckers.sprite.*;
 import lt.vilniustech.moves.base.Move;
 import lt.vilniustech.utils.iterator.CoordinateIterator;
 
 import java.awt.*;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class GUIRenderer {
 
     public GUIRenderer() {
+
         this.availableCell = new ColorEllipseSprite(Color.decode("#2ec761"));
         this.selectedFromCell = new ColorEllipseSprite(Color.decode("#2ec761"));
         this.selectedToCell = new ColorEllipseSprite(Color.decode("#482ec7"));
 
-        this.blackCell = new ColorRectSprite(Color.decode("#664400"));
-        this.whiteCell = new ColorRectSprite(Color.decode("#ffffee"));
+        this.cellSprites = new SpritePair<>(
+            new ColorRectSprite(Color.decode("#664400")),
+            new ColorRectSprite(Color.decode("#ffffee"))
+        );
 
-        this.blackPiece = new ImageSprite("resources/img/BlackPiece.png");
-        this.blackKing =  new ImageSprite("resources/img/BlackKing.png");
-        this.whitePiece = new ImageSprite("resources/img/WhitePiece.png");
-        this.whiteKing = new ImageSprite("resources/img/WhiteKing.png");
+        this.pieceSpriteCache = new PieceSpriteCache(
+            new ImageSprite("resources/img/BasePiece.png"),
+            new ImageSprite("resources/img/BaseKing.png")
+        );
     }
 
     private static final float MARGIN = 0.2f;
@@ -42,13 +44,7 @@ public class GUIRenderer {
     }
 
     public void drawPiece(Graphics2D graphics, int row, int column, Piece piece) {
-        Sprite sprite;
-        switch (piece.getSide().toString()) {
-            case "Black" -> sprite = piece.isKing() ? blackKing : blackPiece;
-            case "White" -> sprite = piece.isKing() ? whiteKing : whitePiece;
-            default -> sprite = ImageSprite.invalidSprite();
-        }
-        sprite.paint(graphics, row, column, cellSize, MARGIN);
+        pieceSpriteCache.get(piece.getSide().toString(), piece.isKing()).paint(graphics, row, column, cellSize, MARGIN);
     }
 
     public void drawAvailableMoves(Graphics2D graphics, Board board, List<Move> availableMoves) {
@@ -81,7 +77,7 @@ public class GUIRenderer {
     public void drawCheckeredPattern(Graphics2D graphics, Board board) {
         int cellTextOffset = (int)(cellSize * margin);
         for(Coordinate coordinate: new CoordinateIterator(board.getBoardSize())) {
-            Sprite sprite = coordinate.isEven() ? this.blackCell : this.whiteCell;
+            Sprite sprite = cellSprites.get(coordinate.isEven());
             sprite.paint(graphics, coordinate.getColumn(), coordinate.getRow(), cellSize);
             graphics.setColor(coordinate.isEven() ? Color.WHITE : Color.BLACK);
             graphics.drawString(coordinate.toString(), coordinate.getColumn() * cellSize + cellTextOffset, (coordinate.getRow() + 1) * cellSize - cellTextOffset);
@@ -102,11 +98,6 @@ public class GUIRenderer {
     private final Sprite selectedFromCell;
     private final Sprite selectedToCell;
 
-    private final Sprite blackCell;
-    private final Sprite whiteCell;
-
-    private final Sprite blackPiece;
-    private final Sprite blackKing;
-    private final Sprite whitePiece;
-    private final Sprite whiteKing;
+    private final SpritePair<ColorRectSprite> cellSprites;
+    private final PieceSpriteCache pieceSpriteCache;
 }

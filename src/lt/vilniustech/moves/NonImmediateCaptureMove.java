@@ -43,6 +43,7 @@ public class NonImmediateCaptureMove extends CaptureMove {
         super.revert(board);
 
         board.popPiece(to);
+        board.putPiece(over, capturedPiece);
         board.putPiece(from, unpromotedPiece);
     }
 

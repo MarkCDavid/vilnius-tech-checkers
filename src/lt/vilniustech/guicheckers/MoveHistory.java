@@ -16,7 +16,6 @@ public class MoveHistory extends JList<Move> {
         this.moveHistoryChangeSupport = new MoveHistoryChangeSupport();
 
         addListSelectionListener(listSelectionEvent -> {
-
             int to = movesModel.indexOf(getSelectedValue());
             int from = movesModel.indexOf(getPreviousSelection());
 
@@ -40,7 +39,7 @@ public class MoveHistory extends JList<Move> {
     }
 
     public void toTheFuture(Board board, int to, int from) {
-        for(int i = from; i <= to; i++) {
+        for(int i = from + 1; i <= to; i++) {
             movesModel.get(i).apply(board);
         }
     }

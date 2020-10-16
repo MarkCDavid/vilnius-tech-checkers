@@ -1,7 +1,5 @@
 package lt.vilniustech.guicheckers;
 
-import lt.vilniustech.side.Side;
-
 import javax.swing.*;
 
 public class StatusBar extends JLabel {

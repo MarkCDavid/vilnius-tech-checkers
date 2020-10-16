@@ -1,6 +1,7 @@
 package lt.vilniustech.guicheckers;
 
 import lt.vilniustech.rulesets.CheckersRuleset;
+import lt.vilniustech.rulesets.fourplayer.FourPlayerCheckers;
 import lt.vilniustech.rulesets.english.EnglishCheckers;
 import lt.vilniustech.rulesets.turkish.TurkishCheckers;
 
@@ -29,6 +30,7 @@ public class MainMenuForm {
 //        availableRulesModel.addElement(new ItalianCheckers());
         availableRulesModel.addElement(new TurkishCheckers());
 //        availableRulesModel.addElement(new InternationalCheckers());
+        availableRulesModel.addElement(new FourPlayerCheckers());
 
         availableRules = new JList<>(availableRulesModel);
         availableRules.setSelectedIndex(0);

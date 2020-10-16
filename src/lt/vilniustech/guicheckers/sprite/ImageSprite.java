@@ -34,6 +34,17 @@ public class ImageSprite implements Sprite {
         );
     }
 
+    public BufferedImage getImage() {
+        return image;
+    }
+
+    public ImageSprite copy() {
+        var colorModel = image.getColorModel();
+        var isAlphaPremultiplied = colorModel.isAlphaPremultiplied();
+        var raster = image.copyData(null);
+        return new ImageSprite(new BufferedImage(colorModel, raster, isAlphaPremultiplied, null));
+    }
+
     private static BufferedImage getImage(String path) {
         try {
             return ImageIO.read(new File(path));

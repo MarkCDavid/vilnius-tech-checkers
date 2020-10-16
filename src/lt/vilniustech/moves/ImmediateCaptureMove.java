@@ -37,9 +37,8 @@ public class ImmediateCaptureMove extends CaptureMove {
     public void revert(Board board) {
         super.revert(board);
 
-        board.putPiece(over, capturedPiece);
-
         board.popPiece(to);
+        board.putPiece(over, capturedPiece);
         board.putPiece(from, unpromotedPiece);
     }
 
