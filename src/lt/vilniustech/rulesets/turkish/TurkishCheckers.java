@@ -40,22 +40,37 @@ public class TurkishCheckers implements CheckersRuleset {
     }
 
     @Override
-    public String processWinningConditions(Board board, List<Move> availableMoves, List<Side> playingSides, Side current) {
+    public Side processWinningConditions(Board board, List<Move> availableMoves, List<Side> playingSides, Side current) {
 
-        List<Piece> pieces0 = playingSides.get(0).getPieces(board);
-        List<Piece> pieces1 = playingSides.get(1).getPieces(board);
-
-        if(pieces0.isEmpty()) return playingSides.get(1).toString();
-        if(pieces1.isEmpty()) return playingSides.get(0).toString();
-
-        if(pieces0.size() == 1 && pieces1.size() == 1) {
-            if(pieces0.get(0).isKing() && !pieces1.get(0).isKing()) return playingSides.get(0).toString();
-            if(pieces1.get(0).isKing() && !pieces0.get(0).isKing()) return playingSides.get(1).toString();
+        if (availableMoves.isEmpty()) {
+            playingSides.clear();
+            return current;
         }
 
-        if(availableMoves.isEmpty())
-            return "Draw";
-        return null;
+        Side white = playingSides.get(0);
+        Side black = playingSides.get(1);
+
+        List<Piece> whitePieces = white.getPieces(board);
+        List<Piece> blackPieces = black.getPieces(board);
+
+        if (whitePieces.isEmpty()) {
+            playingSides.remove(white);
+        }
+
+        if(blackPieces.isEmpty()) {
+            playingSides.remove(black);
+        }
+
+        if(whitePieces.size() == 1 && blackPieces.size() == 1) {
+            if (whitePieces.get(0).isKing() && !blackPieces.get(0).isKing()) {
+                playingSides.remove(black);
+            }
+
+            if(blackPieces.get(0).isKing() && !whitePieces.get(0).isKing())
+                playingSides.remove(white);
+        }
+
+        return current;
     }
 
     @Override

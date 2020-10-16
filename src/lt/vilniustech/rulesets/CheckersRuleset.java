@@ -15,7 +15,7 @@ public interface CheckersRuleset {
     boolean isPromotionImmediate();
     boolean isPromotionHalting();
 
-    String processWinningConditions(Board board, List<Move> availableMoves, List<Side> playingSides, Side current);
+    Side processWinningConditions(Board board, List<Move> availableMoves, List<Side> playingSides, Side current);
 
     List<Side> getPlayingSides();
     MoveFactory getMoveFactory();

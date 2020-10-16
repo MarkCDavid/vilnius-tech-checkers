@@ -10,11 +10,10 @@ public class PieceSpriteCache {
         this.piece = piece;
         this.king = king;
         this.colors = Arrays.asList(
-                Color.decode("#d9b70d"),
-                Color.decode("#6e6e6e"),
-                Color.decode("#c75656"),
-                Color.decode("#540f99"),
-                Color.decode("#298fcf")
+                Color.decode("#545454"),
+                Color.decode("#ebebeb"),
+                Color.decode("#47457d"),
+                Color.decode("#49874d")
         );
 
     }

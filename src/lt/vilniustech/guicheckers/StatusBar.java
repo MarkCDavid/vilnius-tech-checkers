@@ -1,15 +1,17 @@
 package lt.vilniustech.guicheckers;
 
+import lt.vilniustech.side.Side;
+
 import javax.swing.*;
 
 public class StatusBar extends JLabel {
 
-    public void setCurrentSide(String side) {
+    public void setCurrentSide(Side side) {
         currentSide = side;
         updateStatusBarText();
     }
 
-    public void setWinner(String  side) {
+    public void setWinner(Side side) {
         winner = side;
         updateStatusBarText();
     }
@@ -24,6 +26,6 @@ public class StatusBar extends JLabel {
         repaint();
     }
 
-    private String currentSide;
-    private String winner = null;
+    private Side currentSide;
+    private Side winner = null;
 }

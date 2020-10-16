@@ -12,6 +12,7 @@ public class Filters {
         return move -> move instanceof CaptureMove;
     }
     public static Predicate<Move> movesFromDestination(Move currentMove) {
+        if(currentMove == null) return move -> true;
         return move -> move.getFrom().equals(currentMove.getTo());
     }
 

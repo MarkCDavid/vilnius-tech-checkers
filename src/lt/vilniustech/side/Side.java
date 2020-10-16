@@ -10,7 +10,14 @@ import java.util.List;
 
 public class Side {
 
-    public static final String DRAW = "Draw";
+    public static final Side DRAW = new Side("Draw");
+
+    private Side(String name) {
+        this.name = name;
+        this.piecePositionValidator = null;
+        this.kingRowValidator = null;
+        this.pieceFactory = null;
+    }
 
     public Side(String name, CoordinateValidator piecePositionValidator, CoordinateValidator kingRowValidator, PieceFactory pieceFactory) {
         this.name = name;
@@ -28,6 +35,9 @@ public class Side {
     }
 
     public void fillBoard(Board board) {
+        if(piecePositionValidator == null || pieceFactory == null)
+            return;
+
         for(Coordinate coordinate : new CoordinateIterator(board.getBoardSize())) {
             if(piecePositionValidator.isValid(coordinate)) {
                 board.putPiece(coordinate, pieceFactory.producePiece());
@@ -37,6 +47,9 @@ public class Side {
 
     public List<Piece> getPieces(Board board) {
         ArrayList<Piece> pieces = new ArrayList<>();
+
+        if(pieceFactory == null)
+            return pieces;
 
         for(Coordinate coordinate : new CoordinateIterator(board.getBoardSize())) {
             Piece piece = board.getPiece(coordinate);
@@ -52,7 +65,7 @@ public class Side {
     }
 
     public boolean isKingRow(Coordinate coordinate) {
-        return kingRowValidator.isValid(coordinate);
+        return kingRowValidator != null && kingRowValidator.isValid(coordinate);
     }
 
     @Override

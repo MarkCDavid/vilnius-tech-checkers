@@ -32,7 +32,7 @@ public class GamePanel extends JPanel {
     }
 
     private void drawHighlights(Graphics2D graphics) {
-        if (selectedMoves.size() == 0)
+        if (selectedMoves.isEmpty())
             renderer.drawAvailableMoves(graphics, gameManager.getBoard(), gameManager.getAvailableMoves());
         else
             renderer.drawSelectedMoves(graphics, gameManager.getBoard(), selectedMoves);

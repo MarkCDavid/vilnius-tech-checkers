@@ -17,22 +17,28 @@ import lt.vilniustech.side.Side;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class GameManager implements SubscriptionSupport {
 
     public boolean isFinished() {
-        return winner != null;
+        return playingSides.size() < 2;
     }
 
-    public String getWinner() {
-        return winner;
+    public Side getWinner() {
+        return playingSides.isEmpty() ? Side.DRAW : playingSides.get(0);
     }
-    public void setWinner(String winner) {
-        this.winner = winner;
+    public void setWinner(Side winner) {
+        this.playingSides = new ArrayList<>();
+        this.playingSides.add(winner);
     }
 
     public Side getCurrentSide() {
         return this.currentSide;
+    }
+
+    public List<Side> getPlayingSides() {
+        return playingSides;
     }
 
     public Board getBoard() {
@@ -79,13 +85,26 @@ public class GameManager implements SubscriptionSupport {
         if(arguments.isSwitchSide())
             currentSide = currentSide.getNext();
 
-        CaptureConstraints captureConstraints = ruleset.getCaptureConstraints(board, moveHistory, move);
-        captureConstraints.setMultiCapture(!arguments.isSwitchSide());
-        availableMoves = captureConstraints.filterMoves(availableMovesBuilder.buildAvailableMoves(currentSide));
+        processSideSwitch(move, !arguments.isSwitchSide());
 
-        winner = ruleset.processWinningConditions(board, availableMoves, playingSides, currentSide);
+        Side next = ruleset.processWinningConditions(board, availableMoves, playingSides, currentSide);
+        if(!Objects.equals(currentSide, next)) {
+            switchSide(next);
+        }
+
         if (isFinished())
-            eventEmitter.emit(new GameFinishedEvent(winner));
+            eventEmitter.emit(new GameFinishedEvent(getWinner()));
+    }
+
+    public void switchSide(Side side) {
+        currentSide = side;
+        processSideSwitch(null, false);
+    }
+
+    private void processSideSwitch(Move move, boolean multiCapture) {
+        CaptureConstraints captureConstraints = ruleset.getCaptureConstraints(board, moveHistory, move);
+        captureConstraints.setMultiCapture(multiCapture);
+        availableMoves = captureConstraints.filterMoves(availableMovesBuilder.buildAvailableMoves(currentSide));
     }
 
     private boolean legitimateMove(Move move) {
@@ -107,16 +126,14 @@ public class GameManager implements SubscriptionSupport {
         return moves;
     }
 
-    private String winner = null;
-
     private final CheckersRuleset ruleset;
     private final Board board;
 
-    private final List<Side> playingSides;
+    private Side currentSide;
+    private List<Side> playingSides;
 
     private final MoveHistory moveHistory;
 
-    private Side currentSide;
     private List<Move> availableMoves;
 
     private final AvailableMovesBuilder availableMovesBuilder;

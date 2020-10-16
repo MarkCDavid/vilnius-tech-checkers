@@ -7,6 +7,8 @@ import lt.vilniustech.moves.factory.MoveFactory;
 import lt.vilniustech.moves.factory.NonImmediateMoveFactory;
 import lt.vilniustech.rulesets.CaptureConstraints;
 import lt.vilniustech.rulesets.CheckersRuleset;
+import lt.vilniustech.side.CoordinateValidator;
+import lt.vilniustech.side.PieceFactory;
 import lt.vilniustech.side.Side;
 
 import java.util.ArrayList;
@@ -21,7 +23,7 @@ public class FourPlayerCheckers implements CheckersRuleset {
 
     @Override
     public int getBoardSize() {
-        return 12;
+        return 8;
     }
 
     @Override
@@ -36,41 +38,47 @@ public class FourPlayerCheckers implements CheckersRuleset {
 
     @Override
     public boolean isPromotionHalting() {
-        return true;
+        return false;
     }
 
     @Override
     public List<Side> getPlayingSides() {
         List<Side> sides = new ArrayList<>();
 
+        int middleStart = 3 * getBoardSize() / 8;
+        int middleEnd = 4 * getBoardSize() / 8;
+
+
+        CoordinateValidator middleKingRow = new FourPlayerCheckersKingRow(middleStart, middleEnd, middleStart, middleEnd);
+
         Side p1 = new Side(
                 "Player 1",
-                new FourPlayerCheckersPieceSetter(getBoardSize() / 4, 3 * getBoardSize() / 4 - 1, 0, 1),
-                new FourPlayerCheckersKingRow(3 * getBoardSize() / 8, 5 * getBoardSize() / 8, 3 * getBoardSize() / 8, 5 * getBoardSize() / 8 ),
+                new FourPlayerCheckersPieceSetter(middleStart, middleEnd, 0, 1),
+                middleKingRow,
                 new FourPlayerCheckersPieceFactory(FourPlayerCheckersPieceFactory.DIRECTIONS, FourPlayerCheckersPieceFactory.DIRECTIONS)
         );
 
 
         Side p2 = new Side(
                 "Player 2",
-                new FourPlayerCheckersPieceSetter(getBoardSize() / 4, 3 * getBoardSize() / 4 - 1, getBoardSize() - 2, getBoardSize() - 1),
-                new FourPlayerCheckersKingRow(3 * getBoardSize() / 8, 5 * getBoardSize() / 8, 3 * getBoardSize() / 8, 5 * getBoardSize() / 8 ),
+                new FourPlayerCheckersPieceSetter(middleStart, middleEnd, getBoardSize() - 2, getBoardSize() - 1),
+                middleKingRow,
                 new FourPlayerCheckersPieceFactory(FourPlayerCheckersPieceFactory.DIRECTIONS, FourPlayerCheckersPieceFactory.DIRECTIONS)
         );
 
 
         Side p3 = new Side(
                 "Player 3",
-                new FourPlayerCheckersPieceSetter(0, 1, getBoardSize() / 4, 3 * getBoardSize() / 4 - 1),
-                new FourPlayerCheckersKingRow(3 * getBoardSize() / 8, 5 * getBoardSize() / 8, 3 * getBoardSize() / 8, 5 * getBoardSize() / 8 ),
+                new FourPlayerCheckersPieceSetter(0, 1, middleStart, middleEnd),
+                middleKingRow,
                 new FourPlayerCheckersPieceFactory(FourPlayerCheckersPieceFactory.DIRECTIONS, FourPlayerCheckersPieceFactory.DIRECTIONS)
         );
 
 
         Side p4 = new Side(
                 "Player 4",
-                new FourPlayerCheckersPieceSetter(getBoardSize() - 2, getBoardSize() - 1, getBoardSize() / 4, 3 * getBoardSize() / 4 - 1),
-                new FourPlayerCheckersKingRow(3 * getBoardSize() / 8, 5 * getBoardSize() / 8, 3 * getBoardSize() / 8, 5 * getBoardSize() / 8 ),
+                new FourPlayerCheckersPieceSetter(getBoardSize() - 2, getBoardSize() - 1, middleStart, middleEnd),
+                middleKingRow,
                 new FourPlayerCheckersPieceFactory(FourPlayerCheckersPieceFactory.DIRECTIONS, FourPlayerCheckersPieceFactory.DIRECTIONS)
         );
 
@@ -88,17 +96,27 @@ public class FourPlayerCheckers implements CheckersRuleset {
     }
 
     @Override
-    public String processWinningConditions(Board board, List<Move> availableMoves, List<Side> playingSides, Side current) {
-        for(int i = 0; i < playingSides.size(); i++) {
-            Side playingSide = playingSides.get(i % playingSides.size());
-            if(playingSide.getPieces(board).isEmpty())
-                return playingSides.get((i + 1) % playingSides.size()).toString();
+    public Side processWinningConditions(Board board, List<Move> availableMoves, List<Side> playingSides, Side current) {
+
+        List<Side> toRemove = new ArrayList<>();
+        for(Side side: playingSides) {
+            if(side.getPieces(board).isEmpty()) {
+                toRemove.add(side);
+            }
+        }
+        playingSides.removeAll(toRemove);
+
+        if(availableMoves.isEmpty()) {
+            playingSides.remove(current);
         }
 
-        if(availableMoves.isEmpty())
-            return "Draw";
+        if(playingSides.isEmpty())
+            return current;
 
-        return null;
+        while(!playingSides.contains(current))
+            current = current.getNext();
+
+        return current;
     }
 
     @Override

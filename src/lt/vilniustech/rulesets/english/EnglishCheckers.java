@@ -67,17 +67,19 @@ public class EnglishCheckers implements CheckersRuleset {
     }
 
     @Override
-    public String processWinningConditions(Board board, List<Move> availableMoves, List<Side> playingSides, Side current) {
-        for(int i = 0; i < playingSides.size(); i++) {
-            Side playingSide = playingSides.get(i % playingSides.size());
-            if(playingSide.getPieces(board).isEmpty())
-                return playingSides.get((i + 1) % playingSides.size()).toString();
+    public Side processWinningConditions(Board board, List<Move> availableMoves, List<Side> playingSides, Side current) {
+        if(availableMoves.isEmpty()) {
+            playingSides.remove(current);
         }
 
-        if(availableMoves.isEmpty())
-            return "Draw";
+        List<Side> toRemove = new ArrayList<>();
+        for(Side side: playingSides) {
+            if(side.getPieces(board).isEmpty())
+                toRemove.add(side);
+        }
 
-        return null;
+        playingSides.removeAll(toRemove);
+        return current;
     }
 
     @Override
