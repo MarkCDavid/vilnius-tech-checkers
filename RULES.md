@@ -28,5 +28,5 @@
     
 ## End of game
 * Player wins if they capture all of the enemy pieces
-* Draw if the opponent has no legal moves or if players agree to a draw
+* Draw if the opponent has no legal backend.moves or if players agree to a draw
 

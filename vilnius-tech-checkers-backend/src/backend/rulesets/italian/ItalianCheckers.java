@@ -1,17 +1,18 @@
-//package lt.vilniustech;
+//package backend.rulesets.italian;
 //
+//import lt.vilniustech.*;
 //import backend.moves.Move;
 //import backend.rulesets.CaptureConstraints;
-//import backend.side.CoordinateValidator;
+//import backend.side.PieceSetter;
 //import backend.rulesets.CheckersRuleset;
 //
 //import java.util.List;
 //
-//public class DummyRuleset implements CheckersRuleset {
+//public class ItalianCheckers implements CheckersRuleset {
 //
 //    @Override
 //    public String toString() {
-//        return "Dummy Checkers";
+//        return "Italian Checkers";
 //    }
 //
 //    @Override
@@ -36,32 +37,20 @@
 //
 //    @Override
 //    public Side processWinningConditions(Side currentSide, List<Move> backend.moves, List<backend.Piece> whitePieces, List<backend.Piece> blackPieces) {
+//        if(whitePieces.size() == 0) return Side.BLACK;
+//        else if(blackPieces.size() == 0) return Side.WHITE;
+//        else if(backend.moves.size() == 0) return Side.DRAW;
 //        return Side.NONE;
 //    }
 //
 //    @Override
 //    public Side getFirstToMove() {
-//        return Side.BLACK;
+//        return Side.WHITE;
 //    }
 //
 //    @Override
 //    public CaptureConstraints getCaptureConstraints(backend.Board board, Move move) {
-//        return new CaptureConstraints() {
-//            @Override
-//            public List<Move> filterMoves(List<Move> availableMoves) {
-//                return availableMoves;
-//            }
-//
-//            @Override
-//            public Side getNextSide(Side backend.side) {
-//                return Side.opposite(backend.side);
-//            }
-//
-//            @Override
-//            public void setMultipleCaptures(boolean multipleCaptures) {
-//
-//            }
-//        };
+//        return new ItalianCheckersCaptureConstraints(board, move);
 //    }
 //
 //    @Override
@@ -74,7 +63,7 @@
 //    }
 //
 //    @Override
-//    public CoordinateValidator getCellFill(Side backend.side) {
+//    public PieceSetter getCellFill(Side backend.side) {
 //        switch (backend.side) {
 //            case BLACK -> { return getBlackCellFill(); }
 //            case WHITE -> { return getWhiteCellFill(); }
@@ -102,21 +91,37 @@
 //
 //    @Override
 //    public backend.Piece createWhitePiece() {
-//        return new backend.Piece(Side.WHITE, new backend.Direction[]{});
+//        return new backend.Piece(Side.WHITE, new backend.Direction[]{
+//                new backend.Direction(1, -1),
+//                new backend.Direction(-1, -1),
+//        });
 //    }
 //
 //    @Override
 //    public backend.Piece createBlackPiece() {
-//        return new backend.Piece(Side.BLACK, new backend.Direction[]{});
+//        return new backend.Piece(Side.BLACK, new backend.Direction[]{
+//                new backend.Direction(1, 1),
+//                new backend.Direction(-1, 1),
+//        });
 //    }
 //
 //    @Override
 //    public backend.Piece createWhiteKing() {
-//        return new backend.Piece(Side.WHITE, new backend.Direction[]{}, true);
+//        return new backend.Piece(Side.WHITE, new backend.Direction[]{
+//                new backend.Direction(1, -1),
+//                new backend.Direction(-1, -1),
+//                new backend.Direction(1, 1),
+//                new backend.Direction(-1, 1),
+//        }, true);
 //    }
 //    @Override
 //    public backend.Piece createBlackKing() {
-//        return new backend.Piece(Side.BLACK, new backend.Direction[]{}, true);
+//        return new backend.Piece(Side.BLACK, new backend.Direction[]{
+//                new backend.Direction(1, -1),
+//                new backend.Direction(-1, -1),
+//                new backend.Direction(1, 1),
+//                new backend.Direction(-1, 1),
+//        }, true);
 //    }
 //
 //    @Override
@@ -130,32 +135,12 @@
 //    }
 //
 //    @Override
-//    public CoordinateValidator getWhiteCellFill() { return whiteCellFill; }
+//    public PieceSetter getWhiteCellFill() { return whiteCellFill; }
 //
 //    @Override
-//    public CoordinateValidator getBlackCellFill() { return blackCellFill; }
+//    public PieceSetter getBlackCellFill() { return blackCellFill; }
 //
 //
-//    private final CoordinateValidator whiteCellFill = new CoordinateValidator() {
-//        @Override
-//        protected boolean rowValid(backend.Coordinate coordinate) {
-//            return false;
-//        }
-//
-//        @Override
-//        protected boolean columnValid(backend.Coordinate coordinate) {
-//            return false;
-//        }
-//    };
-//    private final CoordinateValidator blackCellFill = new CoordinateValidator() {
-//        @Override
-//        protected boolean rowValid(backend.Coordinate coordinate) {
-//            return false;
-//        }
-//
-//        @Override
-//        protected boolean columnValid(backend.Coordinate coordinate) {
-//            return false;
-//        }
-//    };
+//    private final PieceSetter whiteCellFill = new ItalianCheckersCellFill(getBoardSize() - 3, getBoardSize() - 1);
+//    private final PieceSetter blackCellFill = new ItalianCheckersCellFill(0, 2);
 //}
