@@ -1,5 +1,7 @@
 package backend.manager;
 
+import api.dto.Ruleset;
+import api.endpoints.RulesetService;
 import backend.Board;
 import backend.Coordinate;
 import backend.events.EventEmitter;
@@ -20,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class GameManager implements SubscriptionSupport {
+public class GameManager implements SubscriptionSupport, RulesetService {
 
     public boolean isFinished() {
         return playingSides.size() < 2;
@@ -147,4 +149,9 @@ public class GameManager implements SubscriptionSupport {
         eventEmitter.subscribe(subscriber);
     }
     private final EventEmitter eventEmitter;
+
+    @Override
+    public List<Ruleset> getRulesets() {
+        return null;
+    }
 }

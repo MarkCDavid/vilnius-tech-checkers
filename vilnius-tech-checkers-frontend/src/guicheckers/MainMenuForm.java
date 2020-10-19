@@ -44,6 +44,11 @@ public class MainMenuForm {
         frame.pack();
         frame.setVisible(true);
     }
-
-
 }
+
+
+/* DATA MODELING
+    Requires:
+        - Available Rulesets
+ */
+

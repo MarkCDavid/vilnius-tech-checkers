@@ -178,3 +178,9 @@ public class GameForm {
     }
 
 }
+
+/* DATA MODELING
+    Requires:
+        - Winner
+        - Processed Move
+ */
