@@ -27,13 +27,6 @@ public class Side {
         this.pieceFactory.setSide(this);
     }
 
-    public Side getNext() {
-        return next;
-    }
-    public void setNext(Side next) {
-        this.next = next;
-    }
-
     public void fillBoard(Board board) {
         if(piecePositionValidator == null || pieceFactory == null)
             return;
@@ -77,5 +70,4 @@ public class Side {
     private final CoordinateValidator piecePositionValidator;
     private final CoordinateValidator kingRowValidator;
     private final PieceFactory pieceFactory;
-    private Side next;
 }

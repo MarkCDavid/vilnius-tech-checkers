@@ -12,8 +12,11 @@ import backend.side.Side;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class TurkishCheckers implements CheckersRuleset {
+
+    public final static UUID OID = UUID.fromString("94ea9a46-b04a-48f1-83a1-bd73cf6d540d");
 
     @Override
     public String toString() {

@@ -1,4 +1,4 @@
-package guicheckers;
+package guicheckers.controls;
 
 import backend.Board;
 import backend.moves.base.Move;

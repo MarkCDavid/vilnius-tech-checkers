@@ -1,20 +1,21 @@
 package backend.manager;
 
 import api.dto.Ruleset;
-import api.endpoints.RulesetService;
 import backend.Board;
 import backend.Coordinate;
 import backend.events.EventEmitter;
 import backend.events.EventSubscriber;
 import backend.events.SubscriptionSupport;
-import backend.manager.events.GameFinishedEvent;
-import backend.manager.events.MoveProcessedEvent;
+import backend.factory.RulesetFactory;
+import backend.manager.events.event.GameFinishedEvent;
+import backend.manager.events.event.MoveProcessedEvent;
+import backend.manager.events.event.SideSwitchEvent;
+import backend.manager.events.handler.SideSwitchEventSubscriber;
 import backend.manager.exceptions.GameFinishedException;
 import backend.manager.exceptions.IllegitimateMoveException;
 import backend.moves.base.Move;
 import backend.moves.finalization.FinalizationArguments;
 import backend.moves.finalization.FinalizationArgumentsBuilder;
-import backend.rulesets.CaptureConstraints;
 import backend.rulesets.CheckersRuleset;
 import backend.side.Side;
 
@@ -22,61 +23,40 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class GameManager implements SubscriptionSupport, RulesetService {
-
-    public boolean isFinished() {
-        return playingSides.size() < 2;
-    }
-
-    public Side getWinner() {
-        return playingSides.isEmpty() ? Side.DRAW : playingSides.get(0);
-    }
-    public void setWinner(Side winner) {
-        this.playingSides = new ArrayList<>();
-        this.playingSides.add(winner);
-    }
-
-    public Side getCurrentSide() {
-        return this.currentSide;
-    }
-
-    public List<Side> getPlayingSides() {
-        return playingSides;
-    }
+public class GameManager implements SubscriptionSupport {
 
     public Board getBoard() {
         return board;
     }
 
-    public GameManager(CheckersRuleset ruleset) {
+    public GameManager(Ruleset ruleset) {
         this.moveHistory = new MoveHistory();
         this.eventEmitter = new EventEmitter();
 
-        this.ruleset = ruleset;
+        this.ruleset = RulesetFactory.build(ruleset.getId());
+        this.sides = new GameSides(this.ruleset.getPlayingSides());
+        this.board = new Board(this.ruleset.getBoardSize());
 
-        this.playingSides = ruleset.getPlayingSides();
-        this.board = new Board(ruleset.getBoardSize());
-
-        for(Side side: this.playingSides) {
+        for(var side: sides.getPlayingSides()) {
             side.fillBoard(board);
         }
 
-        this.currentSide = this.playingSides.get(0);
+        this.sides.subscribe(constructSideSwitchHandler());
 
-        this.availableMovesBuilder = new AvailableMovesBuilder(board, moveHistory, ruleset.getMoveFactory());
-        this.finalizationArgumentsBuilder = new FinalizationArgumentsBuilder(board, ruleset, moveHistory, this.availableMovesBuilder);
+        this.availableMovesBuilder = new AvailableMovesBuilder(board, moveHistory, this.ruleset.getMoveFactory());
+        this.finalizationArgumentsBuilder = new FinalizationArgumentsBuilder(board, this.ruleset, moveHistory, this.availableMovesBuilder);
 
-        this.availableMoves = availableMovesBuilder.buildAvailableMoves(currentSide);
+        this.availableMoves = availableMovesBuilder.buildAvailableMoves(sides.getCurrentSide());
     }
 
     public void processMove(Move move) {
-        if(isFinished())
-            throw new GameFinishedException(getWinner());
+        if(sides.isFinished())
+            throw new GameFinishedException(sides.getWinner());
 
         if(!legitimateMove(move))
             throw new IllegitimateMoveException(move);
 
-        FinalizationArguments arguments = finalizationArgumentsBuilder.build(getCurrentSide(), move);
+        FinalizationArguments arguments = finalizationArgumentsBuilder.build(sides.getCurrentSide(), move);
         move = move.finalizeMove(board, moveHistory, arguments);
         move.apply(board);
         moveHistory.add(move);
@@ -86,17 +66,17 @@ public class GameManager implements SubscriptionSupport, RulesetService {
             board.putPiece(move.getTo(), board.popPiece(move.getTo()).promote());
 
         if(arguments.isSwitchSide())
-            currentSide = currentSide.getNext();
+            sides.next();
 
         processSideSwitch(move, !arguments.isSwitchSide());
 
-        Side next = ruleset.processWinningConditions(board, availableMoves, playingSides, currentSide);
-        if(!Objects.equals(currentSide, next)) {
-            switchSide(next);
+        Side next = ruleset.processWinningConditions(board, availableMoves, sides.getPlayingSides(), sides.getCurrentSide());
+        if(!Objects.equals(sides.getCurrentSide(), next)) {
+            sides.next();
         }
 
-        if (isFinished())
-            eventEmitter.emit(new GameFinishedEvent(getWinner()));
+        if (sides.isFinished())
+            eventEmitter.emit(new GameFinishedEvent(sides.getWinner()));
     }
 
     public void switchSide(Side side) {
@@ -105,9 +85,17 @@ public class GameManager implements SubscriptionSupport, RulesetService {
     }
 
     private void processSideSwitch(Move move, boolean multiCapture) {
-        CaptureConstraints captureConstraints = ruleset.getCaptureConstraints(board, moveHistory, move);
-        captureConstraints.setMultiCapture(multiCapture);
-        availableMoves = captureConstraints.filterMoves(availableMovesBuilder.buildAvailableMoves(currentSide));
+
+    }
+
+    private SideSwitchEventSubscriber constructSideSwitchHandler() {
+        return new SideSwitchEventSubscriber() {
+            @Override
+            protected void receive(SideSwitchEvent event) {
+                var captureConstraints = ruleset.getCaptureConstraints(board, moveHistory, null);
+                availableMoves = captureConstraints.filterMoves(availableMovesBuilder.buildAvailableMoves(event.getCurrent()));
+            }
+        };
     }
 
     private boolean legitimateMove(Move move) {
@@ -132,12 +120,11 @@ public class GameManager implements SubscriptionSupport, RulesetService {
     private final CheckersRuleset ruleset;
     private final Board board;
 
-    private Side currentSide;
-    private List<Side> playingSides;
-
     private final MoveHistory moveHistory;
 
     private List<Move> availableMoves;
+
+    private final GameSides sides;
 
     private final AvailableMovesBuilder availableMovesBuilder;
     private final FinalizationArgumentsBuilder finalizationArgumentsBuilder;
@@ -149,9 +136,4 @@ public class GameManager implements SubscriptionSupport, RulesetService {
         eventEmitter.subscribe(subscriber);
     }
     private final EventEmitter eventEmitter;
-
-    @Override
-    public List<Ruleset> getRulesets() {
-        return null;
-    }
 }

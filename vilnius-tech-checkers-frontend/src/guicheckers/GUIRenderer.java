@@ -56,8 +56,8 @@ public class GUIRenderer {
     }
 
     public void drawSelectedMoves(Graphics2D graphics, Board board, List<Move> selectedMoves) {
-        for (Coordinate coordinate : new CoordinateIterator(board.getBoardSize())) {
-            for (Move selectedMove : selectedMoves) {
+        for (var coordinate : new CoordinateIterator(board.getBoardSize())) {
+            for (var selectedMove : selectedMoves) {
                 Sprite sprite = null;
 
                 if (selectedMove.getFrom().equals(coordinate)) sprite = selectedFromCell;
@@ -71,10 +71,10 @@ public class GUIRenderer {
         }
     }
 
-    private final float margin = 0.025f;
+    private final static float TEXT_MARGIN = 0.025f;
     public void drawCheckeredPattern(Graphics2D graphics, Board board) {
-        int cellTextOffset = (int)(cellSize * margin);
-        for(Coordinate coordinate: new CoordinateIterator(board.getBoardSize())) {
+        int cellTextOffset = (int)(cellSize * TEXT_MARGIN);
+        for(var coordinate: new CoordinateIterator(board.getBoardSize())) {
             Sprite sprite = cellSprites.get(coordinate.isEven());
             sprite.paint(graphics, coordinate.getColumn(), coordinate.getRow(), cellSize);
             graphics.setColor(coordinate.isEven() ? Color.WHITE : Color.BLACK);

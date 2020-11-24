@@ -11,8 +11,11 @@ import backend.side.Side;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class EnglishCheckers implements CheckersRuleset {
+
+    public final static UUID OID = UUID.fromString("184f54a6-7495-4784-be5d-980e06cf1230");
 
     @Override
     public String toString() {

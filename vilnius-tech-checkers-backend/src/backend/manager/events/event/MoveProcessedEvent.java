@@ -1,4 +1,4 @@
-package backend.manager.events;
+package backend.manager.events.event;
 
 import backend.events.Event;
 import backend.moves.base.Move;

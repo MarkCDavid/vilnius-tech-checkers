@@ -1,8 +1,9 @@
-package guicheckers;
+package guicheckers.controls;
 
 import backend.Coordinate;
 import backend.manager.GameManager;
 import backend.moves.base.Move;
+import guicheckers.GUIRenderer;
 import guicheckers.events.CellClickListener;
 import guicheckers.events.CellClickSupport;
 
@@ -22,7 +23,6 @@ public class GamePanel extends JPanel {
     }
 
     private void drawBoard(Graphics2D graphics) {
-
         renderer.drawCheckeredPattern(graphics, gameManager.getBoard());
 
         if(drawHighlights)
@@ -88,7 +88,6 @@ public class GamePanel extends JPanel {
             public void mousePressed(MouseEvent e) { }
         });
     }
-
 
     private final GUIRenderer renderer;
     private final GameManager gameManager;

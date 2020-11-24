@@ -20,4 +20,9 @@ public class Ruleset {
     private final UUID id;
 
     private final String name;
+
+    @Override
+    public String toString() {
+        return getName();
+    }
 }

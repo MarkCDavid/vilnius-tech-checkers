@@ -12,8 +12,11 @@ import backend.side.Side;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class FourPlayerCheckers implements CheckersRuleset {
+
+    public final static UUID OID = UUID.fromString("2d3126b5-45eb-4c93-8704-ec3a291de472");
 
     @Override
     public String toString() {
