@@ -10,16 +10,18 @@ import java.util.List;
 
 public class Side {
 
-    public static final Side DRAW = new Side("Draw");
+    public static final Side DRAW = new Side(-1 ,"Draw");
 
-    private Side(String name) {
+    private Side(Integer index, String name) {
+        this.index = index;
         this.name = name;
         this.piecePositionValidator = null;
         this.kingRowValidator = null;
         this.pieceFactory = null;
     }
 
-    public Side(String name, CoordinateValidator piecePositionValidator, CoordinateValidator kingRowValidator, PieceFactory pieceFactory) {
+    public Side(Integer index, String name, CoordinateValidator piecePositionValidator, CoordinateValidator kingRowValidator, PieceFactory pieceFactory) {
+        this.index = index;
         this.name = name;
         this.piecePositionValidator = piecePositionValidator;
         this.kingRowValidator = kingRowValidator;
@@ -66,6 +68,11 @@ public class Side {
         return name;
     }
 
+    public Integer getIndex() {
+        return index;
+    }
+
+    private final Integer index;
     private final String name;
     private final CoordinateValidator piecePositionValidator;
     private final CoordinateValidator kingRowValidator;

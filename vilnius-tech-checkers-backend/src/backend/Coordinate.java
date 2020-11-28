@@ -1,5 +1,7 @@
 package backend;
 
+import api.serializer.DTODeserializable;
+import api.serializer.DTOSerializable;
 import backend.manager.exceptions.IllegalCoordinateException;
 
 import java.util.Objects;

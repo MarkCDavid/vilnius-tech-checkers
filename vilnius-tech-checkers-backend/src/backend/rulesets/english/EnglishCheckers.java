@@ -47,6 +47,7 @@ public class EnglishCheckers implements CheckersRuleset {
         List<Side> sides = new ArrayList<>();
 
         Side whiteSide = new Side(
+                0,
                 "White",
                 new EnglishCheckersPieceSetter(getBoardSize() - 3, getBoardSize() - 1),
                 new EnglishCheckersKingRow(0),
@@ -54,14 +55,12 @@ public class EnglishCheckers implements CheckersRuleset {
         );
 
         Side blackSide = new Side(
+                1,
                 "Black",
                 new EnglishCheckersPieceSetter(0, 2),
                 new EnglishCheckersKingRow(getBoardSize() - 1),
                 new EnglishCheckersPieceFactory(EnglishCheckersPieceFactory.BLACK_PIECE_DIRECTIONS, EnglishCheckersPieceFactory.BLACK_KING_DIRECTIONS)
         );
-
-        whiteSide.setNext(blackSide);
-        blackSide.setNext(whiteSide);
 
         sides.add(whiteSide);
         sides.add(blackSide);

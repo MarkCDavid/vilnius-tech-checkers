@@ -1,10 +1,11 @@
 package backend;
 
+import api.serializer.DTOSerializable;
 import backend.side.Side;
 
 import java.util.function.Supplier;
 
-public class Piece {
+public class Piece{
 
     public Piece(Side side, Direction[] directions, int moveSize, int jumpSize, Supplier<Piece> promoter){
         this.side = side;
@@ -27,6 +28,10 @@ public class Piece {
 
     public Side getSide() {
         return side;
+    }
+
+    public int getPromotionLevel() {
+        return promotionLevel;
     }
 
     public boolean isKing() { return promotionLevel > 0; }
@@ -56,6 +61,7 @@ public class Piece {
         promoted.promotionLevel = promotionLevel + 1;
         return promoted;
     }
+
     private Coordinate coordinate;
     private final Side side;
     private final Direction[] directions;
@@ -63,4 +69,5 @@ public class Piece {
 
     private final int jumpSize;
     private int promotionLevel;
+
 }

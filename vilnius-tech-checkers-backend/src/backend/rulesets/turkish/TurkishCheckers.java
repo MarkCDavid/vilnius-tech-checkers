@@ -82,6 +82,7 @@ public class TurkishCheckers implements CheckersRuleset {
         List<Side> sides = new ArrayList<>();
 
         Side whiteSide = new Side(
+                0,
                 "White",
                 new TurkishCheckersPieceSetter(getBoardSize() - 3, getBoardSize() - 2),
                 new TurkishCheckersKingRow(0),
@@ -89,14 +90,12 @@ public class TurkishCheckers implements CheckersRuleset {
         );
 
         Side blackSide = new Side(
+                1,
                 "Black",
                 new TurkishCheckersPieceSetter(1, 2),
                 new TurkishCheckersKingRow(getBoardSize() - 1),
                 new TurkishCheckersPieceFactory(TurkishCheckersPieceFactory.BLACK_PIECE_DIRECTIONS, TurkishCheckersPieceFactory.BLACK_KING_DIRECTIONS, getBoardSize())
         );
-
-        whiteSide.setNext(blackSide);
-        blackSide.setNext(whiteSide);
 
         sides.add(whiteSide);
         sides.add(blackSide);

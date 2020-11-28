@@ -22,7 +22,6 @@ public class GameSides implements SubscriptionSupport {
     public void setCurrentSide(Side side) {
         if (playingSides.contains(side)) {
             currentSide = side;
-
         }
     }
 

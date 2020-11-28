@@ -1,6 +1,7 @@
 package guicheckers.view;
 
 import api.dto.Ruleset;
+import api.endpoints.GameLaunchService;
 import backend.manager.GameManager;
 import backend.moves.base.Move;
 import guicheckers.controls.GamePanel;
@@ -13,37 +14,39 @@ import java.awt.*;
 public class GameView extends AbstractView {
 
     private final Ruleset ruleset;
+    private final GameLaunchService gameLaunchService;
 
-    public GameView(JFrame parent, Ruleset ruleset) {
+    public GameView(JFrame parent, Ruleset ruleset, GameLaunchService gameLaunchService) {
         super(parent);
         this.ruleset = ruleset;
+        this.gameLaunchService = gameLaunchService;
     }
 
     private void createUIComponents() {
-        gamePanel = new GamePanel(new GameManager(ruleset));
-        moveHistory = new MoveHistory(getGamePanel().getGameManager().getBoard());
-        statusBar = new StatusBar();
+        gamePanel = new GamePanel(gameLaunchService.launch(ruleset));
+        //moveHistory = new MoveHistory(getGamePanel().getGameManager().getBoard());
+        //statusBar = new StatusBar();
     }
 
-    public StatusBar getStatusBar() {
-        return (StatusBar)this.statusBar;
-    }
-
-    public MoveHistory getMoveHistory() {
-        return (MoveHistory)this.moveHistory;
-    }
+//    public StatusBar getStatusBar() {
+//        return (StatusBar)this.statusBar;
+//    }
+//
+//    public MoveHistory getMoveHistory() {
+//        return (MoveHistory)this.moveHistory;
+//    }
 
     public GamePanel getGamePanel() {
         return (GamePanel)this.gamePanel;
     }
 
-    public JButton getSurrenderButton() {
-        return surrenderButton;
-    }
-
-    public JButton getDrawButton() {
-        return drawButton;
-    }
+//    public JButton getSurrenderButton() {
+//        return surrenderButton;
+//    }
+//
+//    public JButton getDrawButton() {
+//        return drawButton;
+//    }
 
     public JButton getExitButton() {
         return exitButton;
@@ -54,8 +57,6 @@ public class GameView extends AbstractView {
     private JButton exitButton;
 
     private JPanel gamePanel;
-    private JList<Move> moveHistory;
-    private JLabel statusBar;
 
     @Override
     protected Container getRootContainer() {

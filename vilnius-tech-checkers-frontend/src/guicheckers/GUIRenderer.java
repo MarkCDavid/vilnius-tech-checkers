@@ -1,10 +1,11 @@
 package guicheckers;
 
+import api.dto.Coordinate;
+import api.dto.Move;
+import api.dto.Piece;
+import api.endpoints.GameService;
 import backend.Board;
-import backend.Coordinate;
-import backend.Piece;
 import guicheckers.sprite.*;
-import backend.moves.base.Move;
 import backend.utils.iterator.CoordinateIterator;
 
 import java.awt.*;
@@ -33,48 +34,37 @@ public class GUIRenderer {
     private static final float MARGIN = 0.2f;
     private static final float HIGHLIGHT_MARGIN = MARGIN - 0.1f;
 
-    public void drawPieces(Graphics2D graphics, Board board) {
-        for (Coordinate coordinate : new CoordinateIterator(board.getBoardSize())) {
-            Piece piece = board.getPiece(coordinate);
-            if (piece == null) continue;
-            drawPiece(graphics, coordinate.getColumn(), coordinate.getRow(), piece);
+    public void drawPieces(Graphics2D graphics, GameService gameService) {
+
+        for(var cell : gameService.getBoard()) {
+            var piece = cell.getPiece();
+            if (piece == null)
+                continue;
+            drawPiece(graphics, cell.getCoordinate().getX(), cell.getCoordinate().getY(), piece);
         }
     }
 
     public void drawPiece(Graphics2D graphics, int row, int column, Piece piece) {
-        pieceSpriteCache.get(piece.getSide().toString(), piece.isKing()).paint(graphics, row, column, cellSize, MARGIN);
+        pieceSpriteCache.get(String.valueOf(piece.getSideIndex()), piece.getPromotionLevel() > 1).paint(graphics, row, column, cellSize, MARGIN);
     }
 
-    public void drawAvailableMoves(Graphics2D graphics, Board board, List<Move> availableMoves) {
-        for (Coordinate coordinate : new CoordinateIterator(board.getBoardSize())) {
-            for (Move availableMove : availableMoves) {
-                if (!availableMove.getFrom().equals(coordinate))
-                    continue;
-                availableCell.paint(graphics, coordinate.getColumn(), coordinate.getRow(), cellSize, HIGHLIGHT_MARGIN);
-            }
+    public void drawAvailableMoves(Graphics2D graphics, GameService gameService) {
+        for (var interactable : gameService.getInteractable()) {
+            availableCell.paint(graphics, interactable.getX(), interactable.getY(), cellSize, HIGHLIGHT_MARGIN);
         }
     }
 
-    public void drawSelectedMoves(Graphics2D graphics, Board board, List<Move> selectedMoves) {
-        for (var coordinate : new CoordinateIterator(board.getBoardSize())) {
-            for (var selectedMove : selectedMoves) {
-                Sprite sprite = null;
-
-                if (selectedMove.getFrom().equals(coordinate)) sprite = selectedFromCell;
-                else if (selectedMove.getTo().equals(coordinate)) sprite = selectedToCell;
-
-                if(sprite == null)
-                    continue;
-
-                sprite.paint(graphics, coordinate.getColumn(), coordinate.getRow(), cellSize, HIGHLIGHT_MARGIN);
-            }
+    public void drawSelectedMoves(Graphics2D graphics, GameService gameService, Coordinate from) {
+        for (var move : gameService.getAvailableMoves(from)) {
+            selectedFromCell.paint(graphics, move.getFrom().getX(), move.getFrom().getY(), cellSize, HIGHLIGHT_MARGIN);
+            selectedToCell.paint(graphics, move.getTo().getX(), move.getTo().getY(), cellSize, HIGHLIGHT_MARGIN);
         }
     }
 
     private final static float TEXT_MARGIN = 0.025f;
-    public void drawCheckeredPattern(Graphics2D graphics, Board board) {
+    public void drawCheckeredPattern(Graphics2D graphics, int boardSize) {
         int cellTextOffset = (int)(cellSize * TEXT_MARGIN);
-        for(var coordinate: new CoordinateIterator(board.getBoardSize())) {
+        for(var coordinate: new CoordinateIterator(boardSize)) {
             Sprite sprite = cellSprites.get(coordinate.isEven());
             sprite.paint(graphics, coordinate.getColumn(), coordinate.getRow(), cellSize);
             graphics.setColor(coordinate.isEven() ? Color.WHITE : Color.BLACK);
@@ -82,8 +72,8 @@ public class GUIRenderer {
         }
     }
 
-    public void setCellSize(Graphics graphics, Board board) {
-        cellSize = graphics.getClipBounds().width / board.getBoardSize();
+    public void setCellSize(Graphics graphics, int boardSize) {
+        cellSize = graphics.getClipBounds().width / boardSize;
     }
 
     public int getCellSize() {

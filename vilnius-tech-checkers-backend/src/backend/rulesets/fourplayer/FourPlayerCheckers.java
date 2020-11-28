@@ -54,6 +54,7 @@ public class FourPlayerCheckers implements CheckersRuleset {
         CoordinateValidator middleKingRow = new FourPlayerCheckersKingRow(middleStart, middleEnd, middleStart, middleEnd);
 
         Side p1 = new Side(
+                0,
                 "Player 1",
                 new FourPlayerCheckersPieceSetter(middleStart, middleEnd, 0, 1),
                 middleKingRow,
@@ -62,6 +63,7 @@ public class FourPlayerCheckers implements CheckersRuleset {
 
 
         Side p2 = new Side(
+                1,
                 "Player 2",
                 new FourPlayerCheckersPieceSetter(middleStart, middleEnd, getBoardSize() - 2, getBoardSize() - 1),
                 middleKingRow,
@@ -70,6 +72,7 @@ public class FourPlayerCheckers implements CheckersRuleset {
 
 
         Side p3 = new Side(
+                2,
                 "Player 3",
                 new FourPlayerCheckersPieceSetter(0, 1, middleStart, middleEnd),
                 middleKingRow,
@@ -78,16 +81,12 @@ public class FourPlayerCheckers implements CheckersRuleset {
 
 
         Side p4 = new Side(
+                3,
                 "Player 4",
                 new FourPlayerCheckersPieceSetter(getBoardSize() - 2, getBoardSize() - 1, middleStart, middleEnd),
                 middleKingRow,
                 new FourPlayerCheckersPieceFactory(FourPlayerCheckersPieceFactory.DIRECTIONS, FourPlayerCheckersPieceFactory.DIRECTIONS)
         );
-
-        p1.setNext(p2);
-        p2.setNext(p3);
-        p3.setNext(p4);
-        p4.setNext(p1);
 
         sides.add(p1);
         sides.add(p2);
@@ -115,8 +114,8 @@ public class FourPlayerCheckers implements CheckersRuleset {
         if(playingSides.isEmpty())
             return current;
 
-        while(!playingSides.contains(current))
-            current = current.getNext();
+//        while(!playingSides.contains(current))
+//            current = current.getNext();
 
         return current;
     }

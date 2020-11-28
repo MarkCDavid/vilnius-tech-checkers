@@ -2,25 +2,19 @@ package api.dto;
 
 public class Piece {
 
-    public Piece(Side side, Coordinate coordinate, boolean isKing) {
-        this.side = side;
-        this.coordinate = coordinate;
-        this.isKing = isKing;
+    public Piece(int sideIndex, int promotionLevel) {
+        this.sideIndex = sideIndex;
+        this.promotionLevel = promotionLevel;
     }
 
-    public Side getSide() {
-        return side;
+    public int getSideIndex() {
+        return sideIndex;
     }
 
-    public Coordinate getCoordinate() {
-        return coordinate;
+    public int getPromotionLevel() {
+        return promotionLevel;
     }
 
-    public boolean isKing() {
-        return isKing;
-    }
-
-    private final Side side;
-    private final Coordinate coordinate;
-    private final boolean isKing;
+    private final int sideIndex;
+    private final int promotionLevel;
 }

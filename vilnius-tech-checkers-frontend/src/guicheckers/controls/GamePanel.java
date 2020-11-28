@@ -1,5 +1,6 @@
 package guicheckers.controls;
 
+import api.endpoints.GameService;
 import backend.Coordinate;
 import backend.manager.GameManager;
 import backend.moves.base.Move;
@@ -16,26 +17,28 @@ import java.util.List;
 
 public class GamePanel extends JPanel {
 
+    private final GameService gameService;
+
     @Override
     public void paint(Graphics graphics) {
-        renderer.setCellSize(graphics, gameManager.getBoard());
+        renderer.setCellSize(graphics, gameService.getBoardSize());
         drawBoard((Graphics2D) graphics);
     }
 
     private void drawBoard(Graphics2D graphics) {
-        renderer.drawCheckeredPattern(graphics, gameManager.getBoard());
+        renderer.drawCheckeredPattern(graphics, gameService.getBoardSize());
 
         if(drawHighlights)
             drawHighlights(graphics);
 
-        renderer.drawPieces(graphics, gameManager.getBoard());
+        renderer.drawPieces(graphics, gameService);
     }
 
     private void drawHighlights(Graphics2D graphics) {
         if (selectedMoves.isEmpty())
-            renderer.drawAvailableMoves(graphics, gameManager.getBoard(), gameManager.getAvailableMoves());
+            renderer.drawAvailableMoves(graphics, gameService);
         else
-            renderer.drawSelectedMoves(graphics, gameManager.getBoard(), selectedMoves);
+            renderer.drawSelectedMoves(graphics, gameService, new api.dto.Coordinate(0, 0));
     }
 
     private boolean drawHighlights = true;
@@ -44,10 +47,6 @@ public class GamePanel extends JPanel {
         this.drawHighlights = drawHighlights;
     }
 
-
-    public GameManager getGameManager() {
-        return gameManager;
-    }
 
     public void setSelectedMoves(List<Move> selectedMoves) {
         this.selectedMoves = selectedMoves;
@@ -59,16 +58,15 @@ public class GamePanel extends JPanel {
 
     private List<Move> selectedMoves = new ArrayList<>();
 
-    public GamePanel(GameManager gameManager) {
+    public GamePanel(GameService gameService) {
+        this.gameService = gameService;
         this.renderer = new GUIRenderer();
-        this.gameManager = gameManager;
         this.cellClickSupport = new CellClickSupport();
 
 
         addMouseListener(new MouseListener() {
             @Override
             public void mouseReleased(MouseEvent e) {
-                if(getGameManager().isFinished()) return;
                 int row = e.getY() / renderer.getCellSize();
                 int column = e.getX() / renderer.getCellSize();
                 Coordinate coordinate = new Coordinate(column, row);
@@ -90,7 +88,6 @@ public class GamePanel extends JPanel {
     }
 
     private final GUIRenderer renderer;
-    private final GameManager gameManager;
 
     private final CellClickSupport cellClickSupport;
 

@@ -29,11 +29,11 @@ public class GameManager implements SubscriptionSupport {
         return board;
     }
 
-    public GameManager(Ruleset ruleset) {
+    public GameManager(CheckersRuleset ruleset) {
         this.moveHistory = new MoveHistory();
         this.eventEmitter = new EventEmitter();
 
-        this.ruleset = RulesetFactory.build(ruleset.getId());
+        this.ruleset = ruleset;
         this.sides = new GameSides(this.ruleset.getPlayingSides());
         this.board = new Board(this.ruleset.getBoardSize());
 
@@ -68,8 +68,6 @@ public class GameManager implements SubscriptionSupport {
         if(arguments.isSwitchSide())
             sides.next();
 
-        processSideSwitch(move, !arguments.isSwitchSide());
-
         Side next = ruleset.processWinningConditions(board, availableMoves, sides.getPlayingSides(), sides.getCurrentSide());
         if(!Objects.equals(sides.getCurrentSide(), next)) {
             sides.next();
@@ -77,15 +75,6 @@ public class GameManager implements SubscriptionSupport {
 
         if (sides.isFinished())
             eventEmitter.emit(new GameFinishedEvent(sides.getWinner()));
-    }
-
-    public void switchSide(Side side) {
-        currentSide = side;
-        processSideSwitch(null, false);
-    }
-
-    private void processSideSwitch(Move move, boolean multiCapture) {
-
     }
 
     private SideSwitchEventSubscriber constructSideSwitchHandler() {
@@ -103,12 +92,12 @@ public class GameManager implements SubscriptionSupport {
     }
 
     public List<Move> getAvailableMoves() {
-        return isFinished() ? new ArrayList<>() : new ArrayList<>(availableMoves);
+        return sides.isFinished() ? new ArrayList<>() : new ArrayList<>(availableMoves);
     }
 
     public List<Move> getAvailableMoves(Coordinate from) {
         List<Move> moves = new ArrayList<>();
-        if(isFinished()) return moves;
+        if(sides.isFinished()) return moves;
 
         for(Move move: getAvailableMoves()) {
             if(move.getFrom().equals(from))

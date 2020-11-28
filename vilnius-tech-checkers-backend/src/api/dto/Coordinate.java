@@ -2,19 +2,19 @@ package api.dto;
 
 public class Coordinate {
 
-    public Coordinate(int row, int column) {
-        this.row = row;
-        this.column = column;
+    public Coordinate(int x, int y) {
+        this.x = x;
+        this.y = y;
     }
 
-    public int getRow() {
-        return row;
+    public int getX() {
+        return x;
     }
 
-    public int getColumn() {
-        return column;
+    public int getY() {
+        return y;
     }
 
-    private final int row;
-    private final int column;
+    private final int x;
+    private final int y;
 }

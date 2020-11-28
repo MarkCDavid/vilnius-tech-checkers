@@ -21,27 +21,6 @@
         <border type="none"/>
         <children/>
       </grid>
-      <scrollpane id="74191">
-        <constraints>
-          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false">
-            <minimum-size width="150" height="760"/>
-            <preferred-size width="150" height="760"/>
-            <maximum-size width="150" height="760"/>
-          </grid>
-        </constraints>
-        <properties/>
-        <border type="none"/>
-        <children>
-          <component id="6f8ff" class="javax.swing.JList" binding="moveHistory" custom-create="true">
-            <constraints/>
-            <properties>
-              <enabled value="true"/>
-              <layoutOrientation value="0"/>
-              <selectionMode value="0"/>
-            </properties>
-          </component>
-        </children>
-      </scrollpane>
       <component id="cb998" class="javax.swing.JButton" binding="surrenderButton" default-binding="true">
         <constraints>
           <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
@@ -76,19 +55,6 @@
         </constraints>
         <properties>
           <text value="Exit"/>
-        </properties>
-      </component>
-      <component id="2ceed" class="javax.swing.JLabel" binding="statusBar" custom-create="true">
-        <constraints>
-          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false">
-            <minimum-size width="-1" height="20"/>
-            <preferred-size width="-1" height="20"/>
-            <maximum-size width="-1" height="20"/>
-          </grid>
-        </constraints>
-        <properties>
-          <background color="-14605013"/>
-          <horizontalTextPosition value="11"/>
         </properties>
       </component>
     </children>
