@@ -2,7 +2,7 @@ package guicheckers.controller;
 
 import guicheckers.view.AbstractView;
 
-public class AbstractController<T extends AbstractView> {
+public abstract class AbstractController<T extends AbstractView> {
 
     public T getView() {
         return view;
@@ -12,5 +12,9 @@ public class AbstractController<T extends AbstractView> {
 
     public AbstractController(T view) {
         this.view = view;
+    }
+
+    public void render() {
+        this.view.render();
     }
 }

@@ -1,4 +1,4 @@
-package api.services;
+package api.services.mock;
 
 import api.dto.Ruleset;
 import backend.rulesets.english.EnglishCheckers;

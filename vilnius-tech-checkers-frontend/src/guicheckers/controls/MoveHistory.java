@@ -1,7 +1,7 @@
 package guicheckers.controls;
 
+import api.dto.Move;
 import backend.Board;
-import backend.moves.base.Move;
 import guicheckers.events.MoveHistoryChangeListener;
 import guicheckers.events.MoveHistoryChangeSupport;
 
@@ -10,22 +10,26 @@ import java.util.List;
 
 public class MoveHistory extends JList<Move> {
 
+    public MoveHistory() {
+
+    }
+
     public MoveHistory(Board board) {
         this.movesModel = new DefaultListModel<>();
         this.setModel(movesModel);
         this.moveHistoryChangeSupport = new MoveHistoryChangeSupport();
-
-        addListSelectionListener(listSelectionEvent -> {
-            int to = movesModel.indexOf(getSelectedValue());
-            int from = movesModel.indexOf(getPreviousSelection());
-
-            if(to > from) toTheFuture(board, to, from);
-            if(to < from) toThePast(board, to, from);
-
-            previousSelection = getSelectedValue();
-
-            moveHistoryChangeSupport.emit(getSelectedValue());
-        });
+//
+//        addListSelectionListener(listSelectionEvent -> {
+//            int to = movesModel.indexOf(getSelectedValue());
+//            int from = movesModel.indexOf(getPreviousSelection());
+//
+//            if(to > from) toTheFuture(board, to, from);
+//            if(to < from) toThePast(board, to, from);
+//
+//            previousSelection = getSelectedValue();
+//
+//            moveHistoryChangeSupport.emit(getSelectedValue());
+//        });
     }
 
     public boolean isPresent() {
@@ -33,28 +37,28 @@ public class MoveHistory extends JList<Move> {
     }
 
     public void toThePast(Board board, int to, int from) {
-        for(int i = from; i > to; i--) {
-            movesModel.get(i).revert(board);
-        }
+//        for(int i = from; i > to; i--) {
+//            movesModel.get(i).revert(board);
+//        }
     }
 
     public void toTheFuture(Board board, int to, int from) {
-        for(int i = from + 1; i <= to; i++) {
-            movesModel.get(i).apply(board);
-        }
+//        for(int i = from + 1; i <= to; i++) {
+//            movesModel.get(i).apply(board);
+//        }
     }
 
     public void addMoves(List<Move> moves) {
-        movesModel.clear();
-        movesModel.addAll(moves);
-        setPreviousSelection(moves.get(moves.size() - 1));
-        moveHistoryChangeSupport.emit(getSelectedValue());
+//        movesModel.clear();
+//        movesModel.addAll(moves);
+//        setPreviousSelection(moves.get(moves.size() - 1));
+//        moveHistoryChangeSupport.emit(getSelectedValue());
     }
 
     public void addMove(Move move) {
-        movesModel.addElement(move);
-        setPreviousSelection(move);
-        moveHistoryChangeSupport.emit(getSelectedValue());
+//        movesModel.addElement(move);
+//        setPreviousSelection(move);
+//        moveHistoryChangeSupport.emit(getSelectedValue());
     }
 
     public void addHistoryChangeListener(MoveHistoryChangeListener listener) {
@@ -78,7 +82,7 @@ public class MoveHistory extends JList<Move> {
 
     private Move previousSelection;
 
-    private final DefaultListModel<Move> movesModel;
-    private final MoveHistoryChangeSupport moveHistoryChangeSupport;
+    private DefaultListModel<Move> movesModel;
+    private MoveHistoryChangeSupport moveHistoryChangeSupport;
 
 }

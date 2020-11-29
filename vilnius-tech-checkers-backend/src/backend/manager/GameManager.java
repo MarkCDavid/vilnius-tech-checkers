@@ -29,6 +29,10 @@ public class GameManager implements SubscriptionSupport {
         return board;
     }
 
+    public GameSides getSides() {
+        return sides;
+    }
+
     public GameManager(CheckersRuleset ruleset) {
         this.moveHistory = new MoveHistory();
         this.eventEmitter = new EventEmitter();

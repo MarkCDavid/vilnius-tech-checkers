@@ -1,5 +1,6 @@
 package api.serializer.concrete;
 
+import api.dto.Side;
 import api.serializer.DTODeserializable;
 import api.serializer.DTOSerializable;
 import backend.Coordinate;
@@ -11,6 +12,6 @@ public class PieceSerializer implements DTOSerializable<Piece, api.dto.Piece>{
     public api.dto.Piece serialize(Piece value) {
         if(value == null)
             return null;
-        return new api.dto.Piece(value.getSide().getIndex(), value.getPromotionLevel());
+        return new api.dto.Piece(new Side(value.getSide().getIndex()), value.getPromotionLevel());
     }
 }

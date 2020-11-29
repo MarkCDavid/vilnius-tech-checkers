@@ -1,62 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="guicheckers.view.GameView">
-  <grid id="27dc6" binding="mainPanel" layout-manager="GridLayoutManager" row-count="4" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-    <margin top="20" left="20" bottom="20" right="20"/>
+  <grid id="27dc6" binding="mainPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
     <constraints>
-      <xy x="20" y="20" width="1004" height="949"/>
+      <xy x="20" y="20" width="904" height="854"/>
     </constraints>
-    <properties/>
+    <properties>
+      <enabled value="true"/>
+      <maximumSize width="-1" height="-1"/>
+      <minimumSize width="0" height="0"/>
+    </properties>
     <border type="none"/>
     <children>
-      <grid id="2b9ef" binding="gamePanel" custom-create="true" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="true" same-size-vertically="true" hgap="-1" vgap="-1">
+      <grid id="2ccb6" binding="gamePanel" custom-create="true" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="0" left="0" bottom="0" right="0"/>
-        <constraints>
-          <grid row="0" column="0" row-span="3" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false">
-            <minimum-size width="800" height="800"/>
-            <preferred-size width="800" height="800"/>
-            <maximum-size width="800" height="800"/>
-          </grid>
-        </constraints>
-        <properties/>
+        <constraints border-constraint="Center"/>
+        <properties>
+          <maximumSize width="800" height="800"/>
+          <minimumSize width="800" height="800"/>
+          <preferredSize width="800" height="800"/>
+        </properties>
         <border type="none"/>
         <children/>
       </grid>
-      <component id="cb998" class="javax.swing.JButton" binding="surrenderButton" default-binding="true">
-        <constraints>
-          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
-            <minimum-size width="150" height="20"/>
-            <preferred-size width="150" height="20"/>
-            <maximum-size width="150" height="20"/>
-          </grid>
-        </constraints>
+      <component id="98aa" class="javax.swing.JLabel" binding="statusBar" custom-create="true">
+        <constraints border-constraint="South"/>
         <properties>
-          <text value="Surrender"/>
+          <inheritsPopupMenu value="false"/>
+          <maximumSize width="925" height="20"/>
+          <minimumSize width="925" height="20"/>
+          <preferredSize width="925" height="20"/>
+          <text value=""/>
         </properties>
       </component>
-      <component id="ef3d9" class="javax.swing.JButton" binding="drawButton" default-binding="true">
-        <constraints>
-          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
-            <minimum-size width="150" height="20"/>
-            <preferred-size width="150" height="20"/>
-            <maximum-size width="150" height="20"/>
-          </grid>
-        </constraints>
+      <scrollpane id="6c6bb">
+        <constraints border-constraint="East"/>
         <properties>
-          <text value="Draw"/>
+          <maximumSize width="125" height="800"/>
+          <minimumSize width="125" height="800"/>
+          <preferredSize width="125" height="800"/>
         </properties>
-      </component>
-      <component id="88776" class="javax.swing.JButton" binding="exitButton" default-binding="true">
-        <constraints>
-          <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
-            <minimum-size width="150" height="20"/>
-            <preferred-size width="150" height="20"/>
-            <maximum-size width="150" height="20"/>
-          </grid>
-        </constraints>
-        <properties>
-          <text value="Exit"/>
-        </properties>
-      </component>
+        <border type="none"/>
+        <children>
+          <component id="32a55" class="javax.swing.JList" binding="moveHistory" custom-create="true">
+            <constraints/>
+            <properties/>
+          </component>
+        </children>
+      </scrollpane>
     </children>
   </grid>
 </form>

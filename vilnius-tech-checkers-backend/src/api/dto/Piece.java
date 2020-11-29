@@ -2,19 +2,19 @@ package api.dto;
 
 public class Piece {
 
-    public Piece(int sideIndex, int promotionLevel) {
-        this.sideIndex = sideIndex;
+    public Piece(Side side, Integer promotionLevel) {
+        this.side = side;
         this.promotionLevel = promotionLevel;
     }
 
-    public int getSideIndex() {
-        return sideIndex;
+    public Side getSide() {
+        return side;
     }
 
-    public int getPromotionLevel() {
+    public Integer getPromotionLevel() {
         return promotionLevel;
     }
 
-    private final int sideIndex;
-    private final int promotionLevel;
+    private final Side side;
+    private final Integer promotionLevel;
 }

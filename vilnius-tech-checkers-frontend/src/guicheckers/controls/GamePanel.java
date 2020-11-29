@@ -1,94 +1,67 @@
 package guicheckers.controls;
 
-import api.endpoints.GameService;
-import backend.Coordinate;
-import backend.manager.GameManager;
-import backend.moves.base.Move;
-import guicheckers.GUIRenderer;
+import api.dto.*;
+import guicheckers.renderer.GUIRenderer;
 import guicheckers.events.CellClickListener;
 import guicheckers.events.CellClickSupport;
+import guicheckers.utility.MouseReleasedListener;
 
 import javax.swing.*;
-import java.awt.*;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GamePanel extends JPanel {
 
-    private final GameService gameService;
+    public GamePanel() {
+        this.renderer = new GUIRenderer();
+        this.cellClickSupport = new CellClickSupport();
+        this.addMouseListener(getMouseReleasedListener());
+    }
+
+    public void setMoves(List<Move> moves) {
+        this.moves = moves;
+    }
+
+    public void setInteractables(List<Coordinate> interactables) {
+        this.interactables = interactables;
+    }
+
+    public void setCells(List<Cell> cells) {
+        this.cells = cells;
+    }
+
+    public void setBoardSideLength(Integer boardSideLength) {
+        this.boardSideLength = boardSideLength;
+    }
+
+    public void invalidateData() {
+        boardSideLength = null;
+        cells = new ArrayList<>();
+        interactables = new ArrayList<>();
+        moves = new ArrayList<>();
+    }
+
 
     @Override
     public void paint(Graphics graphics) {
-        renderer.setCellSize(graphics, gameService.getBoardSize());
-        drawBoard((Graphics2D) graphics);
+        if(boardSideLength == null)
+            return;
+
+        paint2D((Graphics2D) graphics);
     }
 
-    private void drawBoard(Graphics2D graphics) {
-        renderer.drawCheckeredPattern(graphics, gameService.getBoardSize());
-
-        if(drawHighlights)
-            drawHighlights(graphics);
-
-        renderer.drawPieces(graphics, gameService);
-    }
-
-    private void drawHighlights(Graphics2D graphics) {
-        if (selectedMoves.isEmpty())
-            renderer.drawAvailableMoves(graphics, gameService);
-        else
-            renderer.drawSelectedMoves(graphics, gameService, new api.dto.Coordinate(0, 0));
-    }
-
-    private boolean drawHighlights = true;
-
-    public void setDrawHighlights(boolean drawHighlights) {
-        this.drawHighlights = drawHighlights;
-    }
-
-
-    public void setSelectedMoves(List<Move> selectedMoves) {
-        this.selectedMoves = selectedMoves;
-    }
-
-    public List<Move> getSelectedMoves() {
-        return this.selectedMoves;
-    }
-
-    private List<Move> selectedMoves = new ArrayList<>();
-
-    public GamePanel(GameService gameService) {
-        this.gameService = gameService;
-        this.renderer = new GUIRenderer();
-        this.cellClickSupport = new CellClickSupport();
-
-
-        addMouseListener(new MouseListener() {
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                int row = e.getY() / renderer.getCellSize();
-                int column = e.getX() / renderer.getCellSize();
-                Coordinate coordinate = new Coordinate(column, row);
-                cellClickSupport.emit(coordinate);
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {}
-
-            @Override
-            public void mouseExited(MouseEvent e) { }
-
-            @Override
-            public void mouseClicked(MouseEvent e) { }
-
-            @Override
-            public void mousePressed(MouseEvent e) { }
-        });
+    private void paint2D(Graphics2D graphics) {
+        renderer.setCellSize(graphics, boardSideLength);
+        renderer.drawCheckeredPattern(graphics, cells);
+        renderer.drawInteractables(graphics, interactables);
+        renderer.drawMoves(graphics, moves);
+        renderer.drawPieces(graphics, cells);
     }
 
     private final GUIRenderer renderer;
-
     private final CellClickSupport cellClickSupport;
 
     public void addCellClickListener(CellClickListener listener) {
@@ -98,4 +71,18 @@ public class GamePanel extends JPanel {
     public void removeCellClickListener(CellClickListener listener) {
         cellClickSupport.removeCellClickListener(listener);
     }
+    private MouseReleasedListener getMouseReleasedListener() {
+        return new MouseReleasedListener() {
+            public void mouseReleased(MouseEvent e) {
+                var row = e.getY() / renderer.getCellSize();
+                var column = e.getX() / renderer.getCellSize();
+                cellClickSupport.emit(new Coordinate(column, row));
+            }
+        };
+    }
+
+    private List<Move> moves;
+    private List<Coordinate> interactables;
+    private List<Cell> cells;
+    private Integer boardSideLength;
 }

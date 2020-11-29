@@ -7,7 +7,7 @@ import backend.Coordinate;
 public class CoordinateSerializer implements DTOSerializable<Coordinate, api.dto.Coordinate>, DTODeserializable<Coordinate, api.dto.Coordinate> {
     @Override
     public Coordinate deserialize(api.dto.Coordinate value) {
-        return new Coordinate(value.getX(), value.getY());
+        return new Coordinate(value.getY(), value.getX());
     }
 
     @Override

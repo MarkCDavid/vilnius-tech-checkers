@@ -1,6 +1,6 @@
 package guicheckers.events;
 
-import backend.Coordinate;
+import api.dto.Coordinate;
 
 import java.util.ArrayList;
 import java.util.List;

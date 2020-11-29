@@ -22,7 +22,7 @@
 * side: Side
 * name: String
 
-### GameToken
+### PlayerToken
 * value: String
 
 ### GameToken
@@ -83,7 +83,7 @@
 >
 
 
-### Game Data Service
+### Game Interaction Service
 
 > ### Reason
 > Provides the player with the ability to interact with the

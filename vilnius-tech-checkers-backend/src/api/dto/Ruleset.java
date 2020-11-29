@@ -4,9 +4,10 @@ import java.util.UUID;
 
 public class Ruleset {
 
-    public Ruleset(UUID id, String name) {
+    public Ruleset(UUID id, String name, Integer playerCount) {
         this.id = id;
         this.name = name;
+        this.playerCount = playerCount;
     }
 
     public UUID getId() {
@@ -17,7 +18,11 @@ public class Ruleset {
         return name;
     }
 
-    private final UUID id;
+    public Integer getPlayerCount() {
+        return playerCount;
+    }
 
+    private final UUID id;
     private final String name;
+    private final Integer playerCount;
 }
